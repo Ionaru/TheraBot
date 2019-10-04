@@ -1,0 +1,32 @@
+{
+    "name": "thera-bot",
+    "version": "0.0.0",
+    "description": "My package TheraBot",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist/**/*"
+    ],
+    "scripts": {
+        "clean": "npx rimraf dist",
+        "build": "npm run clean && tsc --project tsconfig.json",
+        "lint": "npm run lint:src && npm run lint:test",
+        "lint:src": "tslint --project tsconfig.json -c tslint.json --format stylish",
+        "lint:test": "tslint -c tslint.json src/**/*.spec.ts --format stylish",
+        "pretest": "npm run lint",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "npm run build",
+        "preversion": "npm run test"
+    },
+    "keywords": [],
+    "author": "Jeroen Akkerman",
+    "repository": "github:Ionaru/TheraBot",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "12.7.11",
+        "tslint": "5.20.0",
+        "tslint-sonarts": "1.9.0",
+        "typescript": "3.6.3"
+    },
+    "dependencies": {}
+}

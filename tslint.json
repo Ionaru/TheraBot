@@ -1,0 +1,35 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:latest",
+        "tslint-sonarts"
+    ],
+    "rules": {
+        "max-line-length": [
+            true,
+            140
+        ],
+        "no-null-keyword": true,
+        "no-unused-expression": [
+            true,
+            "allow-new"
+        ],
+        "quotemark": [
+            true,
+            "single"
+        ],
+        "trailing-comma": [
+            true,
+            {
+                "multiline": "always",
+                "singleline": "never"
+            }
+        ],
+        "variable-name": [
+            true,
+            "ban-keywords",
+            "check-format",
+            "allow-leading-underscore"
+        ]
+    }
+}

@@ -1,0 +1,19 @@
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Node/Npm files
+npm-debug.log*
+node_modules/
+
+# Build files & test artifacts
+coverage/
+dist/
+
+# Local application files
+.env
+
+# System files
+*.db
+*.DS_Store

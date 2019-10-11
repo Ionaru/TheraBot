@@ -56,10 +56,13 @@ It is possible to self-host this bot, it requires Docker and Docker Compose.
 5. Invite the bot to your server by placing the bot's Client ID in this link: `https://discordapp.com/oauth2/authorize?client_id=PLACE_CLIENT_ID_HERE&scope=bot`
 6. Paste the link in your web browser and follow the steps on the Discord website.
 
-#### Step two (Docker): Installing the bot
+#### Step two: Installing the bot
 1. Install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
-2. Go to the [Releases page](https://github.com/Ionaru/TheraBot/releases), download and extract the latest release.
-3. Create a `.env` file containing the variables `THERABOT_TOKEN` with your bot's token.
+2. [Download](https://github.com/Ionaru/TheraBot/archive/master.zip) and extract, or clone the latest version of this repository.
+3. Fill these environment variables (either using a .env file, export them or pass them to docker-compose in the next step):
+    - `THERABOT_TOKEN` - The Discord Bot Token.
+    - `THERABOT_DATA_VOLUME` - A persistent place where TheraBot will keep its database.
+    - (Optional) `DEBUG` - Set to `*` or `thera-bot*` for extra logging output.
 4. Run `docker-compose up`. 
 
 Contact me in EVE Online: `Ionaru Otsada` or on Discord: `Ionaru#3801` if you need any assistance.

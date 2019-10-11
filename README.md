@@ -1,7 +1,5 @@
 # Discord TheraBot for EVE Online
-[![Build Status](https://img.shields.io/travis/Ionaru/MarketBot/master.svg?style=for-the-badge)](https://travis-ci.org/Ionaru/MarketBot)
-[![codecov](https://img.shields.io/codecov/c/github/Ionaru/MarketBot/master.svg?style=for-the-badge)](https://codecov.io/gh/Ionaru/MarketBot)
-[![Internet spaceships are serious business](https://img.shields.io/badge/internet%20spaceships-are%20serious%20business-2F849E.svg?style=for-the-badge)](https://www.eveonline.com/)
+[![](https://img.shields.io/badge/fly_safe-o7-2F849E.svg?style=for-the-badge)](https://www.eveonline.com/)
 
 ## General information
 TheraBot is a discord bot that posts notifications of newly scouted wormhole connections to Thera.

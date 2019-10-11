@@ -12,6 +12,9 @@ type supportedChannelType = TextChannel | User;
 
 export class WatchController {
 
+    // tslint:disable-next-line:no-bitwise
+    private readonly countdownUnits = countdown.HOURS | countdown.MINUTES;
+
     private static getSecurityStatusColour(secStatus: number) {
         const roundedSecStatus = Number(secStatus.toPrecision(1));
         switch (true) {
@@ -118,7 +121,7 @@ export class WatchController {
 
         embed.addBlankField();
 
-        embed.addField('**Estimated Life**', `${countdown(new Date(wormhole.wormholeEstimatedEol))}`);
+        embed.addField('**Estimated Life**', `${countdown(new Date(wormhole.wormholeEstimatedEol), undefined, this.countdownUnits)}`);
 
         embed.setFooter('Data from https://www.eve-scout.com/', 'http://www.newedenpodcast.de/wp-content/uploads/2019/02/EvE-Scout_Logo-281x300.png');
         embed.setTimestamp();

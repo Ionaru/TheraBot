@@ -14,7 +14,7 @@ export class DatabaseController {
         this.debug('Creating database connection');
 
         return createConnection({
-            database: 'therabot.db',
+            database: 'data/therabot.db',
             entities: [
                 ChannelModel,
                 UserChannelModel,

@@ -1,9 +1,14 @@
 version: '3'
 services:
 
-    marketbot:
-        build:
-            context: ./
-        env_file:
-            - .env
+    therabot:
+        build: .
+        environment:
+            - THERABOT_TOKEN
+            - DEBUG
         restart: unless-stopped
+        volumes:
+            - ${THERABOT_DATA_VOLUME:-data-volume}:/app/data
+
+volumes:
+    data-volume:

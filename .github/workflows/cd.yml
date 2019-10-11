@@ -28,6 +28,9 @@ jobs:
             - name: Run tests
               run: npm test
 
+            - name: Build
+              run: npm run build
+
             - name: Deploy
               if: github.event_name == 'push'
-              run: ./.github/workflows/deploy.sh TheraBot_Build ${{ secrets.API_TOKEN }}
+              run: bash .github/workflows/deploy.sh TheraBot_Build ${{ secrets.API_TOKEN }}

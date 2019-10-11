@@ -39,7 +39,7 @@ To properly function and perform all commands in a chat channel, TheraBot requir
 ## Screenshots
 TheraBot in action!
 
-// TODO: Screenshot
+![Image of notification](https://user-images.githubusercontent.com/3472373/66662486-35269700-ec49-11e9-96d5-b01d70412b56.png)
 
 ## Feature requests
 Please open an [issue](https://github.com/Ionaru/TheraBot/issues/new) if you have any feature ideas for this bot

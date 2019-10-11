@@ -2,5 +2,8 @@ version: '3'
 services:
 
     marketbot:
-        build: .
+        build:
+            context: ./
+        env_file:
+            - .env
         restart: unless-stopped

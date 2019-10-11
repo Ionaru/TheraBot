@@ -2,20 +2,21 @@
     "name": "thera-bot",
     "version": "0.0.0",
     "description": "My package TheraBot",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "main": "dist/main.js",
+    "types": "dist/main.d.ts",
     "files": [
         "dist/**/*"
     ],
     "scripts": {
-        "clean": "npx rimraf dist",
+        "clean": "npx -q rimraf dist",
         "build": "npm run clean && tsc --project tsconfig.json",
         "lint": "npm run lint:src && npm run lint:test",
         "lint:src": "tslint --project tsconfig.json -c tslint.json --format stylish",
         "lint:test": "tslint -c tslint.json src/**/*.spec.ts --format stylish",
         "pretest": "npm run lint",
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "echo \"Error: no test specified\" && exit 0",
         "prepare": "npm run build",
+        "start": "node ./dist/main.js",
         "preversion": "npm run test"
     },
     "keywords": [],
@@ -23,10 +24,28 @@
     "repository": "github:Ionaru/TheraBot",
     "license": "MIT",
     "devDependencies": {
-        "@types/node": "12.7.11",
+        "@types/countdown": "0.0.7",
+        "@types/debug": "^4.1.5",
+        "@types/escape-string-regexp": "^2.0.1",
+        "@types/node": "^12.7.12",
+        "@types/sqlite3": "^3.1.5",
+        "ts-node": "^8.4.1",
         "tslint": "5.20.0",
         "tslint-sonarts": "1.9.0",
-        "typescript": "3.6.3"
+        "typescript": "^3.6.4"
     },
-    "dependencies": {}
+    "dependencies": {
+        "@ionaru/esi-service": "^3.2.2",
+        "@ionaru/eve-utils": "^4.3.0",
+        "@ionaru/format-number": "^2.0.0",
+        "agentkeepalive": "^4.0.2",
+        "axios": "^0.19.0",
+        "countdown": "^2.6.0",
+        "debug": "^4.1.1",
+        "discord.js": "^11.5.1",
+        "escape-string-regexp": "^2.0.0",
+        "reflect-metadata": "^0.1.13",
+        "sqlite3": "^4.1.0",
+        "typeorm": "^0.2.19"
+    }
 }

@@ -1,4 +1,4 @@
-name: TheraBot Test
+name: TheraBot CD
 
 on:
     push:

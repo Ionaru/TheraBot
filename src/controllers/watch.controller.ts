@@ -12,9 +12,6 @@ type supportedChannelType = TextChannel | User;
 
 export class WatchController {
 
-    // tslint:disable-next-line:no-bitwise
-    private readonly countdownUnits = countdown.HOURS | countdown.MINUTES;
-
     private static getSecurityStatusColour(secStatus: number) {
         const roundedSecStatus = Number(secStatus.toPrecision(1));
         switch (true) {
@@ -44,6 +41,9 @@ export class WatchController {
                 return '#2FEFEF';
         }
     }
+
+    // tslint:disable-next-line:no-bitwise
+    private readonly countdownUnits = countdown.HOURS | countdown.MINUTES;
 
     private readonly client: Client;
     private readonly eveScoutService: EveScoutService;

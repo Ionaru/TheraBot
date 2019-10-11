@@ -29,5 +29,5 @@ jobs:
               run: npm test
 
             - name: Deploy
-              if: github.event_name == 'push' && github.ref == 'master'
+              if: github.event_name == 'push'
               run: ./.github/workflows/deploy.sh TheraBot_Build ${{ secrets.API_TOKEN }}

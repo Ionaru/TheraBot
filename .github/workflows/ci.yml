@@ -14,9 +14,11 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v1
+            - name: Checkout
+              uses: actions/checkout@v1
+
             - name: Set up Node.js
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v1.1.0
               with:
                   node-version: '12.x'
 
@@ -25,3 +27,7 @@ jobs:
 
             - name: Run tests
               run: npm test
+
+            - name: Deploy
+              if: github.event_name == 'push' && github.ref == 'master'
+              run: ./.github/workflows/deploy.sh TheraBot_Build ${{ secrets.API_TOKEN }}

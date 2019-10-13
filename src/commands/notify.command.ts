@@ -26,36 +26,35 @@ export class NotifyCommand extends Command {
 
     protected async processCommand(): Promise<void> {
         const args = this.message.content.replace(NotifyCommand.commandRegex, '').trim();
+        const firstArg = args.toLowerCase().split(' ')[0];
 
-        if (args.toLowerCase() === 'here' && this.message.channel instanceof TextChannel) {
-            const channel = await ChannelModel.findOne({where: [{identifier: this.message.channel.id}]});
-            if (channel) {
-                this.setNotifyEmbed('Channel already added');
-            } else {
-                await new ChannelModel(this.message.channel.id).save();
-                this.setNotifyEmbed('Channel added');
-            }
+        switch (firstArg) {
 
-        } else if (args.toLowerCase() === 'here' && this.message.channel instanceof DMChannel) {
-            const userChannel = await UserChannelModel.findOne({where: [{identifier: this.message.author.id}]});
-            if (userChannel) {
-                this.setNotifyEmbed('Channel already added');
-            } else {
-                await new UserChannelModel(this.message.author.id).save();
-                this.setNotifyEmbed('Channel added');
-            }
+            case 'here':
 
-        } else if (args.toLowerCase() === 'stop') {
-            const model = await this.getModelToRemove();
+                const channel = await this.getChannel();
 
-            if (model) {
-                await model.remove();
-                this.setNotifyEmbed('Channel removed');
-            } else {
-                this.setNotifyEmbed('Channel not found');
-            }
-        } else {
-            this.setNotifyHelp();
+                if (channel) {
+                    this.setNotifyEmbed('Channel already added');
+                } else {
+                    this.createChannel();
+                    this.setNotifyEmbed('Channel added');
+                }
+                break;
+
+            case 'stop':
+                const model = await this.getChannel();
+
+                if (model) {
+                    await model.remove();
+                    this.setNotifyEmbed('Channel removed');
+                } else {
+                    this.setNotifyEmbed('Channel not found');
+                }
+                break;
+
+            default:
+                this.setNotifyHelp();
         }
     }
 
@@ -67,25 +66,27 @@ export class NotifyCommand extends Command {
         this.embed.addField('**Notify**', [
             '- **here** - Notify about new wormholes in this channel.',
             '- **stop** - Stop notifying about new wormholes in this channel.',
-        ], true);
-        this.embed.addBlankField(true);
+        ]);
         this.embed.addField('**Examples**', [
             '- !thera notify here',
             '- !thera notify stop',
-        ], true);
+        ]);
     }
 
-    private async getModelToRemove(): Promise<BaseModel | undefined> {
-        const channel = await ChannelModel.findOne({where: [{identifier: this.message.channel.id}]});
-        if (channel) {
-            return channel;
+    private async getChannel(): Promise<BaseModel | undefined> {
+        if (this.message.channel instanceof TextChannel) {
+            return ChannelModel.findOne({where: [{identifier: this.message.channel.id}]});
+        } else if (this.message.channel instanceof DMChannel) {
+            return UserChannelModel.findOne({where: [{identifier: this.message.author.id}]});
         }
-
-        const userChannel = await UserChannelModel.findOne({where: [{identifier: this.message.author.id}]});
-        if (userChannel) {
-            return userChannel;
-        }
-
         return;
+    }
+
+    private async createChannel() {
+        if (this.message.channel instanceof TextChannel) {
+            await new ChannelModel(this.message.channel.id).save();
+        } else if (this.message.channel instanceof DMChannel) {
+            await new UserChannelModel(this.message.author.id).save();
+        }
     }
 }

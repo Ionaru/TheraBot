@@ -3,8 +3,7 @@ import * as countdown from 'countdown';
 import { Channel, Client, DiscordAPIError, RichEmbed, TextChannel, User } from 'discord.js';
 
 import { debug } from '../main';
-import { ChannelModel } from '../models/channel.model';
-import { UserChannelModel } from '../models/user-channel.model';
+import { ChannelModel, ChannelType } from '../models/channel.model';
 import { WormholeModel } from '../models/wormhole.model';
 import { EveScoutService, IWormholeData } from '../services/eve-scout.service';
 
@@ -142,16 +141,16 @@ export class WatchController {
         const comparator = (channel: Channel) => usedChannelClasses.some((channelClass) => channel instanceof channelClass);
 
         const channels = this.client.channels.array().filter(comparator) as supportedChannelType[];
-        const savedChannels = await ChannelModel.find();
+        const savedChannels = await ChannelModel.find({where: [{type: ChannelType.TextChannel}]});
         const savedChannelIds = savedChannels.map((channel) => channel.identifier);
         const channelsToSend = channels.filter((channel) => savedChannelIds.includes(channel.id));
 
-        const users = this.client.users.array();
-        const savedUsers = await UserChannelModel.find();
-        const savedUserIds = savedUsers.map((user) => user.identifier);
-        const usersToSend = users.filter((user) => savedUserIds.includes(user.id));
+        const userChannels = this.client.users.array();
+        const savedUserChannels = await ChannelModel.find({where: [{type: ChannelType.DMChannel}]});
+        const savedUserChannelIds = savedUserChannels.map((user) => user.identifier);
+        const userChannelsToSend = userChannels.filter((user) => savedUserChannelIds.includes(user.id));
 
-        return [...channelsToSend, ...usersToSend];
+        return [...channelsToSend, ...userChannelsToSend];
     }
 
     private getSecurityStatusText = (secStatus: number) => formatNumber(secStatus, 1);

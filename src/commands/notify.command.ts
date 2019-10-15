@@ -1,7 +1,5 @@
 import { DMChannel, TextChannel } from 'discord.js';
-import { BaseModel } from '../models/base.model';
-import { ChannelModel } from '../models/channel.model';
-import { UserChannelModel } from '../models/user-channel.model';
+import { ChannelModel, ChannelType } from '../models/channel.model';
 import { Command } from './command';
 
 export class NotifyCommand extends Command {
@@ -26,13 +24,15 @@ export class NotifyCommand extends Command {
 
     protected async processCommand(): Promise<void> {
         const args = this.message.content.replace(NotifyCommand.commandRegex, '').trim();
-        const firstArg = args.toLowerCase().split(' ')[0];
+        const firstArg = args.toLowerCase().split(' ').shift();
+
+        let channel: ChannelModel | undefined;
 
         switch (firstArg) {
 
             case 'here':
 
-                const channel = await this.getChannel();
+                channel = await this.getChannel();
 
                 if (channel) {
                     this.setNotifyEmbed('Channel already added');
@@ -73,20 +73,20 @@ export class NotifyCommand extends Command {
         ]);
     }
 
-    private async getChannel(): Promise<BaseModel | undefined> {
+    private async getChannel(): Promise<ChannelModel | undefined> {
         if (this.message.channel instanceof TextChannel) {
             return ChannelModel.findOne({where: [{identifier: this.message.channel.id}]});
         } else if (this.message.channel instanceof DMChannel) {
-            return UserChannelModel.findOne({where: [{identifier: this.message.author.id}]});
+            return ChannelModel.findOne({where: [{identifier: this.message.author.id}]});
         }
         return;
     }
 
     private async createChannel() {
         if (this.message.channel instanceof TextChannel) {
-            await new ChannelModel(this.message.channel.id).save();
+            await new ChannelModel(ChannelType.TextChannel, this.message.channel.id).save();
         } else if (this.message.channel instanceof DMChannel) {
-            await new UserChannelModel(this.message.author.id).save();
+            await new ChannelModel(ChannelType.DMChannel, this.message.author.id).save();
         }
     }
 }

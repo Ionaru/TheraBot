@@ -2,6 +2,11 @@ import { Column, Entity } from 'typeorm';
 
 import { BaseModel } from './base.model';
 
+export enum ChannelType {
+    TextChannel,
+    DMChannel,
+}
+
 @Entity()
 export class ChannelModel extends BaseModel {
 
@@ -10,8 +15,12 @@ export class ChannelModel extends BaseModel {
     })
     public identifier: string;
 
-    constructor(identifier: string) {
+    @Column()
+    public type: ChannelType;
+
+    constructor(type: ChannelType, identifier: string) {
         super();
+        this.type = type;
         this.identifier = identifier;
     }
 }

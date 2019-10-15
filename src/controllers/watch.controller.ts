@@ -140,15 +140,17 @@ export class WatchController {
         const usedChannelClasses = [TextChannel];
         const comparator = (channel: Channel) => usedChannelClasses.some((channelClass) => channel instanceof channelClass);
 
+        const allSavedChannels = await ChannelModel.find({where: [{active: true}]});
+
         const channels = this.client.channels.array().filter(comparator) as supportedChannelType[];
-        const savedChannels = await ChannelModel.find({where: [{type: ChannelType.TextChannel}]});
+        const savedChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.TextChannel);
         const savedChannelIds = savedChannels.map((channel) => channel.identifier);
         const channelsToSend = channels.filter((channel) => savedChannelIds.includes(channel.id));
 
         const userChannels = this.client.users.array();
-        const savedUserChannels = await ChannelModel.find({where: [{type: ChannelType.DMChannel}]});
-        const savedUserChannelIds = savedUserChannels.map((user) => user.identifier);
-        const userChannelsToSend = userChannels.filter((user) => savedUserChannelIds.includes(user.id));
+        const savedUserChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.DMChannel);
+        const savedUserChannelIds = savedUserChannels.map((channel) => channel.identifier);
+        const userChannelsToSend = userChannels.filter((channel) => savedUserChannelIds.includes(channel.id));
 
         return [...channelsToSend, ...userChannelsToSend];
     }

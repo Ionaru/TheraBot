@@ -34,19 +34,20 @@ export class NotifyCommand extends Command {
 
                 channel = await this.getChannel();
 
-                if (channel) {
+                if (channel && channel.active) {
                     this.setNotifyEmbed('Channel already added');
                 } else {
-                    this.createChannel();
+                    this.activateChannel(channel);
                     this.setNotifyEmbed('Channel added');
                 }
                 break;
 
             case 'stop':
-                const model = await this.getChannel();
+                channel = await this.getChannel();
 
-                if (model) {
-                    await model.remove();
+                if (channel) {
+                    channel.active = false;
+                    await channel.save();
                     this.setNotifyEmbed('Channel removed');
                 } else {
                     this.setNotifyEmbed('Channel not found');
@@ -54,7 +55,7 @@ export class NotifyCommand extends Command {
                 break;
 
             default:
-                this.setNotifyHelp();
+                await this.setNotifyHelp();
         }
     }
 
@@ -62,7 +63,7 @@ export class NotifyCommand extends Command {
         this.embed.addField('**Notify**', text);
     }
 
-    private setNotifyHelp() {
+    private async setNotifyHelp() {
         this.embed.addField('**Notify**', [
             '- **here** - Notify about new wormholes in this channel.',
             '- **stop** - Stop notifying about new wormholes in this channel.',
@@ -70,6 +71,11 @@ export class NotifyCommand extends Command {
         this.embed.addField('**Examples**', [
             '- !thera notify here',
             '- !thera notify stop',
+        ]);
+
+        const channel = await this.getChannel();
+        this.embed.addField('**Notifications in this channel**', [
+            `- **Status** - ${channel && channel.active ? 'Active' : 'Inactive'}`,
         ]);
     }
 
@@ -82,11 +88,17 @@ export class NotifyCommand extends Command {
         return;
     }
 
-    private async createChannel() {
-        if (this.message.channel instanceof TextChannel) {
-            await new ChannelModel(ChannelType.TextChannel, this.message.channel.id).save();
-        } else if (this.message.channel instanceof DMChannel) {
-            await new ChannelModel(ChannelType.DMChannel, this.message.author.id).save();
+    private async activateChannel(channel?: ChannelModel) {
+
+        if (channel) {
+            channel.active = true;
+            await channel.save();
+        } else {
+            if (this.message.channel instanceof TextChannel) {
+                await new ChannelModel(ChannelType.TextChannel, this.message.channel.id).save();
+            } else if (this.message.channel instanceof DMChannel) {
+                await new ChannelModel(ChannelType.DMChannel, this.message.author.id).save();
+            }
         }
     }
 }

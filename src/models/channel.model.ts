@@ -16,6 +16,9 @@ export class ChannelModel extends BaseModel {
     public identifier: string;
 
     @Column()
+    public active: boolean = true;
+
+    @Column()
     public type: ChannelType;
 
     constructor(type: ChannelType, identifier: string) {

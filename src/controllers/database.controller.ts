@@ -1,9 +1,6 @@
 import { createConnection } from 'typeorm';
 
 import { debug } from '../main';
-import { ChannelModel } from '../models/channel.model';
-import { UserChannelModel } from '../models/user-channel.model';
-import { WormholeModel } from '../models/wormhole.model';
 
 export class DatabaseController {
 
@@ -13,15 +10,6 @@ export class DatabaseController {
 
         this.debug('Creating database connection');
 
-        return createConnection({
-            database: 'data/therabot.db',
-            entities: [
-                ChannelModel,
-                UserChannelModel,
-                WormholeModel,
-            ],
-            synchronize: true,
-            type: 'sqlite',
-        });
+        return createConnection();
     }
 }

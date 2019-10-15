@@ -5,16 +5,17 @@ FROM node:12-alpine
 RUN mkdir -p /app /app/data
 WORKDIR /app
 
-# Copy needed build files
-COPY ./package.json ./package-lock.json ./tsconfig.json ./
+# Copy required files
+COPY ./package.json ./package-lock.json ./tsconfig.json ./ormconfig.js ./
+COPY ./src ./src
 
 # Install dependencies
 RUN npm install
 
-# Copy source files
-COPY ./src ./src
+# Run database migrations
+RUN npm run typeorm migration:run
 
-# Build server for production
+# Build for production
 ENV NODE_ENV production
 RUN npm run build
 RUN npm ci

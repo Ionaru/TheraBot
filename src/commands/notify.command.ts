@@ -1,5 +1,8 @@
 import { DMChannel, TextChannel } from 'discord.js';
+
 import { ChannelModel, ChannelType } from '../models/channel.model';
+import { FilterModel } from '../models/filter.model';
+import { FilterTypeService } from '../services/filter-type.service';
 import { Command } from './command';
 
 export class NotifyCommand extends Command {
@@ -42,6 +45,33 @@ export class NotifyCommand extends Command {
                 }
                 break;
 
+            case 'when':
+
+                const output = [];
+
+                channel = await this.getChannel();
+                if (!channel) {
+                    this.activateChannel(channel);
+                    output.push('- Channel added');
+                    channel = await this.getChannel();
+                }
+
+                if (channel) {
+                    const filter = args.replace('when ', '');
+                    const filterType = await FilterTypeService.getFilterType(args.replace('when ', ''));
+
+                    if (!filterType) {
+                        this.setNotifyEmbed('Unknown filter');
+                        break;
+                    }
+
+                    const filterModel = new FilterModel(channel, filterType, filter);
+                    await filterModel.save();
+                }
+
+                NotifyCommand.debug(args);
+                break;
+
             case 'stop':
                 channel = await this.getChannel();
 
@@ -59,7 +89,7 @@ export class NotifyCommand extends Command {
         }
     }
 
-    private setNotifyEmbed(text: string) {
+    private setNotifyEmbed(text: string | string[]) {
         this.embed.addField('**Notify**', text);
     }
 

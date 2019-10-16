@@ -7,7 +7,7 @@ const runningTSMain = process.argv[1].includes('main.ts');
 
 const models = [
     'channel.model',
-    'user-channel.model',
+    'filter.model',
     'wormhole.model',
 ];
 

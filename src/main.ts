@@ -1,3 +1,4 @@
+import { CacheController, PublicESIService } from '@ionaru/esi-service';
 import { HttpsAgent } from 'agentkeepalive';
 import axios, { AxiosInstance } from 'axios';
 import Debug from 'debug';
@@ -5,6 +6,7 @@ import 'reflect-metadata'; // Required for TypeORM
 
 export const debug = Debug('thera-bot');
 export let axiosInstance: AxiosInstance;
+export let publicESIService: PublicESIService;
 
 import { ClientController } from './controllers/client.controller';
 import { CommandController } from './controllers/command.controller';
@@ -30,6 +32,12 @@ import { WatchController } from './controllers/watch.controller';
 
         // Cap the maximum content length we'll accept to 50MBs, just in case
         maxContentLength: 50000000,
+    });
+
+    const cacheController = new CacheController('data/cache.json');
+    publicESIService = new PublicESIService({
+        axiosInstance,
+        cacheController,
     });
 
     await new DatabaseController().connect();

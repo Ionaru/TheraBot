@@ -24,9 +24,9 @@ if (runningMigration || runningTSMain) {
 
 if (runningMigration) {
     connectionOptions.cli = {
-        migrationsDir: 'src/migrations',
+        migrationsDir: 'migrations',
     };
-    connectionOptions.migrations = ['src/migrations/*.ts'];
+    connectionOptions.migrations = ['migrations/*.ts'];
     connectionOptions.migrationsTableName = 'migrations';
 }
 

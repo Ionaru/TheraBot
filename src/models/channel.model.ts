@@ -22,7 +22,9 @@ export class ChannelModel extends BaseModel {
     @Column()
     public type: ChannelType;
 
-    @OneToMany(() => FilterModel, (filter) => filter.channel)
+    @OneToMany(() => FilterModel, (filter) => filter.channel, {
+        eager: true,
+    })
     public filters!: FilterModel[];
 
     constructor(type: ChannelType, identifier: string) {

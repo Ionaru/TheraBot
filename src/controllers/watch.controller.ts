@@ -4,8 +4,10 @@ import { Channel, Client, DiscordAPIError, RichEmbed, TextChannel, User } from '
 
 import { debug } from '../main';
 import { ChannelModel, ChannelType } from '../models/channel.model';
+import { FilterModel, FilterType } from '../models/filter.model';
 import { WormholeModel } from '../models/wormhole.model';
 import { EveScoutService, IWormholeData } from '../services/eve-scout.service';
+import { NamesService } from '../services/names.service';
 
 type supportedChannelType = TextChannel | User;
 
@@ -41,18 +43,29 @@ export class WatchController {
         }
     }
 
+    private static getSecurityStatusText(secStatus: number) {
+        if (0 < secStatus && secStatus <= 0.05) {
+            return '0.1';
+        }
+
+        return formatNumber(secStatus, 1);
+    }
+
     // tslint:disable-next-line:no-bitwise
     private readonly countdownUnits = countdown.HOURS | countdown.MINUTES;
 
     private readonly client: Client;
     private readonly eveScoutService: EveScoutService;
+    private readonly namesService: NamesService;
     private readonly debug = debug.extend('watch');
+    private readonly wormholeSystemRegex = new RegExp(/^J\d{6}$/);
 
     private knownWormholes: number[] = [];
 
     constructor(client: Client) {
         this.client = client;
         this.eveScoutService = new EveScoutService();
+        this.namesService = new NamesService();
     }
 
     public async startWatchCycle() {
@@ -110,7 +123,8 @@ export class WatchController {
         embed.setColor(WatchController.getSecurityStatusColour(wormhole.destinationSolarSystem.security));
 
         embed.addField('**Region**', wormhole.destinationSolarSystem.region.name, true);
-        embed.addField('**System**', `${wormhole.destinationSolarSystem.name} (${this.getSecurityStatusText(wormhole.destinationSolarSystem.security)})`, true);
+        const securityStatus = WatchController.getSecurityStatusText(wormhole.destinationSolarSystem.security);
+        embed.addField('**System**', `${wormhole.destinationSolarSystem.name} (${securityStatus})`, true);
 
         embed.addBlankField();
 
@@ -127,13 +141,99 @@ export class WatchController {
 
         this.debug(`Sending messages for WH ${wormhole.sourceWormholeType.name} to ${channels.length} channels`);
 
-        channels.forEach((channel) => {
+        channels.forEach((async (channel) => {
+
+            const channelModel = await ChannelModel.findOne({where: [{identifier: channel.id}]});
+            if (!channelModel) {
+                return;
+            }
+
+            const filteredBySecurity = await this.isFilteredBySecurity(channelModel.filters, wormhole);
+            if (filteredBySecurity) {
+                return;
+            }
+
+            const filteredBySystem = await this.isFilteredBySystem(channelModel.filters, wormhole);
+            if (filteredBySystem) {
+                return;
+            }
+
             channel.send('', {embed}).catch((e) => {
                 if (e instanceof DiscordAPIError) {
                     this.debug(`${e.message}: ${channel.toString()}`);
                 }
             });
-        });
+        }));
+    }
+
+    private async isFilteredBySecurity(filters: FilterModel[], wormhole: IWormholeData): Promise<boolean> {
+        const allowedSecurity = [];
+        let wormholeSpace = false;
+
+        const securityClassFilters = filters.filter((filter) => filter.type === FilterType.SecurityClass);
+        for (const securityClassFilter of securityClassFilters) {
+            switch (securityClassFilter.filter) {
+                case 'highsec':
+                    allowedSecurity.push(...['0.5', '0.6', '0.7', '0.8', '0.9', '1.0']);
+                    break;
+                case 'lowsec':
+                    allowedSecurity.push(...['0.1', '0.2', '0.3', '0.4']);
+                    break;
+                case 'nullsec':
+                    allowedSecurity.push(...['-1.0', '-0.9', '-0.8', '-0.7', '-0.6', '-0.5', '-0.4', '-0.3', '-0.2', '-0.1', '0.0']);
+                    break;
+                case 'wspace':
+                    wormholeSpace = true;
+                    break;
+            }
+        }
+
+        const securityStatusFilters = filters.filter((filter) => filter.type === FilterType.SecurityStatus);
+        for (const securityStatusFilter of securityStatusFilters) {
+            allowedSecurity.push(securityStatusFilter.filter);
+        }
+
+        this.debug(`Allowed security: ${allowedSecurity}`);
+
+        const isWormholeSystem = this.wormholeSystemRegex.test(wormhole.destinationSolarSystem.name);
+        if (!allowedSecurity.length && wormholeSpace && !isWormholeSystem) {
+            return true;
+        }
+
+        if (!allowedSecurity.length) {
+            return false;
+        }
+
+        return !allowedSecurity.includes(WatchController.getSecurityStatusText(wormhole.destinationSolarSystem.security));
+    }
+
+    private async isFilteredBySystem(filters: FilterModel[], wormhole: IWormholeData): Promise<boolean> {
+        const systemFilters = filters.filter((filter) => filter.type === FilterType.System);
+        for (const systemFilter of systemFilters) {
+            this.debug(`${wormhole.destinationSolarSystem.name} === ${systemFilter.filter}`);
+            if (wormhole.destinationSolarSystem.name.toLowerCase() === systemFilter.filter) {
+                return false;
+            }
+        }
+
+        const constellationFilters = filters.filter((filter) => filter.type === FilterType.Constellation);
+        for (const constellationFilter of constellationFilters) {
+            const constellationName = await this.namesService.getName(wormhole.destinationSolarSystem.constellationID);
+            this.debug(`${constellationName} === ${constellationFilter.filter}`);
+            if (constellationName && constellationName.toLowerCase() === constellationFilter.filter) {
+                return false;
+            }
+        }
+
+        const regionFilters = filters.filter((filter) => filter.type === FilterType.Region);
+        for (const regionFilter of regionFilters) {
+            this.debug(`${wormhole.destinationSolarSystem.region.name} === ${regionFilter.filter}`);
+            if (wormhole.destinationSolarSystem.region.name.toLowerCase() === regionFilter.filter) {
+                return false;
+            }
+        }
+
+        return !(!systemFilters.length && !constellationFilters.length && !regionFilters.length);
     }
 
     private async getChannelsToNotify() {
@@ -154,8 +254,6 @@ export class WatchController {
 
         return [...channelsToSend, ...userChannelsToSend];
     }
-
-    private getSecurityStatusText = (secStatus: number) => formatNumber(secStatus, 1);
 
     private getMass = (mass: number) => formatNumber(mass * 1000000, 0);
 }

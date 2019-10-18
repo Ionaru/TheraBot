@@ -199,7 +199,7 @@ export class NotifyCommand extends Command {
             '- **here** - Notify about new wormholes in this channel.',
             '- **when (security, system, constellation, region)** - Notify when a wormhole matches a filter. ' +
             'The wormhole must match security AND (system OR constellation OR region). Multiple filters can be active at the same time.',
-            '- **when (security, system, constellation, region)** - Remove a notification filter',
+            '- **undo (security, system, constellation, region)** - Remove a notification filter.',
             '- **stop** - Stop notifying about new wormholes in this channel.',
         ]);
         this.embed.addField('**Examples**', [
@@ -220,8 +220,8 @@ export class NotifyCommand extends Command {
             '- **Kimotoro** - Any system in the Kimotoro constellation.',
             '- **lowsec** - Any system with a security rating between 0.1 and 0.4.',
             '- **0.1, 0.2, 0.3, 0.4** - Same as above.',
-            '- **0.5, 0.7, Domain** - Systems with security rating 0.5 or 0.7, in the Domain region.',
-            '- **highsec, Hek, The Forge** - Systems with security rating 0.5 or higher, in the Hek system or The Forge region.',
+            '- **0.5, 0.7, Domain** - Systems with security rating 0.5 or 0.7 in the Domain region.',
+            '- **highsec, Hek, The Forge** - Systems with security rating 0.5 or higher that are in the Hek system or The Forge region.',
             '- **Jita, 0.5** - Will match nothing because Jita has a security rating of 1.0.',
             '- **Thera** - That\'s... not possible.',
         ]);

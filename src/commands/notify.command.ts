@@ -11,6 +11,7 @@ enum NotifySubCommand {
     when = 'when',
     undo = 'undo',
     stop = 'stop',
+    help = 'help',
 }
 
 export class NotifyCommand extends Command {
@@ -87,6 +88,7 @@ export class NotifyCommand extends Command {
                 await this.setNotifyStop();
                 break;
 
+            case NotifySubCommand.help:
             default:
 
                 this.setNotifyHelp();

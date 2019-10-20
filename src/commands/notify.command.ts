@@ -103,7 +103,7 @@ export class NotifyCommand extends Command {
         const channel = await this.getChannel();
 
         if (channel) {
-            const channelText = [`- **Status** - ${channel && channel.active ? 'Active' : 'Inactive'}`];
+            const channelText = [`- **Status** - ${channel.active ? 'Active' : 'Inactive'}`];
 
             for (const filter of channel.filters) {
                 channelText.push(`- **Filter** - ${filter.filter}`);

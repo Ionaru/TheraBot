@@ -13,7 +13,7 @@ import { CommandController } from './controllers/command.controller';
 import { DatabaseController } from './controllers/database.controller';
 import { WatchController } from './controllers/watch.controller';
 
-(async function start() {
+async function start() {
 
     debug('Hello!');
 
@@ -46,7 +46,7 @@ import { WatchController } from './controllers/watch.controller';
     const clientController = new ClientController(commandController);
     await clientController.activate();
 
-    const watchController = new WatchController(clientController.client);
+    const watchController = new WatchController(clientController.client, axiosInstance, publicESIService);
     await watchController.startWatchCycle();
 
     process.stdin.resume();
@@ -65,9 +65,14 @@ import { WatchController } from './controllers/watch.controller';
         debug('SIGTERM received.');
         clientController.deactivate().then(exit);
     });
-})();
+}
 
 function exit() {
     debug('Bye bye');
     process.exit(0);
+}
+
+// Prevent file from running when importing from it.
+if (require.main === module) {
+    start().then();
 }

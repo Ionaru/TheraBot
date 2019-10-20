@@ -1,4 +1,6 @@
+import { PublicESIService } from '@ionaru/esi-service';
 import { formatNumber } from '@ionaru/format-number';
+import { AxiosInstance } from 'axios';
 import * as countdown from 'countdown';
 import { Channel, Client, DiscordAPIError, RichEmbed, TextChannel, User } from 'discord.js';
 
@@ -62,10 +64,10 @@ export class WatchController {
 
     private knownWormholes: number[] = [];
 
-    constructor(client: Client) {
+    constructor(client: Client, axiosInstance: AxiosInstance, publicESIService: PublicESIService) {
         this.client = client;
-        this.eveScoutService = new EveScoutService();
-        this.namesService = new NamesService();
+        this.eveScoutService = new EveScoutService(axiosInstance);
+        this.namesService = new NamesService(publicESIService);
     }
 
     public async startWatchCycle() {
@@ -141,8 +143,7 @@ export class WatchController {
 
         this.debug(`Sending messages for WH ${wormhole.sourceWormholeType.name} to ${channels.length} channels`);
 
-        channels.forEach((async (channel) => {
-
+        return Promise.all(channels.map(async (channel) => {
             const channelModel = await ChannelModel.findOne({where: [{identifier: channel.id}]});
             if (!channelModel) {
                 return;
@@ -210,7 +211,6 @@ export class WatchController {
     private async isFilteredBySystem(filters: FilterModel[], wormhole: IWormholeData): Promise<boolean> {
         const systemFilters = filters.filter((filter) => filter.type === FilterType.System);
         for (const systemFilter of systemFilters) {
-            this.debug(`${wormhole.destinationSolarSystem.name} === ${systemFilter.filter}`);
             if (wormhole.destinationSolarSystem.name.toLowerCase() === systemFilter.filter) {
                 return false;
             }
@@ -219,7 +219,6 @@ export class WatchController {
         const constellationFilters = filters.filter((filter) => filter.type === FilterType.Constellation);
         for (const constellationFilter of constellationFilters) {
             const constellationName = await this.namesService.getName(wormhole.destinationSolarSystem.constellationID);
-            this.debug(`${constellationName} === ${constellationFilter.filter}`);
             if (constellationName && constellationName.toLowerCase() === constellationFilter.filter) {
                 return false;
             }
@@ -227,7 +226,6 @@ export class WatchController {
 
         const regionFilters = filters.filter((filter) => filter.type === FilterType.Region);
         for (const regionFilter of regionFilters) {
-            this.debug(`${wormhole.destinationSolarSystem.region.name} === ${regionFilter.filter}`);
             if (wormhole.destinationSolarSystem.region.name.toLowerCase() === regionFilter.filter) {
                 return false;
             }

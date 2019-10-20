@@ -1,4 +1,6 @@
-import { axiosInstance, debug } from '../main';
+import { debug } from '../main';
+
+import { AxiosInstance } from 'axios';
 
 export interface IRegion {
     id: number;
@@ -53,11 +55,16 @@ export interface IWormholeData {
 
 export class EveScoutService {
 
+    private axiosInstance: AxiosInstance;
     private debug = debug.extend('EveScoutService');
+
+    constructor(axiosInstance: AxiosInstance) {
+        this.axiosInstance = axiosInstance;
+    }
 
     public async getWH(secondAttempt = false): Promise<IWormholeData[] | undefined> {
         this.debug('getWH');
-        const response = await axiosInstance.get<IWormholeData[]>('https://www.eve-scout.com/api/wormholes').catch(() => undefined);
+        const response = await this.axiosInstance.get<IWormholeData[]>('https://www.eve-scout.com/api/wormholes').catch(() => undefined);
 
         if (!response) {
             if (!secondAttempt) {

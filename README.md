@@ -15,15 +15,10 @@ Show information and commands.
 
 **Syntax**: `!thera info`
 
-##### !thera notify here
-Notify about new wormholes in this channel.
+##### !thera notify
+Show information about the notify command and filtering.
 
-**Syntax**: `!thera notify here`
-
-##### !thera notify stop
-Stop notifying about new wormholes in this channel.
-
-**Syntax**: `!thera notify stop`
+**Syntax**: `!thera notify`
 
 #### Discord permissions
 To properly function and perform all commands in a chat channel, TheraBot requires 3 Discord permissions:

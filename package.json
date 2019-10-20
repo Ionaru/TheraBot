@@ -17,7 +17,6 @@
         "lint:test": "tslint -c tslint.json src/**/*.spec.ts --format stylish",
         "pretest": "npm run lint",
         "test": "jest src",
-        "posttest": "codecov -f coverage/*.json",
         "start": "npm run migrate && node ./dist/main.js",
         "preversion": "npm run test"
     },

@@ -1,0 +1,19 @@
+{
+    "id": 0,
+    "signatureId": "AAA",
+    "wormholeMass": "stable",
+    "wormholeEstimatedEol": "2019-10-19T00:00:00.000Z",
+    "wormholeDestinationSignatureId": "ZZZ",
+    "sourceWormholeType": {
+        "name": "E000",
+        "jumpMass": 1000
+    },
+    "destinationSolarSystem": {
+        "name": "Jita",
+        "constellationID": 20000020,
+        "security": 0.9459131360054016,
+        "region": {
+            "name": "The Forge"
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "id": 0,
+    "signatureId": "AAA",
+    "wormholeMass": "stable",
+    "wormholeEstimatedEol": "2019-10-19T00:00:00.000Z",
+    "wormholeDestinationSignatureId": "ZZZ",
+    "sourceWormholeType": {
+        "name": "E000",
+        "jumpMass": 1000
+    },
+    "destinationSolarSystem": {
+        "name": "3-DMQT",
+        "constellationID": 20000696,
+        "security": -1.0,
+        "region": {
+            "name": "Delve"
+        }
+    }
+}

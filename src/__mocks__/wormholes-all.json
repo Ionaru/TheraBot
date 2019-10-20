@@ -1,0 +1,2296 @@
+[
+    {
+        "id": 57305,
+        "signatureId": "UHD",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T13:44:36.000Z",
+        "wormholeDestinationSignatureId": "ACL",
+        "createdAt": "2019-10-18T21:44:36.000Z",
+        "updatedAt": "2019-10-18T21:44:36.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Ef Cobb",
+        "createdById": "2114068272",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 137,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30003134,
+        "sourceWormholeType": {
+            "id": 137,
+            "name": "E587",
+            "src": "thera",
+            "dest": "nullsec",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30003134,
+            "name": "CZ6U-1",
+            "constellationID": 20000458,
+            "security": -0.345139,
+            "regionId": 10000039,
+            "region": {
+                "id": 10000039,
+                "name": "Esoteria"
+            }
+        }
+    },
+    {
+        "id": 57304,
+        "signatureId": "MLJ",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T13:41:23.000Z",
+        "wormholeDestinationSignatureId": "LTY",
+        "createdAt": "2019-10-18T21:41:23.000Z",
+        "updatedAt": "2019-10-18T21:41:23.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Ef Cobb",
+        "createdById": "2114068272",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 137,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30003700,
+        "sourceWormholeType": {
+            "id": 137,
+            "name": "E587",
+            "src": "thera",
+            "dest": "nullsec",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30003700,
+            "name": "X5-UME",
+            "constellationID": 20000539,
+            "security": -0.389217,
+            "regionId": 10000046,
+            "region": {
+                "id": 10000046,
+                "name": "Fade"
+            }
+        }
+    },
+    {
+        "id": 57303,
+        "signatureId": "JZY",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T13:39:30.000Z",
+        "wormholeDestinationSignatureId": "JNK",
+        "createdAt": "2019-10-18T21:39:30.000Z",
+        "updatedAt": "2019-10-18T21:39:30.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Ef Cobb",
+        "createdById": "2114068272",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 137,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30003709,
+        "sourceWormholeType": {
+            "id": 137,
+            "name": "E587",
+            "src": "thera",
+            "dest": "nullsec",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30003709,
+            "name": "D-GTMI",
+            "constellationID": 20000541,
+            "security": -0.324702,
+            "regionId": 10000047,
+            "region": {
+                "id": 10000047,
+                "name": "Providence"
+            }
+        }
+    },
+    {
+        "id": 57283,
+        "signatureId": "ITE",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "critical",
+        "wormholeEstimatedEol": "2019-10-19T00:40:07.000Z",
+        "wormholeDestinationSignatureId": "GSH",
+        "createdAt": "2019-10-18T08:40:07.000Z",
+        "updatedAt": "2019-10-18T20:40:46.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 139,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 31000487,
+        "sourceWormholeType": {
+            "id": 139,
+            "name": "F135",
+            "src": "C2",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 31000487,
+            "name": "J172556",
+            "constellationID": 21000033,
+            "security": -0.99,
+            "regionId": 11000005,
+            "region": {
+                "id": 11000005,
+                "name": "B-R00005"
+            }
+        }
+    },
+    {
+        "id": 57281,
+        "signatureId": "HBH",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "critical",
+        "wormholeEstimatedEol": "2019-10-19T00:33:48.000Z",
+        "wormholeDestinationSignatureId": "ZHR",
+        "createdAt": "2019-10-18T08:33:48.000Z",
+        "updatedAt": "2019-10-18T20:34:46.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 139,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 31002369,
+        "sourceWormholeType": {
+            "id": 139,
+            "name": "F135",
+            "src": "C2",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 31002369,
+            "name": "J164745",
+            "constellationID": 21000297,
+            "security": -0.99,
+            "regionId": 11000030,
+            "region": {
+                "id": 11000030,
+                "name": "F-R00030"
+            }
+        }
+    },
+    {
+        "id": 57280,
+        "signatureId": "JZV",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "critical",
+        "wormholeEstimatedEol": "2019-10-19T00:25:52.000Z",
+        "wormholeDestinationSignatureId": "HMB",
+        "createdAt": "2019-10-18T08:25:52.000Z",
+        "updatedAt": "2019-10-18T20:26:46.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 139,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 31001998,
+        "sourceWormholeType": {
+            "id": 139,
+            "name": "F135",
+            "src": "C2",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 31001998,
+            "name": "J213055",
+            "constellationID": 21000247,
+            "security": -0.99,
+            "regionId": 11000025,
+            "region": {
+                "id": 11000025,
+                "name": "E-R00025"
+            }
+        }
+    },
+    {
+        "id": 57278,
+        "signatureId": "DBD",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "critical",
+        "wormholeEstimatedEol": "2019-10-19T00:22:36.000Z",
+        "wormholeDestinationSignatureId": "RVI",
+        "createdAt": "2019-10-18T08:22:36.000Z",
+        "updatedAt": "2019-10-18T20:22:46.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 136,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30002720,
+        "sourceWormholeType": {
+            "id": 136,
+            "name": "V898",
+            "src": "thera",
+            "dest": "lowsec",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30002720,
+            "name": "Thelan",
+            "constellationID": 20000398,
+            "security": 0.226993,
+            "regionId": 10000032,
+            "region": {
+                "id": 10000032,
+                "name": "Sinq Laison"
+            }
+        }
+    },
+    {
+        "id": 57276,
+        "signatureId": "AKQ",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "critical",
+        "wormholeEstimatedEol": "2019-10-19T00:19:26.000Z",
+        "wormholeDestinationSignatureId": "TKA",
+        "createdAt": "2019-10-18T08:19:26.000Z",
+        "updatedAt": "2019-10-18T20:19:46.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 139,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 31001564,
+        "sourceWormholeType": {
+            "id": 139,
+            "name": "F135",
+            "src": "C2",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 31001564,
+            "name": "J145659",
+            "constellationID": 21000181,
+            "security": -0.99,
+            "regionId": 11000019,
+            "region": {
+                "id": 11000019,
+                "name": "D-R00019"
+            }
+        }
+    },
+    {
+        "id": 57277,
+        "signatureId": "YBT",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "critical",
+        "wormholeEstimatedEol": "2019-10-19T00:18:35.000Z",
+        "wormholeDestinationSignatureId": "JFU",
+        "createdAt": "2019-10-18T08:20:20.000Z",
+        "updatedAt": "2019-10-18T20:18:46.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Dybenko",
+        "createdById": "770927031",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 135,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30003888,
+        "sourceWormholeType": {
+            "id": 135,
+            "name": "Q063",
+            "src": "thera",
+            "dest": "highsec",
+            "lifetime": 16,
+            "jumpMass": 20,
+            "maxMass": 1000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30003888,
+            "name": "Badivefi",
+            "constellationID": 20000568,
+            "security": 0.658747,
+            "regionId": 10000049,
+            "region": {
+                "id": 10000049,
+                "name": "Khanid"
+            }
+        }
+    },
+    {
+        "id": 57275,
+        "signatureId": "EPZ",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "critical",
+        "wormholeEstimatedEol": "2019-10-19T00:16:35.000Z",
+        "wormholeDestinationSignatureId": "SXM",
+        "createdAt": "2019-10-18T08:16:35.000Z",
+        "updatedAt": "2019-10-18T20:16:46.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 140,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30004180,
+        "sourceWormholeType": {
+            "id": 140,
+            "name": "L031",
+            "src": "null",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 3000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30004180,
+            "name": "CBY8-J",
+            "constellationID": 20000611,
+            "security": -0.296496,
+            "regionId": 10000053,
+            "region": {
+                "id": 10000053,
+                "name": "Cobalt Edge"
+            }
+        }
+    },
+    {
+        "id": 57298,
+        "signatureId": "SEX",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T12:02:25.000Z",
+        "wormholeDestinationSignatureId": "IRP",
+        "createdAt": "2019-10-18T20:02:25.000Z",
+        "updatedAt": "2019-10-18T20:02:25.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Ef Cobb",
+        "createdById": "2114068272",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 135,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30005015,
+        "sourceWormholeType": {
+            "id": 135,
+            "name": "Q063",
+            "src": "thera",
+            "dest": "highsec",
+            "lifetime": 16,
+            "jumpMass": 20,
+            "maxMass": 1000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30005015,
+            "name": "Synchelle",
+            "constellationID": 20000734,
+            "security": 0.870733,
+            "regionId": 10000064,
+            "region": {
+                "id": 10000064,
+                "name": "Essence"
+            }
+        }
+    },
+    {
+        "id": 57297,
+        "signatureId": "SQE",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T11:59:45.000Z",
+        "wormholeDestinationSignatureId": "UWF",
+        "createdAt": "2019-10-18T19:59:45.000Z",
+        "updatedAt": "2019-10-18T19:59:45.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Ef Cobb",
+        "createdById": "2114068272",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 138,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30002673,
+        "sourceWormholeType": {
+            "id": 138,
+            "name": "T458",
+            "src": "highsec",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 20,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30002673,
+            "name": "Estene",
+            "constellationID": 20000391,
+            "security": 0.766312,
+            "regionId": 10000032,
+            "region": {
+                "id": 10000032,
+                "name": "Sinq Laison"
+            }
+        }
+    },
+    {
+        "id": 57295,
+        "signatureId": "JLJ",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T11:54:40.000Z",
+        "wormholeDestinationSignatureId": "YQZ",
+        "createdAt": "2019-10-18T19:54:40.000Z",
+        "updatedAt": "2019-10-18T19:54:40.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Ef Cobb",
+        "createdById": "2114068272",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 136,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30004265,
+        "sourceWormholeType": {
+            "id": 136,
+            "name": "V898",
+            "src": "thera",
+            "dest": "lowsec",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30004265,
+            "name": "Yekh",
+            "constellationID": 20000623,
+            "security": 0.044434,
+            "regionId": 10000054,
+            "region": {
+                "id": 10000054,
+                "name": "Aridia"
+            }
+        }
+    },
+    {
+        "id": 57293,
+        "signatureId": "ZJV",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T07:14:37.000Z",
+        "wormholeDestinationSignatureId": "CYE",
+        "createdAt": "2019-10-18T15:14:37.000Z",
+        "updatedAt": "2019-10-18T15:14:37.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 142,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30003560,
+        "sourceWormholeType": {
+            "id": 142,
+            "name": "M164",
+            "src": "lowsec",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30003560,
+            "name": "Hoshoun",
+            "constellationID": 20000519,
+            "security": 0.085137,
+            "regionId": 10000043,
+            "region": {
+                "id": 10000043,
+                "name": "Domain"
+            }
+        }
+    },
+    {
+        "id": 57292,
+        "signatureId": "IDT",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T07:12:01.000Z",
+        "wormholeDestinationSignatureId": "HNN",
+        "createdAt": "2019-10-18T15:12:01.000Z",
+        "updatedAt": "2019-10-18T15:12:01.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 140,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30005156,
+        "sourceWormholeType": {
+            "id": 140,
+            "name": "L031",
+            "src": "null",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 3000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30005156,
+            "name": "U-3FKL",
+            "constellationID": 20000754,
+            "security": -0.446316,
+            "regionId": 10000066,
+            "region": {
+                "id": 10000066,
+                "name": "Perrigen Falls"
+            }
+        }
+    },
+    {
+        "id": 57291,
+        "signatureId": "COQ",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T07:08:12.000Z",
+        "wormholeDestinationSignatureId": "KJX",
+        "createdAt": "2019-10-18T15:08:12.000Z",
+        "updatedAt": "2019-10-18T15:08:12.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 138,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30005232,
+        "sourceWormholeType": {
+            "id": 138,
+            "name": "T458",
+            "src": "highsec",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 20,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30005232,
+            "name": "Pamah",
+            "constellationID": 20000765,
+            "security": 0.497449,
+            "regionId": 10000067,
+            "region": {
+                "id": 10000067,
+                "name": "Genesis"
+            }
+        }
+    },
+    {
+        "id": 57290,
+        "signatureId": "XLH",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T05:05:20.000Z",
+        "wormholeDestinationSignatureId": "IZZ",
+        "createdAt": "2019-10-18T13:05:20.000Z",
+        "updatedAt": "2019-10-18T13:05:20.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 142,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30001422,
+        "sourceWormholeType": {
+            "id": 142,
+            "name": "M164",
+            "src": "lowsec",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30001422,
+            "name": "Iitanmadan",
+            "constellationID": 20000208,
+            "security": 0.305869,
+            "regionId": 10000016,
+            "region": {
+                "id": 10000016,
+                "name": "Lonetrek"
+            }
+        }
+    },
+    {
+        "id": 57289,
+        "signatureId": "CWR",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T04:41:47.000Z",
+        "wormholeDestinationSignatureId": "OBE",
+        "createdAt": "2019-10-18T12:41:47.000Z",
+        "updatedAt": "2019-10-18T12:41:47.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 140,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30000300,
+        "sourceWormholeType": {
+            "id": 140,
+            "name": "L031",
+            "src": "null",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 3000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30000300,
+            "name": "LS9B-9",
+            "constellationID": 20000042,
+            "security": -0.19893,
+            "regionId": 10000003,
+            "region": {
+                "id": 10000003,
+                "name": "Vale of the Silent"
+            }
+        }
+    },
+    {
+        "id": 57286,
+        "signatureId": "CDA",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-19T04:31:54.000Z",
+        "wormholeDestinationSignatureId": "CDA",
+        "createdAt": "2019-10-18T12:31:54.000Z",
+        "updatedAt": "2019-10-18T12:31:54.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 136,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30000095,
+        "sourceWormholeType": {
+            "id": 136,
+            "name": "V898",
+            "src": "thera",
+            "dest": "lowsec",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30000095,
+            "name": "Asilem",
+            "constellationID": 20000014,
+            "security": 0.284998,
+            "regionId": 10000001,
+            "region": {
+                "id": 10000001,
+                "name": "Derelik"
+            }
+        }
+    },
+    {
+        "id": 57318,
+        "signatureId": "BYX",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "critical",
+        "wormholeEstimatedEol": "2019-10-20T02:16:31.000Z",
+        "wormholeDestinationSignatureId": "JOM",
+        "createdAt": "2019-10-19T10:16:31.000Z",
+        "updatedAt": "2019-10-19T22:16:46.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 142,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30004301,
+        "sourceWormholeType": {
+            "id": 142,
+            "name": "M164",
+            "src": "lowsec",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30004301,
+            "name": "Anath",
+            "constellationID": 20000628,
+            "security": 0.041327,
+            "regionId": 10000054,
+            "region": {
+                "id": 10000054,
+                "name": "Aridia"
+            }
+        }
+    },
+    {
+        "id": 57346,
+        "signatureId": "CMB",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T12:26:08.000Z",
+        "wormholeDestinationSignatureId": "EHO",
+        "createdAt": "2019-10-19T20:26:08.000Z",
+        "updatedAt": "2019-10-19T20:26:08.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 140,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30002291,
+        "sourceWormholeType": {
+            "id": 140,
+            "name": "L031",
+            "src": "null",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 3000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30002291,
+            "name": "5J-62N",
+            "constellationID": 20000336,
+            "security": -0.319319,
+            "regionId": 10000027,
+            "region": {
+                "id": 10000027,
+                "name": "Etherium Reach"
+            }
+        }
+    },
+    {
+        "id": 57345,
+        "signatureId": "WIS",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T12:21:49.000Z",
+        "wormholeDestinationSignatureId": "OMV",
+        "createdAt": "2019-10-19T20:21:49.000Z",
+        "updatedAt": "2019-10-19T20:21:49.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 135,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30003433,
+        "sourceWormholeType": {
+            "id": 135,
+            "name": "Q063",
+            "src": "thera",
+            "dest": "highsec",
+            "lifetime": 16,
+            "jumpMass": 20,
+            "maxMass": 1000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30003433,
+            "name": "Gedugaud",
+            "constellationID": 20000500,
+            "security": 0.736299,
+            "regionId": 10000042,
+            "region": {
+                "id": 10000042,
+                "name": "Metropolis"
+            }
+        }
+    },
+    {
+        "id": 57344,
+        "signatureId": "GEM",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T12:19:37.000Z",
+        "wormholeDestinationSignatureId": "QPN",
+        "createdAt": "2019-10-19T20:19:37.000Z",
+        "updatedAt": "2019-10-19T20:19:37.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 140,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30004743,
+        "sourceWormholeType": {
+            "id": 140,
+            "name": "L031",
+            "src": "null",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 3000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30004743,
+            "name": "MJXW-P",
+            "constellationID": 20000693,
+            "security": -0.900121,
+            "regionId": 10000060,
+            "region": {
+                "id": 10000060,
+                "name": "Delve"
+            }
+        }
+    },
+    {
+        "id": 57343,
+        "signatureId": "GNS",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T12:16:35.000Z",
+        "wormholeDestinationSignatureId": "XEB",
+        "createdAt": "2019-10-19T20:16:35.000Z",
+        "updatedAt": "2019-10-19T20:16:35.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 137,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30001206,
+        "sourceWormholeType": {
+            "id": 137,
+            "name": "E587",
+            "src": "thera",
+            "dest": "nullsec",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30001206,
+            "name": "CBL-XP",
+            "constellationID": 20000176,
+            "security": -0.284196,
+            "regionId": 10000014,
+            "region": {
+                "id": 10000014,
+                "name": "Catch"
+            }
+        }
+    },
+    {
+        "id": 57342,
+        "signatureId": "VIO",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T12:13:24.000Z",
+        "wormholeDestinationSignatureId": "BGQ",
+        "createdAt": "2019-10-19T20:13:24.000Z",
+        "updatedAt": "2019-10-19T20:13:24.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 139,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 31001957,
+        "sourceWormholeType": {
+            "id": 139,
+            "name": "F135",
+            "src": "C2",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 31001957,
+            "name": "J134096",
+            "constellationID": 21000241,
+            "security": -0.99,
+            "regionId": 11000024,
+            "region": {
+                "id": 11000024,
+                "name": "E-R00024"
+            }
+        }
+    },
+    {
+        "id": 57341,
+        "signatureId": "BAL",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T12:09:52.000Z",
+        "wormholeDestinationSignatureId": "SXC",
+        "createdAt": "2019-10-19T20:09:52.000Z",
+        "updatedAt": "2019-10-19T20:09:52.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 136,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30004991,
+        "sourceWormholeType": {
+            "id": 136,
+            "name": "V898",
+            "src": "thera",
+            "dest": "lowsec",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30004991,
+            "name": "Vitrauze",
+            "constellationID": 20000730,
+            "security": 0.299746,
+            "regionId": 10000064,
+            "region": {
+                "id": 10000064,
+                "name": "Essence"
+            }
+        }
+    },
+    {
+        "id": 57340,
+        "signatureId": "JIA",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T12:06:59.000Z",
+        "wormholeDestinationSignatureId": "RBH",
+        "createdAt": "2019-10-19T20:06:59.000Z",
+        "updatedAt": "2019-10-19T20:06:59.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 142,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30002062,
+        "sourceWormholeType": {
+            "id": 142,
+            "name": "M164",
+            "src": "lowsec",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30002062,
+            "name": "Todifrauan",
+            "constellationID": 20000304,
+            "security": 0.115855,
+            "regionId": 10000042,
+            "region": {
+                "id": 10000042,
+                "name": "Metropolis"
+            }
+        }
+    },
+    {
+        "id": 57339,
+        "signatureId": "PEW",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T08:47:49.000Z",
+        "wormholeDestinationSignatureId": "LDC",
+        "createdAt": "2019-10-19T16:47:49.000Z",
+        "updatedAt": "2019-10-19T16:47:49.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 136,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30005007,
+        "sourceWormholeType": {
+            "id": 136,
+            "name": "V898",
+            "src": "thera",
+            "dest": "lowsec",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30005007,
+            "name": "Lisbaetanne",
+            "constellationID": 20000732,
+            "security": 0.373263,
+            "regionId": 10000064,
+            "region": {
+                "id": 10000064,
+                "name": "Essence"
+            }
+        }
+    },
+    {
+        "id": 57336,
+        "signatureId": "GEH",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T08:07:03.000Z",
+        "wormholeDestinationSignatureId": "YLG",
+        "createdAt": "2019-10-19T16:13:50.000Z",
+        "updatedAt": "2019-10-19T16:13:50.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Rogue Integer",
+        "createdById": "90713361",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 136,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30045348,
+        "sourceWormholeType": {
+            "id": 136,
+            "name": "V898",
+            "src": "thera",
+            "dest": "lowsec",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30045348,
+            "name": "Notoras",
+            "constellationID": 20000782,
+            "security": 0.188791,
+            "regionId": 10000069,
+            "region": {
+                "id": 10000069,
+                "name": "Black Rise"
+            }
+        }
+    },
+    {
+        "id": 57335,
+        "signatureId": "MSH",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T07:47:03.000Z",
+        "wormholeDestinationSignatureId": "YUP",
+        "createdAt": "2019-10-19T16:11:02.000Z",
+        "updatedAt": "2019-10-19T16:11:02.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Rogue Integer",
+        "createdById": "90713361",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 138,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30002531,
+        "sourceWormholeType": {
+            "id": 138,
+            "name": "T458",
+            "src": "highsec",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 20,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30002531,
+            "name": "Gerek",
+            "constellationID": 20000371,
+            "security": 0.732252,
+            "regionId": 10000030,
+            "region": {
+                "id": 10000030,
+                "name": "Heimatar"
+            }
+        }
+    },
+    {
+        "id": 57333,
+        "signatureId": "KZX",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T07:47:03.000Z",
+        "wormholeDestinationSignatureId": "WTN",
+        "createdAt": "2019-10-19T15:57:57.000Z",
+        "updatedAt": "2019-10-19T15:57:57.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Rogue Integer",
+        "createdById": "90713361",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 138,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30001660,
+        "sourceWormholeType": {
+            "id": 138,
+            "name": "T458",
+            "src": "highsec",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 20,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30001660,
+            "name": "Dabrid",
+            "constellationID": 20000245,
+            "security": 0.64884,
+            "regionId": 10000020,
+            "region": {
+                "id": 10000020,
+                "name": "Tash-Murkon"
+            }
+        }
+    },
+    {
+        "id": 57330,
+        "signatureId": "XRB",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T05:45:44.000Z",
+        "wormholeDestinationSignatureId": "YZH",
+        "createdAt": "2019-10-19T13:45:44.000Z",
+        "updatedAt": "2019-10-19T13:45:44.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 142,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30002409,
+        "sourceWormholeType": {
+            "id": 142,
+            "name": "M164",
+            "src": "lowsec",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30002409,
+            "name": "Osvetur",
+            "constellationID": 20000354,
+            "security": 0.24758,
+            "regionId": 10000028,
+            "region": {
+                "id": 10000028,
+                "name": "Molden Heath"
+            }
+        }
+    },
+    {
+        "id": 57329,
+        "signatureId": "CIN",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T05:27:12.000Z",
+        "wormholeDestinationSignatureId": "TWM",
+        "createdAt": "2019-10-19T13:27:12.000Z",
+        "updatedAt": "2019-10-19T13:27:12.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 137,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30005158,
+        "sourceWormholeType": {
+            "id": 137,
+            "name": "E587",
+            "src": "thera",
+            "dest": "nullsec",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30005158,
+            "name": "J9A-BH",
+            "constellationID": 20000755,
+            "security": -0.280864,
+            "regionId": 10000066,
+            "region": {
+                "id": 10000066,
+                "name": "Perrigen Falls"
+            }
+        }
+    },
+    {
+        "id": 57327,
+        "signatureId": "GJU",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T05:20:51.000Z",
+        "wormholeDestinationSignatureId": "BWL",
+        "createdAt": "2019-10-19T13:20:51.000Z",
+        "updatedAt": "2019-10-19T13:20:51.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 140,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30004520,
+        "sourceWormholeType": {
+            "id": 140,
+            "name": "L031",
+            "src": "null",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 1000,
+            "maxMass": 3000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30004520,
+            "name": "3HQC-6",
+            "constellationID": 20000660,
+            "security": -0.039106,
+            "regionId": 10000057,
+            "region": {
+                "id": 10000057,
+                "name": "Outer Ring"
+            }
+        }
+    },
+    {
+        "id": 57325,
+        "signatureId": "ABK",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T05:09:23.000Z",
+        "wormholeDestinationSignatureId": "OYA",
+        "createdAt": "2019-10-19T13:09:23.000Z",
+        "updatedAt": "2019-10-19T13:09:23.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 135,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30002650,
+        "sourceWormholeType": {
+            "id": 135,
+            "name": "Q063",
+            "src": "thera",
+            "dest": "highsec",
+            "lifetime": 16,
+            "jumpMass": 20,
+            "maxMass": 1000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30002650,
+            "name": "Ney",
+            "constellationID": 20000388,
+            "security": 0.456755,
+            "regionId": 10000032,
+            "region": {
+                "id": 10000032,
+                "name": "Sinq Laison"
+            }
+        }
+    },
+    {
+        "id": 57320,
+        "signatureId": "KWR",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "critical",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T02:34:41.000Z",
+        "wormholeDestinationSignatureId": "RWL",
+        "createdAt": "2019-10-19T10:34:41.000Z",
+        "updatedAt": "2019-10-19T12:23:02.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 141,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 31000305,
+        "sourceWormholeType": {
+            "id": 141,
+            "name": "F353",
+            "src": "C1",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 300,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 31000305,
+            "name": "J152353",
+            "constellationID": 21000016,
+            "security": -0.99,
+            "regionId": 11000003,
+            "region": {
+                "id": 11000003,
+                "name": "A-R00003"
+            }
+        }
+    },
+    {
+        "id": 57321,
+        "signatureId": "AQN",
+        "type": "wormhole",
+        "status": "scanned",
+        "wormholeMass": "stable",
+        "wormholeEol": "stable",
+        "wormholeEstimatedEol": "2019-10-20T03:17:46.000Z",
+        "wormholeDestinationSignatureId": "VSF",
+        "createdAt": "2019-10-19T11:17:46.000Z",
+        "updatedAt": "2019-10-19T11:17:46.000Z",
+        "deletedAt": null,
+        "statusUpdatedAt": null,
+        "createdBy": "Orexys",
+        "createdById": "95473790",
+        "deletedBy": null,
+        "deletedById": null,
+        "wormholeSourceWormholeTypeId": 138,
+        "wormholeDestinationWormholeTypeId": 91,
+        "solarSystemId": 31000005,
+        "wormholeDestinationSolarSystemId": 30003404,
+        "sourceWormholeType": {
+            "id": 138,
+            "name": "T458",
+            "src": "highsec",
+            "dest": "thera",
+            "lifetime": 16,
+            "jumpMass": 20,
+            "maxMass": 2000
+        },
+        "destinationWormholeType": {
+            "id": 91,
+            "name": "K162",
+            "src": "anywhere",
+            "dest": "anywhere",
+            "lifetime": 0,
+            "jumpMass": 0,
+            "maxMass": 0
+        },
+        "sourceSolarSystem": {
+            "id": 31000005,
+            "name": "Thera",
+            "constellationID": 21000324,
+            "security": -0.99,
+            "regionId": 11000031,
+            "region": {
+                "id": 11000031,
+                "name": "G-R00031"
+            }
+        },
+        "destinationSolarSystem": {
+            "id": 30003404,
+            "name": "Agtver",
+            "constellationID": 20000496,
+            "security": 0.881107,
+            "regionId": 10000042,
+            "region": {
+                "id": 10000042,
+                "name": "Metropolis"
+            }
+        }
+    }
+]

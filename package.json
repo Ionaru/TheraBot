@@ -62,6 +62,6 @@
         "escape-string-regexp": "^2.0.0",
         "reflect-metadata": "^0.1.13",
         "sqlite3": "^4.1.0",
-        "typeorm": "^0.2.19"
+        "typeorm": "^0.2.20"
     }
 }

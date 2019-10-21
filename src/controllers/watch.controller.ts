@@ -196,8 +196,6 @@ export class WatchController {
             allowedSecurity.push(securityStatusFilter.filter);
         }
 
-        this.debug(`Allowed security: ${allowedSecurity}`);
-
         const isWormholeSystem = this.wormholeSystemRegex.test(wormhole.destinationSolarSystem.name);
         if (!allowedSecurity.length && wormholeSpace && !isWormholeSystem) {
             return true;

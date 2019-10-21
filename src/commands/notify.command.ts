@@ -102,15 +102,20 @@ export class NotifyCommand extends Command {
     private async setNotifyInfo() {
         const channel = await this.getChannel();
 
+        const channelText = [];
+
         if (channel) {
-            const channelText = [`- **Status** - ${channel.active ? 'Active' : 'Inactive'}`];
+            channelText.push(`- **Status** - ${channel.active ? 'Active' : 'Inactive'}`);
 
             for (const filter of channel.filters) {
                 channelText.push(`- **Filter** - ${filter.filter}`);
             }
 
-            this.embed.addField('**Notifications in this channel**', channelText);
+        } else {
+            channelText.push(`- **Status** - Inactive`, '', 'Run \`!thera notify here\` to enable notifications.');
         }
+
+        this.embed.addField('**Notifications in this channel**', channelText);
     }
 
     private async setNotifyHere() {
@@ -197,7 +202,7 @@ export class NotifyCommand extends Command {
 
     private setNotifyHelp() {
         this.embed.addField('**Notify**', [
-            '- **info** - Show information about notifications in this channel.',
+            '- **info** - Show information about notifications and active filters in this channel.',
             '- **here** - Notify about new wormholes in this channel.',
             '- **when (security, system, constellation, region)** - Notify when a wormhole matches a filter. ' +
             'The wormhole must match security AND (system OR constellation OR region). Multiple filters can be active at the same time.',
@@ -224,7 +229,7 @@ export class NotifyCommand extends Command {
             '- **0.1, 0.2, 0.3, 0.4** - Same as above.',
             '- **0.5, 0.7, Domain** - Systems with security rating 0.5 or 0.7 in the Domain region.',
             '- **highsec, Hek, The Forge** - Systems with security rating 0.5 or higher that are in the Hek system or The Forge region.',
-            '- **Jita, 0.5** - Will match nothing because Jita has a security rating of 1.0.',
+            '- **Jita, 0.5** - Will match nothing because Jita has a security rating of 0.9.',
             '- **Thera** - That\'s... not possible.',
         ]);
     }

@@ -141,7 +141,7 @@ export class NotifyCommand extends Command {
         const output = [];
 
         let channel = await this.getChannel();
-        if (!channel) {
+        if (!channel || !channel.active) {
             await this.activateChannel(channel);
             output.push('Channel added');
             channel = await this.getChannel();

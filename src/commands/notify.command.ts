@@ -238,7 +238,7 @@ export class NotifyCommand extends Command {
         if (this.message.channel instanceof TextChannel) {
             return ChannelModel.findOne({where: [{identifier: this.message.channel.id}]});
         } else if (this.message.channel instanceof DMChannel) {
-            return ChannelModel.findOne({where: [{identifier: this.message.author.id}], loadEagerRelations: true});
+            return ChannelModel.findOne({where: [{identifier: this.message.author.id}]});
         }
         return;
     }

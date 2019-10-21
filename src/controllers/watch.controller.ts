@@ -72,7 +72,7 @@ export class WatchController {
 
     public async startWatchCycle() {
         const wormholes = await WormholeModel.find();
-        this.knownWormholes = wormholes.map((wormhole) => wormhole.identifier);
+        this.knownWormholes = wormholes.map((wormhole) => wormhole.id);
 
         this.debug(`Started watching with ${this.knownWormholes.length} known wormholes`);
 
@@ -110,11 +110,7 @@ export class WatchController {
         });
 
         closedWormholes.forEach((wormholeId) => {
-            WormholeModel.findOne({where: [{identifier: wormholeId}]}).then((wormhole) => {
-                if (wormhole) {
-                    wormhole.remove().then();
-                }
-            });
+            WormholeModel.delete(wormholeId);
         });
     }
 

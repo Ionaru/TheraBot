@@ -36,4 +36,4 @@ jobs:
 
             - name: Deploy
               if: github.event_name == 'push'
-              run: bash .github/workflows/deploy.sh TheraBot_Build ${{ secrets.API_TOKEN }}
+              run: npx -q @ionaru/teamcity-deploy teamcity.saturnserver.org TheraBot_Build ${{ secrets.API_TOKEN }}

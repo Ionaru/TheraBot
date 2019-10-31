@@ -10,6 +10,9 @@ export class DatabaseController {
 
         this.debug('Creating database connection');
 
-        return createConnection();
+        const connection = await createConnection();
+
+        this.debug(`Database: ${connection.driver.database}`);
+        this.debug(`Entities: ${connection.entityMetadatas.map((entity) => entity.targetName).join(', ')}`);
     }
 }

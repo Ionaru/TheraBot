@@ -1,5 +1,6 @@
 import { DMChannel, TextChannel } from 'discord.js';
 
+import { publicESIService } from '../main';
 import { ChannelModel, ChannelType } from '../models/channel.model';
 import { FilterModel } from '../models/filter.model';
 import { FilterTypeService } from '../services/filter-type.service';
@@ -154,7 +155,7 @@ export class NotifyCommand extends Command {
                 return;
             }
 
-            const filterType = await FilterTypeService.getFilterType(filter);
+            const filterType = await new FilterTypeService(publicESIService).getFilterType(filter);
 
             if (filterType === undefined) {
                 this.setNotifyEmbed('Unknown filter');

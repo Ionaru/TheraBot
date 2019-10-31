@@ -1,11 +1,11 @@
+import { PublicESIService } from '@ionaru/esi-service';
 import { EVE, ISearchData } from '@ionaru/eve-utils';
 
-import { publicESIService } from '../main';
 import { FilterType } from '../models/filter.model';
 
 export class FilterTypeService {
 
-    public static securityStatuses = [
+    private securityStatuses = [
         '-1.0',
         '-0.9',
         '-0.8',
@@ -29,24 +29,30 @@ export class FilterTypeService {
         '1.0',
     ];
 
-    public static securityClasses = [
+    private securityClasses = [
         'highsec',
         'lowsec',
         'nullsec',
         'wspace',
     ];
 
-    public static async getFilterType(filter: string): Promise<FilterType | undefined> {
+    private publicESIService: PublicESIService;
 
-        if (FilterTypeService.securityStatuses.includes(filter)) {
+    constructor(publicESIService: PublicESIService) {
+        this.publicESIService = publicESIService;
+    }
+
+    public async getFilterType(filter: string): Promise<FilterType | undefined> {
+
+        if (this.securityStatuses.includes(filter)) {
             return FilterType.SecurityStatus;
-        } else if (FilterTypeService.securityClasses.includes(filter.toLowerCase())) {
+        } else if (this.securityClasses.includes(filter.toLowerCase())) {
             return FilterType.SecurityClass;
         }
 
         // Search for the input in ESI
         const url = EVE.getSearchUrl(filter, ['solar_system', 'constellation', 'region']);
-        const response = await publicESIService.fetchESIData<ISearchData>(url).catch(() => undefined);
+        const response = await this.publicESIService.fetchESIData<ISearchData>(url).catch(() => undefined);
 
         if (response) {
             if (response.region) {

@@ -164,6 +164,11 @@ export class WatchController {
     }
 
     private async isFilteredBySecurity(filters: FilterModel[], wormhole: IWormholeData): Promise<boolean> {
+
+        if (!filters.length) {
+            return false;
+        }
+
         const allowedSecurity = [];
         let wormholeSpace = false;
         let absoluteStatus = false;
@@ -212,6 +217,11 @@ export class WatchController {
     }
 
     private async isFilteredBySystem(filters: FilterModel[], wormhole: IWormholeData): Promise<boolean> {
+
+        if (!filters.length) {
+            return false;
+        }
+
         const systemFilters = filters.filter((filter) => filter.type === FilterType.System);
         for (const systemFilter of systemFilters) {
             if (wormhole.destinationSolarSystem.name.toLowerCase() === systemFilter.filter) {

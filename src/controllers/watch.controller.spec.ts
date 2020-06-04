@@ -75,7 +75,7 @@ describe('WatchController', () => {
             for (const wormhole of wormholes) {
                 await watchController.sendWormholeAddedMessage([channel], wormhole as any);
             }
-            expect(channelSendMock.mock.calls.length).toBe(31);
+            expect(channelSendMock.mock.calls.length).toBe(wormholes.length);
         });
 
         test.each([

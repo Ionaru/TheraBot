@@ -1,5 +1,5 @@
 import { PublicESIService } from '@ionaru/esi-service';
-import { EVE, ISearchData } from '@ionaru/eve-utils';
+import { EVE, ISearchData, SearchCategory } from '@ionaru/eve-utils';
 
 import { FilterType } from '../models/filter.model';
 
@@ -51,7 +51,9 @@ export class FilterTypeService {
         }
 
         // Search for the input in ESI
-        const url = EVE.getSearchUrl(filter, ['solar_system', 'constellation', 'region']);
+        const url = EVE.getSearchUrl(filter, [
+            SearchCategory.SOLAR_SYSTEM, SearchCategory.CONSTELLATION, SearchCategory.REGION,
+        ]);
         const response = await this.publicESIService.fetchESIData<ISearchData>(url).catch(() => undefined);
 
         if (response) {

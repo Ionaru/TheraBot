@@ -74,10 +74,10 @@ export abstract class Command {
             let reply: Message | Message[] | undefined = await this.message.reply(this.initialReply);
 
             if (Array.isArray(reply)) {
-                reply = reply.length > 0 ? reply[0] : undefined;
+                reply = reply.length ? reply[0] : undefined;
             }
 
-            this.replyPlaceHolder = reply;
+            this.replyPlaceHolder = reply as Message | undefined;
         }
     }
 }

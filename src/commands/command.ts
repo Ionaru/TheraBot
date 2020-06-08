@@ -1,4 +1,4 @@
-import { Message, MessageOptions, RichEmbed } from 'discord.js';
+import { Message, MessageEmbed } from 'discord.js';
 import * as escapeStringRegexp from 'escape-string-regexp';
 
 import { debug } from '../main';
@@ -23,8 +23,7 @@ export abstract class Command {
     }
 
     protected readonly message: Message;
-    protected readonly reply: {text?: string, options?: MessageOptions} = {};
-    protected readonly embed = new RichEmbed();
+    protected readonly embed = new MessageEmbed();
 
     protected abstract readonly initialReply?: string;
 
@@ -41,8 +40,6 @@ export abstract class Command {
             throw new Error('Embed creation failed.');
         }
 
-        this.reply.options = {embed: this.embed};
-
         if (await this.isCommandValid()) {
             await this.processCommand();
         }
@@ -52,16 +49,13 @@ export abstract class Command {
 
     protected async sendReply() {
 
-        const reply = this.reply.text || '';
-        const options = this.reply.options || {};
-
         if (this.replyPlaceHolder) {
             Command.debug(`Editing initial reply`);
-            return this.replyPlaceHolder.edit(reply, options);
+            return this.replyPlaceHolder.edit(this.embed);
         }
 
         Command.debug(`Sending reply`);
-        return this.message.reply(reply, options);
+        return this.message.reply(this.embed);
     }
 
     protected abstract async isCommandValid(): Promise<boolean>;

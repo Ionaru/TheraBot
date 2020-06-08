@@ -134,8 +134,7 @@ export class NotifyCommand extends Command {
 
         // A wormhole from Thera will never connect to Thera.
         if (['thera', 'g-c00324', 'g-r00031'].includes(filter)) {
-            this.reply.options = {};
-            this.reply.text = 'https://tenor.com/view/denhom-clapping-it-crowd-bravo-funny-guy-gif-13251757';
+            this.embed.image = {url: 'https://media1.tenor.com/images/b073c5af6bf50ffcd80bdb2ae823f8f7/tenor.gif?itemid=13251757'};
             return;
         }
 

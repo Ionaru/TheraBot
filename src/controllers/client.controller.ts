@@ -28,10 +28,8 @@ export class ClientController {
     }
 
     public async deactivate() {
-        if (this.client) {
-            this.debug('Destroying client');
-            await this.client.destroy();
-        }
+        this.debug('Destroying client');
+        await this.client?.destroy();
     }
 
     private onMessage(message: Message) {
@@ -44,8 +42,6 @@ export class ClientController {
     }
 
     private setPresence() {
-        if (this.client) {
-            this.client.user.setPresence({game: {name: '!thera info', type: 'WATCHING'}}).then();
-        }
+        this.client?.user?.setActivity('!thera info', {type: 'WATCHING'}).then();
     }
 }

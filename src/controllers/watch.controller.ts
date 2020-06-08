@@ -79,7 +79,7 @@ export class WatchController {
         setInterval(() => {
             this.doWatchCycle();
         }, 300000); // 5 minutes
-        this.doWatchCycle();
+        this.doWatchCycle().then();
     }
 
     public async doWatchCycle() {

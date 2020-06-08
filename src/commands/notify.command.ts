@@ -125,7 +125,7 @@ export class NotifyCommand extends Command {
         if (channel && channel.active) {
             this.setNotifyEmbed('Channel already added');
         } else {
-            this.activateChannel(channel);
+            await this.activateChannel(channel);
             this.setNotifyEmbed('Channel added');
         }
     }

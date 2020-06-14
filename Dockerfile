@@ -11,7 +11,7 @@ COPY ./migrations ./migrations
 COPY ./src ./src
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
 # Build for production
 ENV NODE_ENV production

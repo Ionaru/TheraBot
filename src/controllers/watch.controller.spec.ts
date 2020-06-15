@@ -35,6 +35,7 @@ describe('WatchController', () => {
         }
 
         beforeEach(async () => {
+            jest.useFakeTimers();
             const connectionOptions = await getConnectionOptions();
 
             Object.assign(connectionOptions, {entities: [ChannelModel, FilterModel]});

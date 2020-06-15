@@ -253,7 +253,7 @@ export class WatchController {
 
         const allSavedChannels = await ChannelModel.find({where: [{active: true}]});
 
-        const channels = await this.client.channels.cache.array().filter(comparator) as supportedChannelType[];
+        const channels = this.client.channels.cache.array().filter(comparator) as supportedChannelType[];
         const savedChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.TextChannel);
         const savedChannelIds = savedChannels.map((channel) => channel.identifier);
         const channelsToSend = channels.filter((channel) => savedChannelIds.includes(channel.id));

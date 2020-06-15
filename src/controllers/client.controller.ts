@@ -27,9 +27,9 @@ export class ClientController {
         return this.client.login(process.env.THERABOT_TOKEN);
     }
 
-    public async deactivate() {
+    public deactivate() {
         this.debug('Destroying client');
-        await this.client?.destroy();
+        this.client?.destroy();
     }
 
     private onMessage(message: Message) {

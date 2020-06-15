@@ -55,23 +55,22 @@ async function start() {
     });
     process.on('uncaughtException', (error) => {
         process.stderr.write(`Uncaught Exception! \n${error}\n`);
-        Promise.all(deactivate(clientController, cacheController)).catch(exit).then(exit);
+        deactivate(clientController, cacheController);
     });
     process.on('SIGINT', () => {
         debug('SIGINT received.');
-        Promise.all(deactivate(clientController, cacheController)).catch(exit).then(exit);
+        deactivate(clientController, cacheController);
     });
     process.on('SIGTERM', () => {
         debug('SIGTERM received.');
-        Promise.all(deactivate(clientController, cacheController)).catch(exit).then(exit);
+        deactivate(clientController, cacheController);
     });
 }
 
 function deactivate(clientController: ClientController, cacheController: CacheController) {
     cacheController.dumpCache();
-    return [
-        clientController.deactivate(),
-    ];
+    clientController.deactivate();
+    exit();
 }
 
 function exit() {

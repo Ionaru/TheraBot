@@ -62,7 +62,7 @@
         "escape-string-regexp": "^4.0.0",
         "http-status-codes": "^2.1.4",
         "reflect-metadata": "^0.1.13",
-        "sqlite3": "^5.0.1",
+        "sqlite3": "^5.0.0",
         "typeorm": "^0.2.30"
     }
 }

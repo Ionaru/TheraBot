@@ -58,8 +58,8 @@ export abstract class Command {
         return this.message.reply(this.embed);
     }
 
-    protected abstract async isCommandValid(): Promise<boolean>;
-    protected abstract async processCommand(): Promise<void>;
+    protected abstract isCommandValid(): Promise<boolean>;
+    protected abstract processCommand(): Promise<void>;
 
     protected async sendInitialReply() {
         if (this.initialReply) {

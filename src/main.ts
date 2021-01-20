@@ -34,10 +34,11 @@ async function start() {
         maxContentLength: 50000000,
     });
 
-    const cacheController = new CacheController('data/cache.json');
+    const cacheController = new CacheController('data/cache.json', undefined, debug);
     publicESIService = new PublicESIService({
         axiosInstance,
         cacheController,
+        debug,
     });
 
     await new DatabaseController().connect();

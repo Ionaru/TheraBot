@@ -69,7 +69,7 @@ export class NotifyCommand extends Command {
                     break;
                 }
 
-                await this.setNotifyWhen(whenArg.toLowerCase());
+                await this.setNotifyWhen(whenArg.toLowerCase().split(',').map((part) => part.trim()));
                 break;
 
             case NotifySubCommand.undo:
@@ -81,7 +81,7 @@ export class NotifyCommand extends Command {
                     break;
                 }
 
-                await this.setNotifyUndo(undoArg.toLowerCase());
+                await this.setNotifyUndo(undoArg.toLowerCase().split(',').map((part) => part.trim()));
                 break;
 
             case NotifySubCommand.stop:
@@ -130,46 +130,51 @@ export class NotifyCommand extends Command {
         }
     }
 
-    private async setNotifyWhen(filter: string) {
+    private async setNotifyWhen(filters: string[]) {
 
-        // A wormhole from Thera will never connect to Thera.
-        if (['thera', 'g-c00324', 'g-r00031'].includes(filter)) {
-            this.embed.image = {url: 'https://media1.tenor.com/images/b073c5af6bf50ffcd80bdb2ae823f8f7/tenor.gif?itemid=13251757'};
-            return;
-        }
-
-        const output = [];
-
-        let channel = await this.getChannel();
-        if (!channel || !channel.active) {
-            await this.activateChannel(channel);
-            output.push('Channel added');
-            channel = await this.getChannel();
-        }
-
-        if (channel) {
-
-            if (await NotifyCommand.getFilter(channel, filter)) {
-                this.setNotifyEmbed('Filter already exists on this channel');
+        for (const filter of filters) {
+            // A wormhole from Thera will never connect to Thera.
+            if (['thera', 'g-c00324', 'g-r00031'].includes(filter)) {
+                this.embed.image = {url: 'https://media1.tenor.com/images/b073c5af6bf50ffcd80bdb2ae823f8f7/tenor.gif?itemid=13251757'};
                 return;
             }
+        }
 
-            const filterType = await new FilterTypeService(publicESIService).getFilterType(filter);
+        for (const filter of filters) {
 
-            if (filterType === undefined) {
-                this.setNotifyEmbed('Unknown filter');
-                return;
+            const output = [];
+
+            let channel = await this.getChannel();
+            if (!channel || !channel.active) {
+                await this.activateChannel(channel);
+                output.push('Channel added');
+                channel = await this.getChannel();
             }
 
-            const filterModel = new FilterModel(channel, filterType, filter);
-            await filterModel.save();
-            output.push('Filter added');
+            if (channel) {
 
-            this.setNotifyEmbed(output);
+                if (await NotifyCommand.getFilter(channel, filter)) {
+                    this.setNotifyEmbed(`Filter **${filter}** already exists on this channel`);
+                    continue;
+                }
+
+                const filterType = await new FilterTypeService(publicESIService).getFilterType(filter);
+
+                if (filterType === undefined) {
+                    this.setNotifyEmbed(`Unknown filter: **${filter}**`);
+                    continue;
+                }
+
+                const filterModel = new FilterModel(channel, filterType, filter);
+                await filterModel.save();
+                output.push(`Filter **${filter}** added`);
+
+                this.setNotifyEmbed(output);
+            }
         }
     }
 
-    private async setNotifyUndo(filter: string) {
+    private async setNotifyUndo(filters: string[]) {
         const channel = await this.getChannel();
 
         if (!channel) {
@@ -177,15 +182,18 @@ export class NotifyCommand extends Command {
             return;
         }
 
-        const filterModel = await NotifyCommand.getFilter(channel, filter);
+        for (const filter of filters) {
 
-        if (!filterModel) {
-            this.setNotifyEmbed('Filter not found');
-            return;
+            const filterModel = await NotifyCommand.getFilter(channel, filter);
+
+            if (!filterModel) {
+                this.setNotifyEmbed(`Filter **${filter}** not found`);
+                continue;
+            }
+
+            await filterModel.remove();
+            this.setNotifyEmbed(`Filter **${filter}** removed`);
         }
-
-        await filterModel.remove();
-        this.setNotifyEmbed('Filter removed');
     }
 
     private async setNotifyStop() {

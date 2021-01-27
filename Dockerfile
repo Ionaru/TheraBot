@@ -7,11 +7,12 @@ WORKDIR /app
 
 # Copy required files
 COPY ./package.json ./package-lock.json ./tsconfig.json ./ormconfig.js ./
-COPY ./migrations ./migrations
-COPY ./src ./src
 
 # Install dependencies
 RUN npm ci
+
+# Copy source files
+COPY ./src ./src
 
 # Build for production
 ENV NODE_ENV production
@@ -19,6 +20,9 @@ RUN npm run build
 
 # Add volumes
 VOLUME /app/data
+
+# Copy migration files
+COPY ./migrations ./migrations
 
 ## RUN
 

@@ -13,7 +13,7 @@ const models = [
 
 const connectionOptions = {
     database: 'data/therabot.db',
-    type: 'sqlite',
+    type: 'better-sqlite3',
 };
 
 connectionOptions.entities = models.map((model) =>

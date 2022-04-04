@@ -23,7 +23,7 @@ jobs:
                   node-version: '14'
 
             - name: Audit
-              run: npm audit
+              run: npm audit --production
 
             - name: Install packages
               run: npm install

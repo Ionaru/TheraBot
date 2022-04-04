@@ -1,14 +1,14 @@
 import { PublicESIService } from '@ionaru/esi-service';
 import { EVE, IUniverseTypeData } from '@ionaru/eve-utils';
 
-import { debug } from '../main';
+import { debug } from '../debug';
 
 export class NamesService {
 
     private debug = debug.extend('NamesService');
     private publicESIService: PublicESIService;
 
-    constructor(publicESIService: PublicESIService) {
+    public constructor(publicESIService: PublicESIService) {
         this.publicESIService = publicESIService;
     }
 
@@ -18,10 +18,6 @@ export class NamesService {
         const url = EVE.getUniverseTypeUrl(id);
         const response = await this.publicESIService.fetchESIData<IUniverseTypeData>(url).catch(() => undefined);
 
-        if (response) {
-            return response.name;
-        }
-
-        return;
+        return response ? response.name : undefined;
     }
 }

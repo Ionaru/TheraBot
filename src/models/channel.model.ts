@@ -17,17 +17,17 @@ export class ChannelModel extends BaseModel {
     public identifier: string;
 
     @Column()
-    public active: boolean = true;
+    public active = true;
 
     @Column()
     public type: ChannelType;
 
-    @OneToMany(() => FilterModel, (filter) => filter.channel, {
+    @OneToMany('FilterModel', 'channel', {
         eager: true,
     })
     public filters!: FilterModel[];
 
-    constructor(type: ChannelType, identifier: string) {
+    public constructor(type: ChannelType, identifier: string) {
         super();
         this.type = type;
         this.identifier = identifier;

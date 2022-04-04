@@ -1,6 +1,7 @@
 import { Client, Message } from 'discord.js';
 
-import { debug } from '../main';
+import { debug } from '../debug';
+
 import { CommandController } from './command.controller';
 
 export class ClientController {
@@ -10,7 +11,7 @@ export class ClientController {
     private readonly debug = debug.extend('client');
     private readonly commandController: CommandController;
 
-    constructor(commandController: CommandController) {
+    public constructor(commandController: CommandController) {
         this.commandController = commandController;
         this.client = new Client();
         this.debug('Client created');

@@ -27,7 +27,7 @@ export class FilterModel extends BaseModel {
     })
     public channel: ChannelModel;
 
-    constructor(channel: ChannelModel, type: FilterType, filter: string) {
+    public constructor(channel: ChannelModel, type: FilterType, filter: string) {
         super();
         this.channel = channel;
         this.type = type;

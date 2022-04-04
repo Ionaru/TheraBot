@@ -1,36 +1,36 @@
 import { Message, MessageEmbed } from 'discord.js';
 import * as escapeStringRegexp from 'escape-string-regexp';
 
-import { debug } from '../main';
+import { debug } from '../debug';
 
 export abstract class Command {
 
     public static readonly commandPrefix = '!thera ';
+
+    protected static readonly debug = debug.extend('command');
+
+    protected readonly message: Message;
+    protected readonly embed = new MessageEmbed();
+
+    private replyPlaceHolder?: Message;
+
+    protected abstract readonly initialReply?: string;
+
+    public constructor(message: Message) {
+        this.message = message;
+    }
 
     public static test(message: string) {
         Command.debug(`Testing ${message}`);
         return message.startsWith(Command.commandPrefix);
     }
 
-    protected static readonly debug = debug.extend('command');
-
     protected static createCommandRegex(commands: string[], rootCommand = false): RegExp {
         const beginning = rootCommand ? '^' : '';
 
-        return new RegExp(`${beginning}(${commands.map((element) => {
-            return escapeStringRegexp(Command.commandPrefix) + element + '\\b';
-        }).join('|')})`, 'i');
-    }
-
-    protected readonly message: Message;
-    protected readonly embed = new MessageEmbed();
-
-    protected abstract readonly initialReply?: string;
-
-    private replyPlaceHolder?: Message;
-
-    constructor(message: Message) {
-        this.message = message;
+        return new RegExp(`${beginning}(${commands.map((element) =>
+            escapeStringRegexp(Command.commandPrefix) + element + '\\b').join('|')})`, 'i'
+        );
     }
 
     public async execute() {
@@ -58,9 +58,6 @@ export abstract class Command {
         return this.message.reply(this.embed);
     }
 
-    protected abstract isCommandValid(): Promise<boolean>;
-    protected abstract processCommand(): Promise<void>;
-
     protected async sendInitialReply() {
         if (this.initialReply) {
             Command.debug(`Sending initial reply`);
@@ -74,4 +71,7 @@ export abstract class Command {
             this.replyPlaceHolder = reply as Message | undefined;
         }
     }
+
+    protected abstract isCommandValid(): Promise<boolean>;
+    protected abstract processCommand(): Promise<void>;
 }

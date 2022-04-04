@@ -1,9 +1,10 @@
 import { DMChannel, TextChannel } from 'discord.js';
 
-import { publicESIService } from '../main';
 import { ChannelModel, ChannelType } from '../models/channel.model';
 import { FilterModel } from '../models/filter.model';
 import { FilterTypeService } from '../services/filter-type.service';
+import { getPublicESIService } from '../utils/public-esi-service.util';
+
 import { Command } from './command';
 
 enum NotifySubCommand {
@@ -23,12 +24,14 @@ export class NotifyCommand extends Command {
 
     public static readonly debug = Command.debug.extend('notify');
 
+    private static readonly commandRegex = Command.createCommandRegex(NotifyCommand.commands, true);
+
+    protected initialReply = undefined;
+
     public static test(command: string) {
         NotifyCommand.debug(`Testing ${command} (${NotifyCommand.commandRegex})`);
         return NotifyCommand.commandRegex.test(command);
     }
-
-    private static readonly commandRegex = Command.createCommandRegex(NotifyCommand.commands, true);
 
     private static async getFilter(channel: ChannelModel, filter: string): Promise<FilterModel | undefined> {
         return FilterModel.findOne({where: [{channel, filter}]});
@@ -38,8 +41,6 @@ export class NotifyCommand extends Command {
         return args.replace(subCommand, '').trim();
     }
 
-    protected initialReply = undefined;
-
     protected async isCommandValid(): Promise<boolean> {
         return true;
     }
@@ -47,6 +48,8 @@ export class NotifyCommand extends Command {
     protected async processCommand(): Promise<void> {
         const args = this.message.content.replace(NotifyCommand.commandRegex, '').trim();
         const firstArg = args.toLowerCase().split(' ').shift();
+        const whenArg = NotifyCommand.trimSubCommand(args, NotifySubCommand.when);
+        const undoArg = NotifyCommand.trimSubCommand(args, NotifySubCommand.undo);
 
         switch (firstArg) {
 
@@ -62,8 +65,6 @@ export class NotifyCommand extends Command {
 
             case NotifySubCommand.when:
 
-                const whenArg = NotifyCommand.trimSubCommand(args, NotifySubCommand.when);
-
                 if (!whenArg.length) {
                     this.setNotifyEmbed('Argument expected.');
                     break;
@@ -73,8 +74,6 @@ export class NotifyCommand extends Command {
                 break;
 
             case NotifySubCommand.undo:
-
-                const undoArg = NotifyCommand.trimSubCommand(args, NotifySubCommand.undo);
 
                 if (!undoArg.length) {
                     this.setNotifyEmbed('Argument expected.');
@@ -113,7 +112,7 @@ export class NotifyCommand extends Command {
             }
 
         } else {
-            channelText.push(`- **Status** - Inactive`, '', 'Run \`!thera notify here\` to enable notifications.');
+            channelText.push(`- **Status** - Inactive`, '', 'Run `!thera notify here` to enable notifications.');
         }
 
         this.embed.addField('**Notifications in this channel**', channelText);
@@ -158,7 +157,7 @@ export class NotifyCommand extends Command {
                     continue;
                 }
 
-                const filterType = await new FilterTypeService(publicESIService).getFilterType(filter);
+                const filterType = await new FilterTypeService(getPublicESIService()).getFilterType(filter);
 
                 if (filterType === undefined) {
                     this.setNotifyEmbed(`Unknown filter: **${filter}**`);
@@ -248,7 +247,7 @@ export class NotifyCommand extends Command {
         } else if (this.message.channel instanceof DMChannel) {
             return ChannelModel.findOne({where: [{identifier: this.message.author.id}]});
         }
-        return;
+        return undefined;
     }
 
     private async activateChannel(channel?: ChannelModel) {

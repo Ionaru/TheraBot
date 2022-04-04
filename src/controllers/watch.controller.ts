@@ -4,7 +4,7 @@ import { AxiosInstance } from 'axios';
 import * as countdown from 'countdown';
 import { Channel, Client, DiscordAPIError, MessageEmbed, TextChannel, User } from 'discord.js';
 
-import { debug } from '../main';
+import { debug } from '../debug';
 import { ChannelModel, ChannelType } from '../models/channel.model';
 import { FilterModel, FilterType } from '../models/filter.model';
 import { WormholeModel } from '../models/wormhole.model';
@@ -14,6 +14,23 @@ import { NamesService } from '../services/names.service';
 type supportedChannelType = TextChannel | User;
 
 export class WatchController {
+
+    // eslint-disable-next-line no-bitwise
+    private readonly countdownUnits = countdown.HOURS | countdown.MINUTES;
+
+    private readonly client: Client;
+    private readonly eveScoutService: EveScoutService;
+    private readonly namesService: NamesService;
+    private readonly debug = debug.extend('watch');
+    private readonly wormholeSystemRegex = new RegExp(/^J\d{6}$/);
+
+    private knownWormholes: number[] = [];
+
+    public constructor(client: Client, axiosInstance: AxiosInstance, publicESIService: PublicESIService) {
+        this.client = client;
+        this.eveScoutService = new EveScoutService(axiosInstance);
+        this.namesService = new NamesService(publicESIService);
+    }
 
     private static getSecurityStatusColour(secStatus: number) {
         const roundedSecStatus = Number(secStatus.toPrecision(1));
@@ -51,23 +68,6 @@ export class WatchController {
         }
 
         return formatNumber(secStatus, 1);
-    }
-
-    // tslint:disable-next-line:no-bitwise
-    private readonly countdownUnits = countdown.HOURS | countdown.MINUTES;
-
-    private readonly client: Client;
-    private readonly eveScoutService: EveScoutService;
-    private readonly namesService: NamesService;
-    private readonly debug = debug.extend('watch');
-    private readonly wormholeSystemRegex = new RegExp(/^J\d{6}$/);
-
-    private knownWormholes: number[] = [];
-
-    constructor(client: Client, axiosInstance: AxiosInstance, publicESIService: PublicESIService) {
-        this.client = client;
-        this.eveScoutService = new EveScoutService(axiosInstance);
-        this.namesService = new NamesService(publicESIService);
     }
 
     public async startWatchCycle() {
@@ -124,17 +124,19 @@ export class WatchController {
         const securityStatus = WatchController.getSecurityStatusText(wormhole.destinationSolarSystem.security);
         embed.addField('**System**', `${wormhole.destinationSolarSystem.name} (${securityStatus})`, true);
 
-        embed.addField('\u200b', '\u200b')
+        embed.addField('\u200b', '\u200b');
 
         embed.addField('**Signature** (In - Out)', `\`${wormhole.wormholeDestinationSignatureId}\` - \`${wormhole.signatureId}\``, true);
         embed.addField('**Size**', [`${this.getMass(wormhole.sourceWormholeType.jumpMass)}kg`, wormhole.wormholeMass], true);
         embed.addField('**Type**', `\`${wormhole.sourceWormholeType.name}\``, true);
 
-        embed.addField('\u200b', '\u200b')
+        embed.addField('\u200b', '\u200b');
 
         embed.addField('**Estimated Life**', `${countdown(new Date(wormhole.wormholeEstimatedEol), undefined, this.countdownUnits)}`);
 
-        embed.setFooter('Data from https://www.eve-scout.com/', 'http://www.newedenpodcast.de/wp-content/uploads/2019/02/EvE-Scout_Logo-281x300.png');
+        embed.setFooter(
+            'Data from https://www.eve-scout.com/', 'http://www.newedenpodcast.de/wp-content/uploads/2019/02/EvE-Scout_Logo-281x300.png'
+        );
         embed.setTimestamp();
 
         this.debug(`Sending messages for WH ${wormhole.sourceWormholeType.name} to ${channels.length} channels`);

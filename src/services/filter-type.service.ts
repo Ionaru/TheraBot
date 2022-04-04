@@ -38,7 +38,7 @@ export class FilterTypeService {
 
     private publicESIService: PublicESIService;
 
-    constructor(publicESIService: PublicESIService) {
+    public constructor(publicESIService: PublicESIService) {
         this.publicESIService = publicESIService;
     }
 
@@ -66,6 +66,6 @@ export class FilterTypeService {
             }
         }
 
-        return;
+        return undefined;
     }
 }

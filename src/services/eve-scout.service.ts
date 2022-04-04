@@ -1,6 +1,6 @@
-import { debug } from '../main';
-
 import { AxiosInstance } from 'axios';
+
+import { debug } from '../debug';
 
 export interface IRegion {
     id: number;
@@ -58,7 +58,7 @@ export class EveScoutService {
     private axiosInstance: AxiosInstance;
     private debug = debug.extend('EveScoutService');
 
-    constructor(axiosInstance: AxiosInstance) {
+    public constructor(axiosInstance: AxiosInstance) {
         this.axiosInstance = axiosInstance;
     }
 

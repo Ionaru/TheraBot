@@ -1,6 +1,6 @@
 import { createConnection } from 'typeorm';
 
-import { debug } from '../main';
+import { debug } from '../debug';
 
 export class DatabaseController {
 

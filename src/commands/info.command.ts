@@ -8,13 +8,13 @@ export class InfoCommand extends Command {
 
     public static readonly debug = Command.debug.extend('info');
 
+    private static readonly commandRegex = Command.createCommandRegex(InfoCommand.commands, true);
+    protected initialReply = undefined;
+
     public static test(command: string) {
         InfoCommand.debug(`Testing ${command} (${InfoCommand.commandRegex})`);
         return InfoCommand.commandRegex.test(command);
     }
-
-    private static readonly commandRegex = Command.createCommandRegex(InfoCommand.commands, true);
-    protected initialReply = undefined;
 
     protected async isCommandValid(): Promise<boolean> {
         return true;
@@ -35,8 +35,16 @@ export class InfoCommand extends Command {
             '- !thera notify',
         ]);
 
-        this.embed.addField('**Code, issues and feature requests**', 'The code for this bot is hosted on GitHub, please report issues and feature requests there: <https://github.com/Ionaru/TheraBot>');
+        this.embed.addField(
+            '**Code, issues and feature requests**',
+            // eslint-disable-next-line max-len
+            'The code for this bot is hosted on GitHub, please report issues and feature requests there: <https://github.com/Ionaru/TheraBot>'
+        );
 
-        this.embed.addField('**Disclaimer**', 'EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf.');
+        this.embed.addField(
+            '**Disclaimer**',
+            // eslint-disable-next-line max-len
+            'EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf.'
+        );
     }
 }

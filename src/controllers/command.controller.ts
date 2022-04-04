@@ -3,7 +3,7 @@ import { Message } from 'discord.js';
 import { Command } from '../commands/command';
 import { InfoCommand } from '../commands/info.command';
 import { NotifyCommand } from '../commands/notify.command';
-import { debug } from '../main';
+import { debug } from '../debug';
 
 export class CommandController {
 

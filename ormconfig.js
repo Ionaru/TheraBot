@@ -16,11 +16,9 @@ const connectionOptions = {
     type: 'sqlite',
 };
 
-if (runningMigration || runningTSMain) {
-    connectionOptions.entities = models.map((model) => `src/models/${model}.ts`);
-} else {
-    connectionOptions.entities = models.map((model) => `dist/models/${model}.js`);
-}
+connectionOptions.entities = models.map((model) =>
+    runningMigration || runningTSMain ? `src/models/${model}.ts` : `dist/models/${model}.js`
+);
 
 if (runningMigration) {
     connectionOptions.cli = {

@@ -1,45 +1,25 @@
-import { CacheController, PublicESIService } from '@ionaru/esi-service';
-import { HttpsAgent } from 'agentkeepalive';
-import axios, { AxiosInstance } from 'axios';
-import Debug from 'debug';
-import 'reflect-metadata'; // Required for TypeORM
+import { format } from 'util';
 
-export const debug = Debug('thera-bot');
-export let axiosInstance: AxiosInstance;
-export let publicESIService: PublicESIService;
+import { CacheController } from '@ionaru/esi-service';
+import { config } from 'dotenv';
+import 'reflect-metadata'; // Required for TypeORM
 
 import { ClientController } from './controllers/client.controller';
 import { CommandController } from './controllers/command.controller';
 import { DatabaseController } from './controllers/database.controller';
 import { WatchController } from './controllers/watch.controller';
+import { debug } from './debug';
+import { getAxiosInstance } from './utils/axios-instance.util';
+import { getCacheController } from './utils/cache-controller.util';
+import { getPublicESIService } from './utils/public-esi-service.util';
 
-async function start() {
+const start = async () => {
+
+    config();
 
     debug('Hello!');
 
     debug(`NodeJS version ${process.version}`);
-
-    debug('Creating axios instance');
-    axiosInstance = axios.create({
-        // 60 sec timeout
-        timeout: 60000,
-
-        // keepAlive pools and reuses TCP connections, so it's faster
-        httpsAgent: new HttpsAgent(),
-
-        // Follow up to 10 HTTP 3xx redirects
-        maxRedirects: 10,
-
-        // Cap the maximum content length we'll accept to 50MBs, just in case
-        maxContentLength: 50000000,
-    });
-
-    const cacheController = new CacheController('data/cache.json', undefined, debug);
-    publicESIService = new PublicESIService({
-        axiosInstance,
-        cacheController,
-        debug,
-    });
 
     await new DatabaseController().connect();
 
@@ -47,7 +27,9 @@ async function start() {
     const clientController = new ClientController(commandController);
     await clientController.activate();
 
-    const watchController = new WatchController(clientController.client, axiosInstance, publicESIService);
+    const watchController = new WatchController(
+        clientController.client, getAxiosInstance(), getPublicESIService(),
+    );
     await watchController.startWatchCycle();
 
     process.stdin.resume();
@@ -56,30 +38,30 @@ async function start() {
     });
     process.on('uncaughtException', (error) => {
         process.stderr.write(`Uncaught Exception! \n${error}\n`);
-        deactivate(clientController, cacheController);
+        deactivate(clientController, getCacheController());
     });
     process.on('SIGINT', () => {
         debug('SIGINT received.');
-        deactivate(clientController, cacheController);
+        deactivate(clientController, getCacheController());
     });
     process.on('SIGTERM', () => {
         debug('SIGTERM received.');
-        deactivate(clientController, cacheController);
+        deactivate(clientController, getCacheController());
     });
-}
+};
 
-function deactivate(clientController: ClientController, cacheController: CacheController) {
+const deactivate = (clientController: ClientController, cacheController: CacheController) => {
     cacheController.dumpCache();
     clientController.deactivate();
     exit();
-}
+};
 
-function exit() {
+const exit = () => {
     debug('Bye bye');
     process.exit(0);
-}
+};
 
-// Prevent file from running when importing from it.
-if (require.main === module) {
-    start().then();
-}
+start().catch((error) => {
+    process.stderr.write(`${format(error)}\n`);
+    process.exit(1);
+});

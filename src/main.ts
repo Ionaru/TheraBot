@@ -4,6 +4,8 @@ import { CacheController } from '@ionaru/esi-service';
 import { config } from 'dotenv';
 import 'reflect-metadata'; // Required for TypeORM
 
+config();
+
 import { ClientController } from './controllers/client.controller';
 import { CommandController } from './controllers/command.controller';
 import { DatabaseController } from './controllers/database.controller';
@@ -14,8 +16,6 @@ import { getCacheController } from './utils/cache-controller.util';
 import { getPublicESIService } from './utils/public-esi-service.util';
 
 const start = async () => {
-
-    config();
 
     debug('Hello!');
 

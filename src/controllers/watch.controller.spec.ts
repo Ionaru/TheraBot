@@ -42,7 +42,7 @@ describe('WatchController', () => {
 
             Object.assign(connectionOptions, {entities: [ChannelModel, FilterModel]});
             Object.assign(connectionOptions, {database: ':memory:'});
-            Object.assign(connectionOptions, {type: 'sqlite'});
+            Object.assign(connectionOptions, {type: 'better-sqlite3'});
             Object.assign(connectionOptions, {dropSchema: true});
             Object.assign(connectionOptions, {synchronize: true});
             Object.assign(connectionOptions, {logging: false});

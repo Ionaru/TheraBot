@@ -8,12 +8,12 @@ import { getPublicESIService } from '../utils/public-esi-service.util';
 import { Command } from './command';
 
 enum NotifySubCommand {
-    info = 'info',
-    here = 'here',
-    when = 'when',
-    undo = 'undo',
-    stop = 'stop',
-    help = 'help',
+    INFO = 'info',
+    HERE = 'here',
+    WHEN = 'when',
+    UNDO = 'undo',
+    STOP = 'stop',
+    HELP = 'help',
 }
 
 export class NotifyCommand extends Command {
@@ -48,22 +48,22 @@ export class NotifyCommand extends Command {
     protected async processCommand(): Promise<void> {
         const args = this.message.content.replace(NotifyCommand.commandRegex, '').trim();
         const firstArg = args.toLowerCase().split(' ').shift();
-        const whenArg = NotifyCommand.trimSubCommand(args, NotifySubCommand.when);
-        const undoArg = NotifyCommand.trimSubCommand(args, NotifySubCommand.undo);
+        const whenArg = NotifyCommand.trimSubCommand(args, NotifySubCommand.WHEN);
+        const undoArg = NotifyCommand.trimSubCommand(args, NotifySubCommand.UNDO);
 
         switch (firstArg) {
 
-            case NotifySubCommand.info:
+            case NotifySubCommand.INFO:
 
                 await this.setNotifyInfo();
                 break;
 
-            case NotifySubCommand.here:
+            case NotifySubCommand.HERE:
 
                 await this.setNotifyHere();
                 break;
 
-            case NotifySubCommand.when:
+            case NotifySubCommand.WHEN:
 
                 if (!whenArg.length) {
                     this.setNotifyEmbed('Argument expected.');
@@ -73,7 +73,7 @@ export class NotifyCommand extends Command {
                 await this.setNotifyWhen(whenArg.toLowerCase().split(',').map((part) => part.trim()));
                 break;
 
-            case NotifySubCommand.undo:
+            case NotifySubCommand.UNDO:
 
                 if (!undoArg.length) {
                     this.setNotifyEmbed('Argument expected.');
@@ -83,12 +83,12 @@ export class NotifyCommand extends Command {
                 await this.setNotifyUndo(undoArg.toLowerCase().split(',').map((part) => part.trim()));
                 break;
 
-            case NotifySubCommand.stop:
+            case NotifySubCommand.STOP:
 
                 await this.setNotifyStop();
                 break;
 
-            case NotifySubCommand.help:
+            case NotifySubCommand.HELP:
             default:
 
                 this.setNotifyHelp();
@@ -257,9 +257,9 @@ export class NotifyCommand extends Command {
             await channel.save();
         } else {
             if (this.message.channel instanceof TextChannel) {
-                await new ChannelModel(ChannelType.TextChannel, this.message.channel.id).save();
+                await new ChannelModel(ChannelType.TEXT_CHANNEL, this.message.channel.id).save();
             } else if (this.message.channel instanceof DMChannel) {
-                await new ChannelModel(ChannelType.DMChannel, this.message.author.id).save();
+                await new ChannelModel(ChannelType.DM_CHANNEL, this.message.author.id).save();
             }
         }
     }

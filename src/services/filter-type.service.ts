@@ -45,9 +45,9 @@ export class FilterTypeService {
     public async getFilterType(filter: string): Promise<FilterType | undefined> {
 
         if (this.securityStatuses.includes(filter)) {
-            return FilterType.SecurityStatus;
+            return FilterType.SECURITY_STATUS;
         } else if (this.securityClasses.includes(filter.toLowerCase())) {
-            return FilterType.SecurityClass;
+            return FilterType.SECURITY_CLASS;
         }
 
         // Search for the input in ESI
@@ -58,11 +58,11 @@ export class FilterTypeService {
 
         if (response) {
             if (response.region) {
-                return FilterType.Region;
+                return FilterType.REGION;
             } else if (response.constellation) {
-                return FilterType.Constellation;
+                return FilterType.CONSTELLATION;
             } else if (response.solar_system) {
-                return FilterType.System;
+                return FilterType.SYSTEM;
             }
         }
 

@@ -4,8 +4,8 @@ import { BaseModel } from './base.model';
 import { FilterModel } from './filter.model';
 
 export enum ChannelType {
-    TextChannel,
-    DMChannel,
+    TEXT_CHANNEL,
+    DM_CHANNEL,
 }
 
 @Entity()
@@ -17,7 +17,7 @@ export class ChannelModel extends BaseModel {
     public identifier: string;
 
     @Column()
-    public active = true;
+    public active: boolean;
 
     @Column()
     public type: ChannelType;
@@ -31,5 +31,6 @@ export class ChannelModel extends BaseModel {
         super();
         this.type = type;
         this.identifier = identifier;
+        this.active = true;
     }
 }

@@ -11,7 +11,7 @@ import { WormholeModel } from '../models/wormhole.model';
 import { EveScoutService, IWormholeData } from '../services/eve-scout.service';
 import { NamesService } from '../services/names.service';
 
-type supportedChannelType = TextChannel | User;
+type SupportedChannelType = TextChannel | User;
 
 export class WatchController {
 
@@ -114,7 +114,7 @@ export class WatchController {
         });
     }
 
-    public async sendWormholeAddedMessage(channels: supportedChannelType[], wormhole: IWormholeData) {
+    public async sendWormholeAddedMessage(channels: SupportedChannelType[], wormhole: IWormholeData) {
 
         const embed = new MessageEmbed();
         embed.setTitle('**New Thera connection scouted**');
@@ -175,7 +175,7 @@ export class WatchController {
         let wormholeSpace = false;
         let absoluteStatus = false;
 
-        const securityClassFilters = filters.filter((filter) => filter.type === FilterType.SecurityClass);
+        const securityClassFilters = filters.filter((filter) => filter.type === FilterType.SECURITY_CLASS);
         for (const securityClassFilter of securityClassFilters) {
             switch (securityClassFilter.filter) {
                 case 'highsec':
@@ -193,7 +193,7 @@ export class WatchController {
             }
         }
 
-        const securityStatusFilters = filters.filter((filter) => filter.type === FilterType.SecurityStatus);
+        const securityStatusFilters = filters.filter((filter) => filter.type === FilterType.SECURITY_STATUS);
         for (const securityStatusFilter of securityStatusFilters) {
             absoluteStatus = true;
             allowedSecurity.push(securityStatusFilter.filter);
@@ -224,14 +224,14 @@ export class WatchController {
             return false;
         }
 
-        const systemFilters = filters.filter((filter) => filter.type === FilterType.System);
+        const systemFilters = filters.filter((filter) => filter.type === FilterType.SYSTEM);
         for (const systemFilter of systemFilters) {
             if (wormhole.destinationSolarSystem.name.toLowerCase() === systemFilter.filter) {
                 return false;
             }
         }
 
-        const constellationFilters = filters.filter((filter) => filter.type === FilterType.Constellation);
+        const constellationFilters = filters.filter((filter) => filter.type === FilterType.CONSTELLATION);
         for (const constellationFilter of constellationFilters) {
             const constellationName = await this.namesService.getName(wormhole.destinationSolarSystem.constellationID);
             if (constellationName && constellationName.toLowerCase() === constellationFilter.filter) {
@@ -239,7 +239,7 @@ export class WatchController {
             }
         }
 
-        const regionFilters = filters.filter((filter) => filter.type === FilterType.Region);
+        const regionFilters = filters.filter((filter) => filter.type === FilterType.REGION);
         for (const regionFilter of regionFilters) {
             if (wormhole.destinationSolarSystem.region.name.toLowerCase() === regionFilter.filter) {
                 return false;
@@ -255,13 +255,13 @@ export class WatchController {
 
         const allSavedChannels = await ChannelModel.find({where: [{active: true}]});
 
-        const channels = this.client.channels.cache.array().filter(comparator) as supportedChannelType[];
-        const savedChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.TextChannel);
+        const channels = this.client.channels.cache.array().filter(comparator) as SupportedChannelType[];
+        const savedChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.TEXT_CHANNEL);
         const savedChannelIds = savedChannels.map((channel) => channel.identifier);
         const channelsToSend = channels.filter((channel) => savedChannelIds.includes(channel.id));
 
         const userChannels = this.client.users.cache.array();
-        const savedUserChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.DMChannel);
+        const savedUserChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.DM_CHANNEL);
         const savedUserChannelIds = savedUserChannels.map((channel) => channel.identifier);
         const userChannelsToSend = userChannels.filter((channel) => savedUserChannelIds.includes(channel.id));
 

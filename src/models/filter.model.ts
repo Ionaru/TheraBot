@@ -4,11 +4,11 @@ import { BaseModel } from './base.model';
 import { ChannelModel } from './channel.model';
 
 export enum FilterType {
-    SecurityStatus,
-    SecurityClass,
-    System,
-    Constellation,
-    Region,
+    SECURITY_STATUS,
+    SECURITY_CLASS,
+    SYSTEM,
+    CONSTELLATION,
+    REGION,
 }
 
 @Entity()

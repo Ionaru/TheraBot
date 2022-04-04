@@ -51,11 +51,11 @@ export abstract class Command {
 
         if (this.replyPlaceHolder) {
             Command.debug(`Editing initial reply`);
-            return this.replyPlaceHolder.edit(this.embed);
+            return this.replyPlaceHolder.edit({embeds: [this.embed]});
         }
 
         Command.debug(`Sending reply`);
-        return this.message.reply(this.embed);
+        return this.message.reply({embeds: [this.embed]});
     }
 
     protected async sendInitialReply() {

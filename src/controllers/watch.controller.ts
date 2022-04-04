@@ -2,7 +2,7 @@ import { PublicESIService } from '@ionaru/esi-service';
 import { formatNumber } from '@ionaru/format-number';
 import { AxiosInstance } from 'axios';
 import * as countdown from 'countdown';
-import { Channel, Client, DiscordAPIError, MessageEmbed, TextChannel, User } from 'discord.js';
+import { AnyChannel, Client, DiscordAPIError, MessageEmbed, TextChannel, User } from 'discord.js';
 
 import { debug } from '../debug';
 import { ChannelModel, ChannelType } from '../models/channel.model';
@@ -114,7 +114,7 @@ export class WatchController {
         });
     }
 
-    public async sendWormholeAddedMessage(channels: SupportedChannelType[], wormhole: IWormholeData) {
+    public sendWormholeAddedMessage(channels: SupportedChannelType[], wormhole: IWormholeData) {
 
         const embed = new MessageEmbed();
         embed.setTitle('**New Thera connection scouted**');
@@ -127,19 +127,20 @@ export class WatchController {
         embed.addField('\u200b', '\u200b');
 
         embed.addField('**Signature** (In - Out)', `\`${wormhole.wormholeDestinationSignatureId}\` - \`${wormhole.signatureId}\``, true);
-        embed.addField('**Size**', [`${this.getMass(wormhole.sourceWormholeType.jumpMass)}kg`, wormhole.wormholeMass], true);
+        embed.addField('**Size**', [`${this.getMass(wormhole.sourceWormholeType.jumpMass)}kg`, wormhole.wormholeMass].join('\n'), true);
         embed.addField('**Type**', `\`${wormhole.sourceWormholeType.name}\``, true);
 
         embed.addField('\u200b', '\u200b');
 
         embed.addField('**Estimated Life**', `${countdown(new Date(wormhole.wormholeEstimatedEol), undefined, this.countdownUnits)}`);
 
-        embed.setFooter(
-            'Data from https://www.eve-scout.com/', 'http://www.newedenpodcast.de/wp-content/uploads/2019/02/EvE-Scout_Logo-281x300.png'
-        );
+        embed.setFooter({
+            iconURL: 'http://www.newedenpodcast.de/wp-content/uploads/2019/02/EvE-Scout_Logo-281x300.png',
+            text: 'Data from https://www.eve-scout.com/',
+        });
         embed.setTimestamp();
 
-        this.debug(`Sending messages for WH ${wormhole.sourceWormholeType.name} to ${channels.length} channels`);
+        this.debug(`Sending messages for WH ${wormhole.sourceWormholeType.name} to ${channels.length} channels (before filtering).`);
 
         return Promise.all(channels.map(async (channel) => {
             const channelModel = await ChannelModel.findOne({where: [{identifier: channel.id}]});
@@ -157,7 +158,7 @@ export class WatchController {
                 return;
             }
 
-            channel.send('', {embed}).catch((e) => {
+            channel.send({embeds: [embed]}).catch((e) => {
                 if (e instanceof DiscordAPIError) {
                     this.debug(`${e.message}: ${channel.toString()}`);
                 }
@@ -251,16 +252,16 @@ export class WatchController {
 
     private async getChannelsToNotify() {
         const usedChannelClasses = [TextChannel];
-        const comparator = (channel: Channel) => usedChannelClasses.some((channelClass) => channel instanceof channelClass);
+        const comparator = (channel: AnyChannel) => usedChannelClasses.some((channelClass) => channel instanceof channelClass);
 
         const allSavedChannels = await ChannelModel.find({where: [{active: true}]});
 
-        const channels = this.client.channels.cache.array().filter(comparator) as SupportedChannelType[];
+        const channels = [...this.client.channels.cache.values()].filter(comparator) as SupportedChannelType[];
         const savedChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.TEXT_CHANNEL);
         const savedChannelIds = savedChannels.map((channel) => channel.identifier);
         const channelsToSend = channels.filter((channel) => savedChannelIds.includes(channel.id));
 
-        const userChannels = this.client.users.cache.array();
+        const userChannels = [...this.client.users.cache.values()];
         const savedUserChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.DM_CHANNEL);
         const savedUserChannelIds = savedUserChannels.map((channel) => channel.identifier);
         const userChannelsToSend = userChannels.filter((channel) => savedUserChannelIds.includes(channel.id));

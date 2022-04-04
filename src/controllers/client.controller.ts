@@ -1,4 +1,4 @@
-import { Client, Message } from 'discord.js';
+import { Client, Intents, Message } from 'discord.js';
 
 import { debug } from '../debug';
 
@@ -13,7 +13,13 @@ export class ClientController {
 
     public constructor(commandController: CommandController) {
         this.commandController = commandController;
-        this.client = new Client();
+        this.client = new Client({intents: [
+            Intents.FLAGS.GUILDS,
+            Intents.FLAGS.GUILD_MESSAGES,
+            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+            Intents.FLAGS.DIRECT_MESSAGES,
+            Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+        ], partials: ['CHANNEL']});
         this.debug('Client created');
     }
 
@@ -22,8 +28,9 @@ export class ClientController {
         this.debug('Activating client');
 
         this.client.on('ready', () => this.onReady());
+        this.client.on('warn', (warning: string) => process.emitWarning(warning));
         this.client.on('presenceUpdate', () => this.setPresence());
-        this.client.on('message', (message) => this.onMessage(message));
+        this.client.on('messageCreate', (message) => this.onMessage(message));
 
         return this.client.login(process.env.THERABOT_TOKEN);
     }
@@ -43,6 +50,6 @@ export class ClientController {
     }
 
     private setPresence() {
-        this.client?.user?.setActivity('!thera info', {type: 'WATCHING'}).then();
+        this.client?.user?.setActivity('!thera info', {type: 'WATCHING'});
     }
 }

@@ -21,19 +21,19 @@ export class InfoCommand extends Command {
     }
 
     protected async processCommand(): Promise<void> {
-        this.embed.addField('**Info**', [
+        this.embed.addField('**Info**',
             'TheraBot is a discord bot that posts notifications of newly scouted wormhole connections to Thera.',
-        ]);
+        );
 
         this.embed.addField('**Commands**', [
             '- **info** - Show this info page.',
             '- **notify** - Show information about the notify command and filtering.',
-        ]);
+        ].join('\n'));
 
         this.embed.addField('**Examples**', [
             '- !thera info',
             '- !thera notify',
-        ]);
+        ].join('\n'));
 
         this.embed.addField(
             '**Code, issues and feature requests**',

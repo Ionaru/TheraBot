@@ -1,8 +1,9 @@
-/* tslint:disable:no-big-function no-duplicate-string */
+/* eslint-disable jest/prefer-lowercase-title */
+/* eslint-disable jest/no-mocks-import */
 import { PublicESIService } from '@ionaru/esi-service';
 import { EVE } from '@ionaru/eve-utils';
 import { AxiosResponse } from 'axios';
-import { Client, Guild, TextChannel } from 'discord.js';
+import { Client, TextChannel } from 'discord.js';
 import { createConnection, getConnection, getConnectionOptions } from 'typeorm';
 
 import mockAxios from '../__mocks__/axios';
@@ -12,6 +13,7 @@ import * as wormholeWH from '../__mocks__/wormhole-wh.json';
 import * as wormholes from '../__mocks__/wormholes-all.json';
 import { ChannelModel, ChannelType } from '../models/channel.model';
 import { FilterModel, FilterType } from '../models/filter.model';
+
 import { WatchController } from './watch.controller';
 
 describe('WatchController', () => {
@@ -24,7 +26,7 @@ describe('WatchController', () => {
         const channelSendMock = jest.fn().mockReturnValue(new Promise(() => { /* empty */ }));
         let watchController: WatchController;
 
-        function axiosGetMock(returnValue: AxiosResponse) {
+        const axiosGetMock = (returnValue: AxiosResponse) => {
             const validateStatusFunction = mockAxios.get.mock.calls[0][1].validateStatus;
             if (validateStatusFunction(returnValue.status)) {
                 return returnValue;
@@ -32,7 +34,7 @@ describe('WatchController', () => {
 
             // This would normally be an Axios error.
             throw new Error('HTTP Error');
-        }
+        };
 
         beforeEach(async () => {
             jest.useFakeTimers();
@@ -47,15 +49,12 @@ describe('WatchController', () => {
 
             await createConnection(connectionOptions);
 
-            client = new Client();
-            const guild = new Guild(client, {
-                emojis: [],
-            });
-            channel = new TextChannel(guild, {
+            client = new Client({intents: []});
+            channel = ({
                 id: 'test_channel',
-            });
+            }) as TextChannel;
             channel.send = channelSendMock;
-            channelModel = await new ChannelModel(ChannelType.TextChannel, channel.id).save();
+            channelModel = await new ChannelModel(ChannelType.TEXT_CHANNEL, channel.id).save();
 
             const publicESIService = new PublicESIService({
                 axiosInstance: mockAxios as any,
@@ -71,42 +70,46 @@ describe('WatchController', () => {
             return conn.close();
         });
 
-        test('No filters', async () => {
+        it('No filters', async () => {
+
+            expect.assertions(1);
 
             for (const wormhole of wormholes) {
                 await watchController.sendWormholeAddedMessage([channel], wormhole as any);
             }
-            expect(channelSendMock.mock.calls.length).toBe(wormholes.length);
+            expect(channelSendMock.mock.calls).toHaveLength(wormholes.length);
         });
 
-        test.each([
-            ['highsec', FilterType.SecurityClass, 9],
-            ['lowsec', FilterType.SecurityClass, 11],
-            ['nullsec', FilterType.SecurityClass, 10],
-            ['wspace', FilterType.SecurityClass, 6],
+        it.each([
+            ['highsec', FilterType.SECURITY_CLASS, 9],
+            ['lowsec', FilterType.SECURITY_CLASS, 11],
+            ['nullsec', FilterType.SECURITY_CLASS, 10],
+            ['wspace', FilterType.SECURITY_CLASS, 6],
 
-            ['-1.0', FilterType.SecurityStatus, 6],
-            ['-0.9', FilterType.SecurityStatus, 1],
-            ['-0.8', FilterType.SecurityStatus, 0],
-            ['-0.7', FilterType.SecurityStatus, 0],
-            ['-0.6', FilterType.SecurityStatus, 0],
-            ['-0.5', FilterType.SecurityStatus, 0],
-            ['-0.4', FilterType.SecurityStatus, 2],
-            ['-0.3', FilterType.SecurityStatus, 6],
-            ['-0.2', FilterType.SecurityStatus, 1],
-            ['-0.1', FilterType.SecurityStatus, 0],
-            ['0.0', FilterType.SecurityStatus, 0],
-            ['0.1', FilterType.SecurityStatus, 4],
-            ['0.2', FilterType.SecurityStatus, 3],
-            ['0.3', FilterType.SecurityStatus, 3],
-            ['0.4', FilterType.SecurityStatus, 1],
-            ['0.5', FilterType.SecurityStatus, 2],
-            ['0.6', FilterType.SecurityStatus, 1],
-            ['0.7', FilterType.SecurityStatus, 3],
-            ['0.8', FilterType.SecurityStatus, 1],
-            ['0.9', FilterType.SecurityStatus, 2],
-            ['1.0', FilterType.SecurityStatus, 0],
+            ['-1.0', FilterType.SECURITY_STATUS, 6],
+            ['-0.9', FilterType.SECURITY_STATUS, 1],
+            ['-0.8', FilterType.SECURITY_STATUS, 0],
+            ['-0.7', FilterType.SECURITY_STATUS, 0],
+            ['-0.6', FilterType.SECURITY_STATUS, 0],
+            ['-0.5', FilterType.SECURITY_STATUS, 0],
+            ['-0.4', FilterType.SECURITY_STATUS, 2],
+            ['-0.3', FilterType.SECURITY_STATUS, 6],
+            ['-0.2', FilterType.SECURITY_STATUS, 1],
+            ['-0.1', FilterType.SECURITY_STATUS, 0],
+            ['0.0', FilterType.SECURITY_STATUS, 0],
+            ['0.1', FilterType.SECURITY_STATUS, 4],
+            ['0.2', FilterType.SECURITY_STATUS, 3],
+            ['0.3', FilterType.SECURITY_STATUS, 3],
+            ['0.4', FilterType.SECURITY_STATUS, 1],
+            ['0.5', FilterType.SECURITY_STATUS, 2],
+            ['0.6', FilterType.SECURITY_STATUS, 1],
+            ['0.7', FilterType.SECURITY_STATUS, 3],
+            ['0.8', FilterType.SECURITY_STATUS, 1],
+            ['0.9', FilterType.SECURITY_STATUS, 2],
+            ['1.0', FilterType.SECURITY_STATUS, 0],
         ])('Filter security (%p)', async (filter, filterType, expectedWormholes) => {
+
+            expect.assertions(1);
 
             const filterModel = await new FilterModel(channelModel, filterType as number, filter as string).save();
             channelModel.filters = [filterModel];
@@ -115,30 +118,32 @@ describe('WatchController', () => {
             for (const wormhole of wormholes) {
                 await watchController.sendWormholeAddedMessage([channel], wormhole as any);
             }
-            expect(channelSendMock.mock.calls.length).toBe(expectedWormholes);
+            expect(channelSendMock.mock.calls).toHaveLength(expectedWormholes);
         });
 
-        test.each([
-            ['highsec', FilterType.SecurityClass, 1],
-            ['lowsec', FilterType.SecurityClass, 0],
-            ['nullsec', FilterType.SecurityClass, 0],
-            ['wspace', FilterType.SecurityClass, 0],
+        it.each([
+            ['highsec', FilterType.SECURITY_CLASS, 1],
+            ['lowsec', FilterType.SECURITY_CLASS, 0],
+            ['nullsec', FilterType.SECURITY_CLASS, 0],
+            ['wspace', FilterType.SECURITY_CLASS, 0],
 
-            ['1.0', FilterType.SecurityStatus, 0],
-            ['0.9', FilterType.SecurityStatus, 1],
-            ['0.8', FilterType.SecurityStatus, 0],
-            ['-0.9', FilterType.SecurityStatus, 0],
+            ['1.0', FilterType.SECURITY_STATUS, 0],
+            ['0.9', FilterType.SECURITY_STATUS, 1],
+            ['0.8', FilterType.SECURITY_STATUS, 0],
+            ['-0.9', FilterType.SECURITY_STATUS, 0],
 
-            ['jita', FilterType.System, 1],
-            ['amarr', FilterType.System, 0],
+            ['jita', FilterType.SYSTEM, 1],
+            ['amarr', FilterType.SYSTEM, 0],
 
-            ['kimotoro', FilterType.Constellation, 1],
-            ['throne worlds', FilterType.Constellation, 0],
+            ['kimotoro', FilterType.CONSTELLATION, 1],
+            ['throne worlds', FilterType.CONSTELLATION, 0],
 
-            ['the forge', FilterType.Region, 1],
-            ['domain', FilterType.Region, 0],
+            ['the forge', FilterType.REGION, 1],
+            ['domain', FilterType.REGION, 0],
         ])('Filter singular (%p)', async (securityFilter, filterType, expectedWormholes) => {
 
+            expect.assertions(1);
+
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
                 config: {url: EVE.getUniverseTypeUrl(wormholeJita.destinationSolarSystem.constellationID)},
                 data: {
@@ -155,48 +160,52 @@ describe('WatchController', () => {
             await channelModel.save();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeJita as any);
-            expect(channelSendMock.mock.calls.length).toBe(expectedWormholes);
+            expect(channelSendMock.mock.calls).toHaveLength(expectedWormholes);
         });
 
-        test.each([
-            ['highsec', 'jita', FilterType.SecurityClass, 1],
-            ['lowsec', 'jita', FilterType.SecurityClass, 0],
-            ['nullsec', 'jita', FilterType.SecurityClass, 0],
-            ['wspace', 'jita', FilterType.SecurityClass, 0],
+        it.each([
+            ['highsec', 'jita', FilterType.SECURITY_CLASS, 1],
+            ['lowsec', 'jita', FilterType.SECURITY_CLASS, 0],
+            ['nullsec', 'jita', FilterType.SECURITY_CLASS, 0],
+            ['wspace', 'jita', FilterType.SECURITY_CLASS, 0],
 
-            ['1.0', 'jita', FilterType.SecurityStatus, 0],
-            ['0.9', 'jita', FilterType.SecurityStatus, 1],
-            ['0.8', 'jita', FilterType.SecurityStatus, 0],
-            ['-0.9', 'jita', FilterType.SecurityStatus, 0],
+            ['1.0', 'jita', FilterType.SECURITY_STATUS, 0],
+            ['0.9', 'jita', FilterType.SECURITY_STATUS, 1],
+            ['0.8', 'jita', FilterType.SECURITY_STATUS, 0],
+            ['-0.9', 'jita', FilterType.SECURITY_STATUS, 0],
 
-            ['highsec', 'amarr', FilterType.SecurityClass, 0],
-            ['0.9', 'amarr', FilterType.SecurityStatus, 0],
+            ['highsec', 'amarr', FilterType.SECURITY_CLASS, 0],
+            ['0.9', 'amarr', FilterType.SECURITY_STATUS, 0],
         ])('Filter security and system (%p, %p)', async (securityFilter, systemFilter, filterType, expectedWormholes) => {
 
+            expect.assertions(1);
+
             channelModel.filters = [
                 await new FilterModel(channelModel, filterType as FilterType, securityFilter as string).save(),
-                await new FilterModel(channelModel, FilterType.System, systemFilter as string).save(),
+                await new FilterModel(channelModel, FilterType.SYSTEM, systemFilter as string).save(),
             ];
             await channelModel.save();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeJita as any);
-            expect(channelSendMock.mock.calls.length).toBe(expectedWormholes);
+            expect(channelSendMock.mock.calls).toHaveLength(expectedWormholes);
         });
 
-        test.each([
-            ['highsec', 'kimotoro', FilterType.SecurityClass, 1],
-            ['lowsec', 'kimotoro', FilterType.SecurityClass, 0],
-            ['nullsec', 'kimotoro', FilterType.SecurityClass, 0],
-            ['wspace', 'kimotoro', FilterType.SecurityClass, 0],
+        it.each([
+            ['highsec', 'kimotoro', FilterType.SECURITY_CLASS, 1],
+            ['lowsec', 'kimotoro', FilterType.SECURITY_CLASS, 0],
+            ['nullsec', 'kimotoro', FilterType.SECURITY_CLASS, 0],
+            ['wspace', 'kimotoro', FilterType.SECURITY_CLASS, 0],
 
-            ['1.0', 'kimotoro', FilterType.SecurityStatus, 0],
-            ['0.9', 'kimotoro', FilterType.SecurityStatus, 1],
-            ['0.8', 'kimotoro', FilterType.SecurityStatus, 0],
-            ['-0.9', 'kimotoro', FilterType.SecurityStatus, 0],
+            ['1.0', 'kimotoro', FilterType.SECURITY_STATUS, 0],
+            ['0.9', 'kimotoro', FilterType.SECURITY_STATUS, 1],
+            ['0.8', 'kimotoro', FilterType.SECURITY_STATUS, 0],
+            ['-0.9', 'kimotoro', FilterType.SECURITY_STATUS, 0],
 
-            ['highsec', 'throne worlds', FilterType.SecurityClass, 0],
-            ['0.9', 'throne worlds', FilterType.SecurityStatus, 0],
+            ['highsec', 'throne worlds', FilterType.SECURITY_CLASS, 0],
+            ['0.9', 'throne worlds', FilterType.SECURITY_STATUS, 0],
         ])('Filter security and constellation (%p, %p)', async (securityFilter, constellationFilter, filterType, expectedWormholes) => {
+
+            expect.assertions(1);
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
                 config: {url: EVE.getUniverseTypeUrl(wormholeJita.destinationSolarSystem.constellationID)},
@@ -210,65 +219,69 @@ describe('WatchController', () => {
 
             channelModel.filters = [
                 await new FilterModel(channelModel, filterType as FilterType, securityFilter as string).save(),
-                await new FilterModel(channelModel, FilterType.Constellation, constellationFilter as string).save(),
+                await new FilterModel(channelModel, FilterType.CONSTELLATION, constellationFilter as string).save(),
             ];
             await channelModel.save();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeJita as any);
-            expect(channelSendMock.mock.calls.length).toBe(expectedWormholes);
+            expect(channelSendMock.mock.calls).toHaveLength(expectedWormholes);
         });
 
-        test.each([
-            ['highsec', 'the forge', FilterType.SecurityClass, 1],
-            ['lowsec', 'the forge', FilterType.SecurityClass, 0],
-            ['nullsec', 'the forge', FilterType.SecurityClass, 0],
-            ['wspace', 'the forge', FilterType.SecurityClass, 0],
+        it.each([
+            ['highsec', 'the forge', FilterType.SECURITY_CLASS, 1],
+            ['lowsec', 'the forge', FilterType.SECURITY_CLASS, 0],
+            ['nullsec', 'the forge', FilterType.SECURITY_CLASS, 0],
+            ['wspace', 'the forge', FilterType.SECURITY_CLASS, 0],
 
-            ['1.0', 'the forge', FilterType.SecurityStatus, 0],
-            ['0.9', 'the forge', FilterType.SecurityStatus, 1],
-            ['0.8', 'the forge', FilterType.SecurityStatus, 0],
-            ['-0.9', 'the forge', FilterType.SecurityStatus, 0],
+            ['1.0', 'the forge', FilterType.SECURITY_STATUS, 0],
+            ['0.9', 'the forge', FilterType.SECURITY_STATUS, 1],
+            ['0.8', 'the forge', FilterType.SECURITY_STATUS, 0],
+            ['-0.9', 'the forge', FilterType.SECURITY_STATUS, 0],
 
-            ['highsec', 'domain', FilterType.SecurityClass, 0],
-            ['0.9', 'domain', FilterType.SecurityStatus, 0],
+            ['highsec', 'domain', FilterType.SECURITY_CLASS, 0],
+            ['0.9', 'domain', FilterType.SECURITY_STATUS, 0],
         ])('Filter security and region (%p, %p)', async (securityFilter, regionFilter, filterType, expectedWormholes) => {
+
+            expect.assertions(1);
 
             channelModel.filters = [
                 await new FilterModel(channelModel, filterType as FilterType, securityFilter as string).save(),
-                await new FilterModel(channelModel, FilterType.Region, regionFilter as string).save(),
+                await new FilterModel(channelModel, FilterType.REGION, regionFilter as string).save(),
             ];
             await channelModel.save();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeJita as any);
-            expect(channelSendMock.mock.calls.length).toBe(expectedWormholes);
+            expect(channelSendMock.mock.calls).toHaveLength(expectedWormholes);
         });
 
-        test.each([
-            [[['1.0', FilterType.SecurityStatus], ['0.9', FilterType.SecurityStatus]], 1, 0, 0],
-            [[['0.0', FilterType.SecurityStatus], ['0.9', FilterType.SecurityStatus]], 1, 0, 0],
-            [[['1.0', FilterType.SecurityStatus], ['0.8', FilterType.SecurityStatus]], 0, 0, 0],
-            [[['-1.0', FilterType.SecurityStatus], ['0.8', FilterType.SecurityStatus]], 0, 1, 1],
-            [[['0.9', FilterType.SecurityStatus], ['-1.0', FilterType.SecurityStatus]], 1, 1, 1],
+        it.each([
+            [[['1.0', FilterType.SECURITY_STATUS], ['0.9', FilterType.SECURITY_STATUS]], 1, 0, 0],
+            [[['0.0', FilterType.SECURITY_STATUS], ['0.9', FilterType.SECURITY_STATUS]], 1, 0, 0],
+            [[['1.0', FilterType.SECURITY_STATUS], ['0.8', FilterType.SECURITY_STATUS]], 0, 0, 0],
+            [[['-1.0', FilterType.SECURITY_STATUS], ['0.8', FilterType.SECURITY_STATUS]], 0, 1, 1],
+            [[['0.9', FilterType.SECURITY_STATUS], ['-1.0', FilterType.SECURITY_STATUS]], 1, 1, 1],
 
-            [[['1.0', FilterType.SecurityStatus], ['wspace', FilterType.SecurityClass]], 0, 1, 0],
-            [[['-1.0', FilterType.SecurityStatus], ['wspace', FilterType.SecurityClass]], 0, 1, 1],
-            [[['-1.0', FilterType.SecurityStatus], ['highsec', FilterType.SecurityClass]], 1, 1, 1],
-            [[['1.0', FilterType.SecurityStatus], ['highsec', FilterType.SecurityClass]], 1, 0, 0],
-            [[['0.9', FilterType.SecurityStatus], ['highsec', FilterType.SecurityClass]], 1, 0, 0],
+            [[['1.0', FilterType.SECURITY_STATUS], ['wspace', FilterType.SECURITY_CLASS]], 0, 1, 0],
+            [[['-1.0', FilterType.SECURITY_STATUS], ['wspace', FilterType.SECURITY_CLASS]], 0, 1, 1],
+            [[['-1.0', FilterType.SECURITY_STATUS], ['highsec', FilterType.SECURITY_CLASS]], 1, 1, 1],
+            [[['1.0', FilterType.SECURITY_STATUS], ['highsec', FilterType.SECURITY_CLASS]], 1, 0, 0],
+            [[['0.9', FilterType.SECURITY_STATUS], ['highsec', FilterType.SECURITY_CLASS]], 1, 0, 0],
 
-            [[['highsec', FilterType.SecurityClass], ['wspace', FilterType.SecurityClass]], 1, 1, 0],
-            [[['lowsec', FilterType.SecurityClass], ['wspace', FilterType.SecurityClass]], 0, 1, 0],
-            [[['nullsec', FilterType.SecurityClass], ['highsec', FilterType.SecurityClass]], 1, 0, 1],
+            [[['highsec', FilterType.SECURITY_CLASS], ['wspace', FilterType.SECURITY_CLASS]], 1, 1, 0],
+            [[['lowsec', FilterType.SECURITY_CLASS], ['wspace', FilterType.SECURITY_CLASS]], 0, 1, 0],
+            [[['nullsec', FilterType.SECURITY_CLASS], ['highsec', FilterType.SECURITY_CLASS]], 1, 0, 1],
 
-            [[['jita', FilterType.System], ['amarr', FilterType.System]], 1, 0, 0],
-            [[['the forge', FilterType.Region], ['amarr', FilterType.System]], 1, 0, 0],
-            [[['kimotoro', FilterType.Constellation], ['amarr', FilterType.System]], 1, 0, 0],
+            [[['jita', FilterType.SYSTEM], ['amarr', FilterType.SYSTEM]], 1, 0, 0],
+            [[['the forge', FilterType.REGION], ['amarr', FilterType.SYSTEM]], 1, 0, 0],
+            [[['kimotoro', FilterType.CONSTELLATION], ['amarr', FilterType.SYSTEM]], 1, 0, 0],
 
-            [[['kimotoro', FilterType.Constellation], ['wspace', FilterType.SecurityClass]], 0, 1, 0],
-            [[['kimotoro', FilterType.Constellation], ['highsec', FilterType.SecurityClass]], 1, 0, 0],
+            [[['kimotoro', FilterType.CONSTELLATION], ['wspace', FilterType.SECURITY_CLASS]], 0, 1, 0],
+            [[['kimotoro', FilterType.CONSTELLATION], ['highsec', FilterType.SECURITY_CLASS]], 1, 0, 0],
         ])('Filter combinations (%j)', async (
             filterData, expectedWormholesJita, expectedWormholesWH, expectedWormholesNull,
         ) => {
+
+            expect.assertions(3);
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
                 config: {url: EVE.getUniverseTypeUrl(wormholeJita.destinationSolarSystem.constellationID)},
@@ -289,17 +302,17 @@ describe('WatchController', () => {
             await channelModel.save();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeJita as any);
-            expect(channelSendMock.mock.calls.length).toBe(expectedWormholesJita);
+            expect(channelSendMock.mock.calls).toHaveLength(expectedWormholesJita);
 
             channelSendMock.mockClear();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeWH as any);
-            expect(channelSendMock.mock.calls.length).toBe(expectedWormholesWH);
+            expect(channelSendMock.mock.calls).toHaveLength(expectedWormholesWH);
 
             channelSendMock.mockClear();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeNull as any);
-            expect(channelSendMock.mock.calls.length).toBe(expectedWormholesNull);
+            expect(channelSendMock.mock.calls).toHaveLength(expectedWormholesNull);
         });
     });
 });

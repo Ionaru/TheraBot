@@ -95,7 +95,7 @@ export class NotifyCommand extends Command {
         }
     }
 
-    private setNotifyEmbed(text: string | string[]) {
+    private setNotifyEmbed(text: string) {
         this.embed.addField('**Notify**', text);
     }
 
@@ -115,7 +115,7 @@ export class NotifyCommand extends Command {
             channelText.push(`- **Status** - Inactive`, '', 'Run `!thera notify here` to enable notifications.');
         }
 
-        this.embed.addField('**Notifications in this channel**', channelText);
+        this.embed.addField('**Notifications in this channel**', channelText.join('\n'));
     }
 
     private async setNotifyHere() {
@@ -168,7 +168,7 @@ export class NotifyCommand extends Command {
                 await filterModel.save();
                 output.push(`Filter **${filter}** added`);
 
-                this.setNotifyEmbed(output);
+                this.setNotifyEmbed(output.join('\n'));
             }
         }
     }
@@ -215,7 +215,7 @@ export class NotifyCommand extends Command {
             'The wormhole must match security AND (system OR constellation OR region). Multiple filters can be active at the same time.',
             '- **undo (security, system, constellation, region)** - Remove a notification filter.',
             '- **stop** - Stop notifying about new wormholes in this channel.',
-        ]);
+        ].join('\n'));
         this.embed.addField('**Examples**', [
             '- !thera notify info',
             '- !thera notify here',
@@ -228,7 +228,7 @@ export class NotifyCommand extends Command {
             '- !thera notify undo -0.1',
             '- !thera notify undo Jita',
             '- !thera notify stop',
-        ]);
+        ].join('\n'));
         this.embed.addField('**Filter examples**', [
             '- **Scalding Pass** - Any system in the Scalding Pass region.',
             '- **Kimotoro** - Any system in the Kimotoro constellation.',
@@ -238,7 +238,7 @@ export class NotifyCommand extends Command {
             '- **highsec, Hek, The Forge** - Systems with security rating 0.5 or higher that are in the Hek system or The Forge region.',
             '- **Jita, 0.5** - Will match nothing because Jita has a security rating of 0.9.',
             '- **Thera** - That\'s... not possible.',
-        ]);
+        ].join('\n'));
     }
 
     private async getChannel(): Promise<ChannelModel | undefined> {

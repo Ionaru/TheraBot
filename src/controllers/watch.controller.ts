@@ -2,7 +2,7 @@ import { PublicESIService } from '@ionaru/esi-service';
 import { formatNumber } from '@ionaru/format-number';
 import { AxiosInstance } from 'axios';
 import * as countdown from 'countdown';
-import { AnyChannel, Client, DiscordAPIError, MessageEmbed, TextChannel, User } from 'discord.js';
+import { Channel, Client, DiscordAPIError, EmbedBuilder, TextChannel, User } from 'discord.js';
 
 import { debug } from '../debug';
 import { ChannelModel, ChannelType } from '../models/channel.model';
@@ -116,23 +116,24 @@ export class WatchController {
 
     public sendWormholeAddedMessage(channels: SupportedChannelType[], wormhole: IWormholeData) {
 
-        const embed = new MessageEmbed();
+        const embed = new EmbedBuilder();
         embed.setTitle('**New Thera connection scouted**');
         embed.setColor(WatchController.getSecurityStatusColour(wormhole.destinationSolarSystem.security));
 
-        embed.addField('**Region**', wormhole.destinationSolarSystem.region.name, true);
         const securityStatus = WatchController.getSecurityStatusText(wormhole.destinationSolarSystem.security);
-        embed.addField('**System**', `${wormhole.destinationSolarSystem.name} (${securityStatus})`, true);
 
-        embed.addField('\u200b', '\u200b');
-
-        embed.addField('**Signature** (In - Out)', `\`${wormhole.wormholeDestinationSignatureId}\` - \`${wormhole.signatureId}\``, true);
-        embed.addField('**Size**', [`${this.getMass(wormhole.sourceWormholeType.jumpMass)}kg`, wormhole.wormholeMass].join('\n'), true);
-        embed.addField('**Type**', `\`${wormhole.sourceWormholeType.name}\``, true);
-
-        embed.addField('\u200b', '\u200b');
-
-        embed.addField('**Estimated Life**', `${countdown(new Date(wormhole.wormholeEstimatedEol), undefined, this.countdownUnits)}`);
+        embed.addFields([
+            {inline: true, name: '**Region**', value: wormhole.destinationSolarSystem.region.name},
+            {inline: true, name: '**System**', value: `${wormhole.destinationSolarSystem.name} (${securityStatus})`},
+            {name: '\u200b', value: '\u200b'},
+            {inline: true, name: '**Signature**', value: `\`${wormhole.wormholeDestinationSignatureId}\` - \`${wormhole.signatureId}\``},
+            {inline: true, name: '**Size**', value: [
+                `${this.getMass(wormhole.sourceWormholeType.jumpMass)}kg`, wormhole.wormholeMass,
+            ].join('\n')},
+            {inline: true, name: '**Type**', value: `\`${wormhole.sourceWormholeType.name}\``},
+            {name: '\u200b', value: '\u200b'},
+            {name: '**Estimated Life**', value: `${countdown(new Date(wormhole.wormholeEstimatedEol), undefined, this.countdownUnits)}`},
+        ]);
 
         embed.setFooter({
             iconURL: 'http://www.newedenpodcast.de/wp-content/uploads/2019/02/EvE-Scout_Logo-281x300.png',
@@ -252,7 +253,7 @@ export class WatchController {
 
     private async getChannelsToNotify() {
         const usedChannelClasses = [TextChannel];
-        const comparator = (channel: AnyChannel) => usedChannelClasses.some((channelClass) => channel instanceof channelClass);
+        const comparator = (channel: Channel) => usedChannelClasses.some((channelClass) => channel instanceof channelClass);
 
         const allSavedChannels = await ChannelModel.find({where: [{active: true}]});
 

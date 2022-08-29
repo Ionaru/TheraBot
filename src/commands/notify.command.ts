@@ -1,11 +1,10 @@
-import { DMChannel, TextChannel } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
+import { CommandContext, CommandOptionType, SlashCommand, SlashCreator } from 'slash-create';
 
 import { ChannelModel, ChannelType } from '../models/channel.model';
 import { FilterModel } from '../models/filter.model';
 import { FilterTypeService } from '../services/filter-type.service';
 import { getPublicESIService } from '../utils/public-esi-service.util';
-
-import { Command } from './command';
 
 enum NotifySubCommand {
     INFO = 'info',
@@ -16,91 +15,125 @@ enum NotifySubCommand {
     HELP = 'help',
 }
 
-export class NotifyCommand extends Command {
+export class NotifyCommand extends SlashCommand {
 
-    public static readonly commands = [
-        'notify',
-    ];
-
-    public static readonly debug = Command.debug.extend('notify');
-
-    private static readonly commandRegex = Command.createCommandRegex(NotifyCommand.commands, true);
-
-    protected initialReply = undefined;
-
-    public static test(command: string) {
-        NotifyCommand.debug(`Testing ${command} (${NotifyCommand.commandRegex})`);
-        return NotifyCommand.commandRegex.test(command);
+    public constructor(creator: SlashCreator) {
+        super(creator, {
+            description: 'Show information about the notify command and filtering',
+            name: 'notify',
+            options: [
+                {
+                    description: 'Show information about notifications and active filters in this channel.',
+                    name: 'info',
+                    type: CommandOptionType.SUB_COMMAND,
+                },
+                {
+                    description: 'Notify about new wormholes in this channel.',
+                    name: 'here',
+                    type: CommandOptionType.SUB_COMMAND,
+                },
+                {
+                    description: 'Add a notification filter.',
+                    name: 'when',
+                    options: [
+                        {
+                            description: 'Enter a filter, or multiple separated using commas.',
+                            name: 'filter',
+                            required: true,
+                            type: CommandOptionType.STRING,
+                        },
+                    ],
+                    type: CommandOptionType.SUB_COMMAND,
+                },
+                {
+                    description: 'Remove a notification filter.',
+                    name: 'undo',
+                    options: [
+                        {
+                            description: 'Enter a filter, or multiple separated using commas.',
+                            name: 'filter',
+                            required: true,
+                            type: CommandOptionType.STRING,
+                        },
+                    ],
+                    type: CommandOptionType.SUB_COMMAND,
+                },
+                {
+                    description: 'Stop notifying about new wormholes in this channel.',
+                    name: 'stop',
+                    type: CommandOptionType.SUB_COMMAND,
+                },
+                {
+                    description: 'Show information about setting notification settings',
+                    name: 'help',
+                    type: CommandOptionType.SUB_COMMAND,
+                },
+            ],
+        });
     }
 
-    private static async getFilter(channel: ChannelModel, filter: string): Promise<FilterModel | undefined> {
-        return FilterModel.findOne({where: [{channel, filter}]});
+    private static getFilter(channel: ChannelModel, filter: string): Promise<FilterModel | undefined> {
+        return FilterModel.findOne({ where: [{ channel, filter }] });
     }
 
-    private static trimSubCommand(args: string, subCommand: NotifySubCommand) {
-        return args.replace(subCommand, '').trim();
+    private static parseFilter(filters: string): string[] {
+        return filters.toLowerCase().split(',').map((filter) => filter.trim());
     }
 
-    protected async isCommandValid(): Promise<boolean> {
-        return true;
+    public override async onError(_: Error, context: CommandContext) {
+        await context.send('Something went wrong. Try again later.');
     }
 
-    protected async processCommand(): Promise<void> {
-        const args = this.message.content.replace(NotifyCommand.commandRegex, '').trim();
-        const firstArg = args.toLowerCase().split(' ').shift();
-        const whenArg = NotifyCommand.trimSubCommand(args, NotifySubCommand.WHEN);
-        const undoArg = NotifyCommand.trimSubCommand(args, NotifySubCommand.UNDO);
+    public override async run(context: CommandContext): Promise<void> {
 
-        switch (firstArg) {
+        const embed = new EmbedBuilder();
+
+        const subCommand = context.subcommands;
+
+        switch (subCommand[0]) {
 
             case NotifySubCommand.INFO:
 
-                await this.setNotifyInfo();
+                await this.setNotifyInfo(embed, context);
                 break;
 
             case NotifySubCommand.HERE:
 
-                await this.setNotifyHere();
+                await this.setNotifyHere(embed, context);
                 break;
 
             case NotifySubCommand.WHEN:
 
-                if (!whenArg.length) {
-                    this.setNotifyEmbed('Argument expected.');
-                    break;
-                }
-
-                await this.setNotifyWhen(whenArg.toLowerCase().split(',').map((part) => part.trim()));
+                await this.setNotifyWhen(embed, context);
                 break;
 
             case NotifySubCommand.UNDO:
 
-                if (!undoArg.length) {
-                    this.setNotifyEmbed('Argument expected.');
-                    break;
-                }
-
-                await this.setNotifyUndo(undoArg.toLowerCase().split(',').map((part) => part.trim()));
+                await this.setNotifyUndo(embed, context);
                 break;
 
             case NotifySubCommand.STOP:
 
-                await this.setNotifyStop();
+                await this.setNotifyStop(embed, context);
                 break;
 
             case NotifySubCommand.HELP:
             default:
 
-                this.setNotifyHelp();
+                this.setNotifyHelp(embed);
         }
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        await context.send({ embeds: [embed] });
     }
 
-    private setNotifyEmbed(text: string) {
-        this.embed.addField('**Notify**', text);
+    private setNotifyEmbed(embed: EmbedBuilder, text: string) {
+        embed.addFields([{ name: '**Notify**', value: text }]);
     }
 
-    private async setNotifyInfo() {
-        const channel = await this.getChannel();
+    private async setNotifyInfo(embed: EmbedBuilder, context: CommandContext) {
+        const channel = await this.getChannel(context);
 
         const channelText = [];
 
@@ -115,26 +148,28 @@ export class NotifyCommand extends Command {
             channelText.push(`- **Status** - Inactive`, '', 'Run `!thera notify here` to enable notifications.');
         }
 
-        this.embed.addField('**Notifications in this channel**', channelText.join('\n'));
+        embed.addFields([{ name: '**Notifications in this channel**', value: channelText.join('\n') }]);
     }
 
-    private async setNotifyHere() {
-        const channel = await this.getChannel();
+    private async setNotifyHere(embed: EmbedBuilder, context: CommandContext) {
+        const channel = await this.getChannel(context);
 
         if (channel && channel.active) {
-            this.setNotifyEmbed('Channel already added');
+            this.setNotifyEmbed(embed, 'Channel already added');
         } else {
-            await this.activateChannel(channel);
-            this.setNotifyEmbed('Channel added');
+            await this.activateChannel(context, channel);
+            this.setNotifyEmbed(embed, 'Channel added');
         }
     }
 
-    private async setNotifyWhen(filters: string[]) {
+    private async setNotifyWhen(embed: EmbedBuilder, context: CommandContext) {
+
+        const filters = NotifyCommand.parseFilter(context.options.when.filter);
 
         for (const filter of filters) {
             // A wormhole from Thera will never connect to Thera.
             if (['thera', 'g-c00324', 'g-r00031'].includes(filter)) {
-                this.embed.image = {url: 'https://media1.tenor.com/images/b073c5af6bf50ffcd80bdb2ae823f8f7/tenor.gif?itemid=13251757'};
+                embed.setImage('https://media1.tenor.com/images/b073c5af6bf50ffcd80bdb2ae823f8f7/tenor.gif?itemid=13251757');
                 return;
             }
         }
@@ -143,24 +178,24 @@ export class NotifyCommand extends Command {
 
             const output = [];
 
-            let channel = await this.getChannel();
+            let channel = await this.getChannel(context);
             if (!channel || !channel.active) {
-                await this.activateChannel(channel);
+                await this.activateChannel(context, channel);
                 output.push('Channel added');
-                channel = await this.getChannel();
+                channel = await this.getChannel(context);
             }
 
             if (channel) {
 
                 if (await NotifyCommand.getFilter(channel, filter)) {
-                    this.setNotifyEmbed(`Filter **${filter}** already exists on this channel`);
+                    this.setNotifyEmbed(embed, `Filter **${filter}** already exists on this channel`);
                     continue;
                 }
 
                 const filterType = await new FilterTypeService(getPublicESIService()).getFilterType(filter);
 
                 if (filterType === undefined) {
-                    this.setNotifyEmbed(`Unknown filter: **${filter}**`);
+                    this.setNotifyEmbed(embed, `Unknown filter: **${filter}**`);
                     continue;
                 }
 
@@ -168,99 +203,108 @@ export class NotifyCommand extends Command {
                 await filterModel.save();
                 output.push(`Filter **${filter}** added`);
 
-                this.setNotifyEmbed(output.join('\n'));
+                this.setNotifyEmbed(embed, output.join('\n'));
             }
         }
     }
 
-    private async setNotifyUndo(filters: string[]) {
-        const channel = await this.getChannel();
+    private async setNotifyUndo(embed: EmbedBuilder, context: CommandContext) {
+
+        const channel = await this.getChannel(context);
 
         if (!channel) {
-            this.setNotifyEmbed('Channel not found');
+            this.setNotifyEmbed(embed, 'Channel not found');
             return;
         }
+
+        const filters = NotifyCommand.parseFilter(context.options.undo.filter);
 
         for (const filter of filters) {
 
             const filterModel = await NotifyCommand.getFilter(channel, filter);
 
             if (!filterModel) {
-                this.setNotifyEmbed(`Filter **${filter}** not found`);
+                this.setNotifyEmbed(embed, `Filter **${filter}** not found`);
                 continue;
             }
 
             await filterModel.remove();
-            this.setNotifyEmbed(`Filter **${filter}** removed`);
+            this.setNotifyEmbed(embed, `Filter **${filter}** removed`);
         }
     }
 
-    private async setNotifyStop() {
-        const channel = await this.getChannel();
+    private async setNotifyStop(embed: EmbedBuilder, context: CommandContext) {
+        const channel = await this.getChannel(context);
 
         if (channel) {
             channel.active = false;
             await channel.save();
-            this.setNotifyEmbed('Channel removed');
+            this.setNotifyEmbed(embed, 'Channel removed');
         } else {
-            this.setNotifyEmbed('Channel not found');
+            this.setNotifyEmbed(embed, 'Channel not found');
         }
     }
 
-    private setNotifyHelp() {
-        this.embed.addField('**Notify**', [
-            '- **info** - Show information about notifications and active filters in this channel.',
-            '- **here** - Notify about new wormholes in this channel.',
-            '- **when (security, system, constellation, region)** - Notify when a wormhole matches a filter. ' +
-            'The wormhole must match security AND (system OR constellation OR region). Multiple filters can be active at the same time.',
-            '- **undo (security, system, constellation, region)** - Remove a notification filter.',
-            '- **stop** - Stop notifying about new wormholes in this channel.',
-        ].join('\n'));
-        this.embed.addField('**Examples**', [
-            '- !thera notify info',
-            '- !thera notify here',
-            '- !thera notify when wspace',
-            '- !thera notify when highsec',
-            '- !thera notify when 0.6',
-            '- !thera notify when -0.1',
-            '- !thera notify when The Forge',
-            '- !thera notify when Jita',
-            '- !thera notify undo -0.1',
-            '- !thera notify undo Jita',
-            '- !thera notify stop',
-        ].join('\n'));
-        this.embed.addField('**Filter examples**', [
-            '- **Scalding Pass** - Any system in the Scalding Pass region.',
-            '- **Kimotoro** - Any system in the Kimotoro constellation.',
-            '- **lowsec** - Any system with a security rating between 0.1 and 0.4.',
-            '- **0.1, 0.2, 0.3, 0.4** - Same as above.',
-            '- **0.5, 0.7, Domain** - Systems with security rating 0.5 or 0.7 in the Domain region.',
-            '- **highsec, Hek, The Forge** - Systems with security rating 0.5 or higher that are in the Hek system or The Forge region.',
-            '- **Jita, 0.5** - Will match nothing because Jita has a security rating of 0.9.',
-            '- **Thera** - That\'s... not possible.',
-        ].join('\n'));
+    private setNotifyHelp(embed: EmbedBuilder) {
+        embed.addFields([
+            {
+                name: '**Notify**',
+                value: [
+                    '- **info** - Show information about notifications and active filters in this channel.',
+                    '- **here** - Notify about new wormholes in this channel.',
+                    '- **when (security, system, constellation, region)** - Notify when a wormhole matches a filter. ' +
+                    'The wormhole must match security AND (system OR constellation OR region). ' +
+                    'Multiple filters can be active at the same time.',
+                    '- **undo (security, system, constellation, region)** - Remove a notification filter.',
+                    '- **stop** - Stop notifying about new wormholes in this channel.',
+                ].join('\n'),
+            }, {
+                name: '**Examples**',
+                value: [
+                    '- !thera notify info',
+                    '- !thera notify here',
+                    '- !thera notify when wspace',
+                    '- !thera notify when highsec',
+                    '- !thera notify when 0.6',
+                    '- !thera notify when -0.1',
+                    '- !thera notify when The Forge',
+                    '- !thera notify when Jita',
+                    '- !thera notify undo -0.1',
+                    '- !thera notify undo Jita',
+                    '- !thera notify stop',
+                ].join('\n'),
+            }, {
+                name: '**Filter examples**',
+                value: [
+                    '- **Scalding Pass** - Any system in the Scalding Pass region.',
+                    '- **Kimotoro** - Any system in the Kimotoro constellation.',
+                    '- **lowsec** - Any system with a security rating between 0.1 and 0.4.',
+                    '- **0.1, 0.2, 0.3, 0.4** - Same as above.',
+                    '- **0.5, 0.7, Domain** - Systems with security rating 0.5 or 0.7 in the Domain region.',
+                    '- **highsec, Hek, The Forge** - Systems with security rating 0.5 or higher that are in the Hek system ' +
+                    'or The Forge region.',
+                    '- **Jita, 0.5** - Will match nothing because Jita has a security rating of 0.9.',
+                    '- **Thera** - That\'s... not possible.',
+                ].join('\n'),
+            },
+        ]);
     }
 
-    private async getChannel(): Promise<ChannelModel | undefined> {
-        if (this.message.channel instanceof TextChannel) {
-            return ChannelModel.findOne({where: [{identifier: this.message.channel.id}]});
-        } else if (this.message.channel instanceof DMChannel) {
-            return ChannelModel.findOne({where: [{identifier: this.message.author.id}]});
-        }
-        return undefined;
+    private async getChannel(context: CommandContext): Promise<ChannelModel | undefined> {
+        const identifier = context.guildID ? context.channelID : context.user.id;
+        return ChannelModel.findOne({ where: [{ identifier }] });
     }
 
-    private async activateChannel(channel?: ChannelModel) {
+    private async activateChannel(context: CommandContext, channel?: ChannelModel) {
 
         if (channel) {
             channel.active = true;
             await channel.save();
         } else {
-            if (this.message.channel instanceof TextChannel) {
-                await new ChannelModel(ChannelType.TEXT_CHANNEL, this.message.channel.id).save();
-            } else if (this.message.channel instanceof DMChannel) {
-                await new ChannelModel(ChannelType.DM_CHANNEL, this.message.author.id).save();
-            }
+            await (
+                context.guildID ?
+                    new ChannelModel(ChannelType.TEXT_CHANNEL, context.channelID).save() :
+                    new ChannelModel(ChannelType.DM_CHANNEL, context.user.id).save());
         }
     }
 }

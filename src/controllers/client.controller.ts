@@ -1,25 +1,21 @@
-import { Client, Intents, Message } from 'discord.js';
+import { Client, IntentsBitField } from 'discord.js';
 
 import { debug } from '../debug';
-
-import { CommandController } from './command.controller';
 
 export class ClientController {
 
     public readonly client: Client;
 
     private readonly debug = debug.extend('client');
-    private readonly commandController: CommandController;
 
-    public constructor(commandController: CommandController) {
-        this.commandController = commandController;
+    public constructor() {
         this.client = new Client({intents: [
-            Intents.FLAGS.GUILDS,
-            Intents.FLAGS.GUILD_MESSAGES,
-            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-            Intents.FLAGS.DIRECT_MESSAGES,
-            Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-        ], partials: ['CHANNEL']});
+            IntentsBitField.Flags.Guilds,
+            IntentsBitField.Flags.GuildMessages,
+            IntentsBitField.Flags.GuildMessageReactions,
+            IntentsBitField.Flags.DirectMessages,
+            IntentsBitField.Flags.DirectMessageReactions,
+        ], partials: [1]});
         this.debug('Client created');
     }
 
@@ -30,7 +26,6 @@ export class ClientController {
         this.client.on('ready', () => this.onReady());
         this.client.on('warn', (warning: string) => process.emitWarning(warning));
         this.client.on('presenceUpdate', () => this.setPresence());
-        this.client.on('messageCreate', (message) => this.onMessage(message));
 
         return this.client.login(process.env.THERABOT_TOKEN);
     }
@@ -40,16 +35,12 @@ export class ClientController {
         this.client?.destroy();
     }
 
-    private onMessage(message: Message) {
-        this.commandController.runCommand(message);
-    }
-
     private onReady() {
         this.setPresence();
         this.debug('Logged in');
     }
 
     private setPresence() {
-        this.client?.user?.setActivity('!thera info', {type: 'WATCHING'});
+        this.client?.user?.setActivity('/info', {type: 3});
     }
 }

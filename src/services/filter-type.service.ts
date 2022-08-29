@@ -1,7 +1,17 @@
 import { PublicESIService } from '@ionaru/esi-service';
-import { EVE, ISearchData, SearchCategory } from '@ionaru/eve-utils';
+import { IUniverseNamesDataUnit } from '@ionaru/eve-utils';
 
 import { FilterType } from '../models/filter.model';
+
+interface ISearchResponse extends IUniverseNamesDataUnit {
+    fuzzy?: boolean;
+}
+
+interface IApiResponse {
+    data: ISearchResponse;
+    message: string;
+    state: string;
+}
 
 export class FilterTypeService {
 
@@ -50,19 +60,23 @@ export class FilterTypeService {
             return FilterType.SECURITY_CLASS;
         }
 
-        // Search for the input in ESI
-        const url = EVE.getSearchUrl(filter, [
-            SearchCategory.SOLAR_SYSTEM, SearchCategory.CONSTELLATION, SearchCategory.REGION,
-        ]);
-        const response = await this.publicESIService.fetchESIData<ISearchData>(url).catch(() => undefined);
+        const searchUrls = [
+            `https://search.spaceships.app/system?q=${filter}`,
+            `https://search.spaceships.app/constellation?q=${filter}`,
+            `https://search.spaceships.app/region?q=${filter}`,
+        ];
 
-        if (response) {
-            if (response.region) {
-                return FilterType.REGION;
-            } else if (response.constellation) {
-                return FilterType.CONSTELLATION;
-            } else if (response.solar_system) {
-                return FilterType.SYSTEM;
+        const responses = await Promise.all(searchUrls.map((url) => this.publicESIService.fetchESIData<IApiResponse>(url)));
+        const exactResponse = responses.filter((response) => !response.data.fuzzy)[0];
+
+        if (exactResponse) {
+            switch (exactResponse.data.category) {
+                case 'region':
+                    return FilterType.REGION;
+                case 'constellation':
+                    return FilterType.CONSTELLATION;
+                case 'solar_system':
+                    return FilterType.SYSTEM;
             }
         }
 

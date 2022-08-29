@@ -6,9 +6,11 @@ import 'reflect-metadata'; // Required for TypeORM
 
 config();
 
+import { InfoCommand } from './commands/info.command';
+import { NotifyCommand } from './commands/notify.command';
 import { ClientController } from './controllers/client.controller';
-import { CommandController } from './controllers/command.controller';
 import { DatabaseController } from './controllers/database.controller';
+import { SlashCreatorController } from './controllers/slash-creator.controller';
 import { WatchController } from './controllers/watch.controller';
 import { debug } from './debug';
 import { getAxiosInstance } from './utils/axios-instance.util';
@@ -23,9 +25,16 @@ const start = async () => {
 
     await new DatabaseController().connect();
 
-    const commandController = new CommandController();
-    const clientController = new ClientController(commandController);
+    const clientController = new ClientController();
     await clientController.activate();
+
+    const slashCreatorController = new SlashCreatorController();
+    const slashCreatorService = slashCreatorController.init(clientController.client);
+
+    slashCreatorService.registerCommand((slashCreator) => new InfoCommand(slashCreator));
+    slashCreatorService.registerCommand((slashCreator) => new NotifyCommand(slashCreator));
+
+    await slashCreatorService.syncCommands();
 
     const watchController = new WatchController(
         clientController.client, getAxiosInstance(), getPublicESIService(),

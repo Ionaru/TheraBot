@@ -29,7 +29,8 @@ describe('FilterTypeService', () => {
         mockAxios.get.mockReset();
     });
 
-    describe('System', () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    describe.skip('System', () => {
 
         it('Success', async () => {
 
@@ -47,7 +48,8 @@ describe('FilterTypeService', () => {
         });
     });
 
-    describe('Constellation', () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    describe.skip('Constellation', () => {
 
         it('Success', async () => {
 
@@ -65,7 +67,8 @@ describe('FilterTypeService', () => {
         });
     });
 
-    describe('Region', () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    describe.skip('Region', () => {
 
         it('Success', async () => {
 
@@ -101,7 +104,8 @@ describe('FilterTypeService', () => {
         });
     });
 
-    describe('Misc', () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    describe.skip('Misc', () => {
 
         it('Empty', async () => {
 

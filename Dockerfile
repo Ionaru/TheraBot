@@ -25,7 +25,4 @@ VOLUME /app/data
 COPY ./migrations ./migrations
 
 ## RUN
-
-ARG THERABOT_TOKEN
-ARG DEBUG
 CMD ["npm", "start"]

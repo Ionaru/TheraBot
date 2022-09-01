@@ -55,6 +55,8 @@ It is possible to self-host this bot, it requires Docker and Docker Compose.
 1. Install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
 2. [Download](https://github.com/Ionaru/TheraBot/archive/master.zip) and extract, or clone the latest version of this repository.
 3. Fill these environment variables (either using a .env file, export them or pass them to docker-compose in the next step):
+    - `THERABOT_ID` - The Discord App ID.
+    - `THERABOT_KEY` - The Discord App Key.
     - `THERABOT_TOKEN` - The Discord Bot Token.
     - `THERABOT_DATA_VOLUME` - A persistent place where TheraBot will keep its database.
     - (Optional) `DEBUG` - Set to `*` or `thera-bot*` for extra logging output.

@@ -4,6 +4,8 @@ services:
     therabot:
         build: .
         environment:
+            - THERABOT_ID
+            - THERABOT_KEY
             - THERABOT_TOKEN
             - DEBUG
         restart: unless-stopped

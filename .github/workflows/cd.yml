@@ -15,18 +15,18 @@ jobs:
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v1
+              uses: actions/checkout@v3
 
             - name: Set up Node.js
-              uses: actions/setup-node@v2
+              uses: actions/setup-node@v3
               with:
-                  node-version: '16'
+                  node-version: current
 
             - name: Audit
-              run: npm audit --production
+              run: npm audit --omit=dev
 
             - name: Install packages
-              run: npm install
+              run: npm ci
 
             - name: Run tests
               run: npm test

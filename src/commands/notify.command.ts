@@ -72,8 +72,14 @@ export class NotifyCommand extends SlashCommand {
         });
     }
 
-    private static getFilter(channel: ChannelModel, filter: string): Promise<FilterModel | undefined> {
-        return FilterModel.findOne({ where: [{ channel, filter }] });
+    private static getFilter(channel: ChannelModel, filter: string): Promise<FilterModel | null> {
+        return FilterModel.findOne({
+            where: [{
+                channel: {
+                    identifier: channel.identifier,
+                }, filter,
+            }],
+        });
     }
 
     private static parseFilter(filters: string): string[] {
@@ -92,35 +98,39 @@ export class NotifyCommand extends SlashCommand {
 
         switch (subCommand[0]) {
 
-            case NotifySubCommand.INFO:
+            case NotifySubCommand.INFO: {
 
                 await this.setNotifyInfo(embed, context);
                 break;
+            }
 
-            case NotifySubCommand.HERE:
+            case NotifySubCommand.HERE: {
 
                 await this.setNotifyHere(embed, context);
                 break;
+            }
 
-            case NotifySubCommand.WHEN:
+            case NotifySubCommand.WHEN: {
 
                 await this.setNotifyWhen(embed, context);
                 break;
+            }
 
-            case NotifySubCommand.UNDO:
+            case NotifySubCommand.UNDO: {
 
                 await this.setNotifyUndo(embed, context);
                 break;
+            }
 
-            case NotifySubCommand.STOP:
+            case NotifySubCommand.STOP: {
 
                 await this.setNotifyStop(embed, context);
                 break;
+            }
 
-            case NotifySubCommand.HELP:
-            default:
-
+            default: {
                 this.setNotifyHelp(embed);
+            }
         }
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -199,7 +209,10 @@ export class NotifyCommand extends SlashCommand {
                     continue;
                 }
 
-                const filterModel = new FilterModel(channel, filterType, filter);
+                const filterModel = new FilterModel();
+                filterModel.channel = channel;
+                filterModel.type = filterType;
+                filterModel.filter = filter;
                 await filterModel.save();
                 output.push(`Filter **${filter}** added`);
 
@@ -290,21 +303,27 @@ export class NotifyCommand extends SlashCommand {
         ]);
     }
 
-    private async getChannel(context: CommandContext): Promise<ChannelModel | undefined> {
+    private async getChannel(context: CommandContext): Promise<ChannelModel | null> {
         const identifier = context.guildID ? context.channelID : context.user.id;
         return ChannelModel.findOne({ where: [{ identifier }] });
     }
 
-    private async activateChannel(context: CommandContext, channel?: ChannelModel) {
-
-        if (channel) {
-            channel.active = true;
-            await channel.save();
+    private async activateChannel(context: CommandContext, existingChannel?: ChannelModel | null) {
+        if (existingChannel) {
+            existingChannel.active = true;
+            await existingChannel.save();
         } else {
-            await (
-                context.guildID ?
-                    new ChannelModel(ChannelType.TEXT_CHANNEL, context.channelID).save() :
-                    new ChannelModel(ChannelType.DM_CHANNEL, context.user.id).save());
+            if (context.guildID) {
+                const newChannel = new ChannelModel();
+                newChannel.type = ChannelType.TEXT_CHANNEL;
+                newChannel.identifier = context.channelID;
+                await newChannel.save();
+            } else {
+                const newChannel = new ChannelModel();
+                newChannel.type = ChannelType.DM_CHANNEL;
+                newChannel.identifier = context.user.id;
+                await newChannel.save();
+            }
         }
     }
 }

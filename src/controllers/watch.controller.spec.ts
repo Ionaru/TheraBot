@@ -1,5 +1,3 @@
-/* eslint-disable jest/prefer-lowercase-title */
-/* eslint-disable jest/no-mocks-import */
 import { PublicESIService } from '@ionaru/esi-service';
 import { EVE } from '@ionaru/eve-utils';
 import { AxiosResponse } from 'axios';
@@ -26,6 +24,7 @@ describe('WatchController', () => {
         const channelSendMock = jest.fn().mockReturnValue(new Promise(() => { /* empty */ }));
         let watchController: WatchController;
 
+        // eslint-disable-next-line unicorn/consistent-function-scoping
         const axiosGetMock = (returnValue: AxiosResponse) => {
             const validateStatusFunction = mockAxios.get.mock.calls[0][1].validateStatus;
             if (validateStatusFunction(returnValue.status)) {
@@ -54,7 +53,10 @@ describe('WatchController', () => {
                 id: 'test_channel',
             }) as TextChannel;
             channel.send = channelSendMock;
-            channelModel = await new ChannelModel(ChannelType.TEXT_CHANNEL, channel.id).save();
+            channelModel = new ChannelModel();
+            channelModel.type = ChannelType.TEXT_CHANNEL;
+            channelModel.identifier = channel.id;
+            await channelModel.save();
 
             const publicESIService = new PublicESIService({
                 axiosInstance: mockAxios as any,
@@ -111,7 +113,12 @@ describe('WatchController', () => {
 
             expect.assertions(1);
 
-            const filterModel = await new FilterModel(channelModel, filterType as number, filter as string).save();
+            const filterModel = new FilterModel();
+            filterModel.channel = channelModel;
+            filterModel.type = filterType;
+            filterModel.filter = filter;
+            await filterModel.save();
+
             channelModel.filters = [filterModel];
             await channelModel.save();
 
@@ -154,9 +161,13 @@ describe('WatchController', () => {
                 statusText: 'OK',
             }));
 
-            channelModel.filters = [
-                await new FilterModel(channelModel, filterType as FilterType, securityFilter as string).save(),
-            ];
+            const filter = new FilterModel();
+            filter.channel = channelModel;
+            filter.type = filterType;
+            filter.filter = securityFilter;
+            await filter.save();
+
+            channelModel.filters = [filter];
             await channelModel.save();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeJita as any);
@@ -180,10 +191,19 @@ describe('WatchController', () => {
 
             expect.assertions(1);
 
-            channelModel.filters = [
-                await new FilterModel(channelModel, filterType as FilterType, securityFilter as string).save(),
-                await new FilterModel(channelModel, FilterType.SYSTEM, systemFilter as string).save(),
-            ];
+            const filterOne = new FilterModel();
+            filterOne.channel = channelModel;
+            filterOne.type = filterType;
+            filterOne.filter = securityFilter;
+            await filterOne.save();
+
+            const filterTwo = new FilterModel();
+            filterTwo.channel = channelModel;
+            filterTwo.type = FilterType.SYSTEM;
+            filterTwo.filter = systemFilter;
+            await filterTwo.save();
+
+            channelModel.filters = [filterOne, filterTwo];
             await channelModel.save();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeJita as any);
@@ -217,10 +237,19 @@ describe('WatchController', () => {
                 statusText: 'OK',
             }));
 
-            channelModel.filters = [
-                await new FilterModel(channelModel, filterType as FilterType, securityFilter as string).save(),
-                await new FilterModel(channelModel, FilterType.CONSTELLATION, constellationFilter as string).save(),
-            ];
+            const filterOne = new FilterModel();
+            filterOne.channel = channelModel;
+            filterOne.type = filterType;
+            filterOne.filter = securityFilter;
+            await filterOne.save();
+
+            const filterTwo = new FilterModel();
+            filterTwo.channel = channelModel;
+            filterTwo.type = FilterType.CONSTELLATION;
+            filterTwo.filter = constellationFilter;
+            await filterTwo.save();
+
+            channelModel.filters = [filterOne, filterTwo];
             await channelModel.save();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeJita as any);
@@ -244,10 +273,19 @@ describe('WatchController', () => {
 
             expect.assertions(1);
 
-            channelModel.filters = [
-                await new FilterModel(channelModel, filterType as FilterType, securityFilter as string).save(),
-                await new FilterModel(channelModel, FilterType.REGION, regionFilter as string).save(),
-            ];
+            const filterOne = new FilterModel();
+            filterOne.channel = channelModel;
+            filterOne.type = filterType;
+            filterOne.filter = securityFilter;
+            await filterOne.save();
+
+            const filterTwo = new FilterModel();
+            filterTwo.channel = channelModel;
+            filterTwo.type = FilterType.REGION;
+            filterTwo.filter = regionFilter;
+            await filterTwo.save();
+
+            channelModel.filters = [filterOne, filterTwo];
             await channelModel.save();
 
             await watchController.sendWormholeAddedMessage([channel], wormholeJita as any);
@@ -295,7 +333,11 @@ describe('WatchController', () => {
 
             channelModel.filters = [];
             for (const data of filterData as any) {
-                const filter = await new FilterModel(channelModel, data[1] as number, data[0] as string).save();
+                const filter = new FilterModel();
+                filter.channel = channelModel;
+                filter.type = data[1] as number;
+                filter.filter = data[0] as string;
+                await filter.save();
                 channelModel.filters.push(filter);
             }
 

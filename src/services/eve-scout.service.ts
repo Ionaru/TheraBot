@@ -64,6 +64,7 @@ export class EveScoutService {
 
     public async getWH(secondAttempt = false): Promise<IWormholeData[] | undefined> {
         this.debug('getWH');
+        // eslint-disable-next-line unicorn/no-useless-undefined
         const response = await this.axiosInstance.get<IWormholeData[]>('https://www.eve-scout.com/api/wormholes').catch(() => undefined);
 
         if (!response) {

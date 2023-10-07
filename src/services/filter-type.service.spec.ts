@@ -1,5 +1,3 @@
-/* eslint-disable jest/prefer-lowercase-title */
-/* eslint-disable jest/no-mocks-import */
 import { PublicESIService } from '@ionaru/esi-service';
 import { AxiosResponse } from 'axios';
 
@@ -29,7 +27,6 @@ describe('FilterTypeService', () => {
         mockAxios.get.mockReset();
     });
 
-    // eslint-disable-next-line jest/no-disabled-tests
     describe.skip('System', () => {
 
         it('Success', async () => {
@@ -38,7 +35,7 @@ describe('FilterTypeService', () => {
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
                 config: {url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Amarr'},
-                data: {solar_system: [30002187]},
+                data: {solar_system: [30_002_187]},
                 headers: {},
                 status: 200,
                 statusText: 'OK',
@@ -48,7 +45,6 @@ describe('FilterTypeService', () => {
         });
     });
 
-    // eslint-disable-next-line jest/no-disabled-tests
     describe.skip('Constellation', () => {
 
         it('Success', async () => {
@@ -57,7 +53,7 @@ describe('FilterTypeService', () => {
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
                 config: {url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Kimotoro'},
-                data: {constellation: [20000020]},
+                data: {constellation: [20_000_020]},
                 headers: {},
                 status: 200,
                 statusText: 'OK',
@@ -67,7 +63,6 @@ describe('FilterTypeService', () => {
         });
     });
 
-    // eslint-disable-next-line jest/no-disabled-tests
     describe.skip('Region', () => {
 
         it('Success', async () => {
@@ -76,7 +71,7 @@ describe('FilterTypeService', () => {
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
                 config: {url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Domain'},
-                data: {region: [10000043]},
+                data: {region: [10_000_043]},
                 headers: {},
                 status: 200,
                 statusText: 'OK',
@@ -104,7 +99,6 @@ describe('FilterTypeService', () => {
         });
     });
 
-    // eslint-disable-next-line jest/no-disabled-tests
     describe.skip('Misc', () => {
 
         it('Empty', async () => {
@@ -130,7 +124,7 @@ describe('FilterTypeService', () => {
                 config: {url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Amarr'},
                 data: {
                     solar_system: [
-                        30002187,
+                        30_002_187,
                     ],
                 },
                 headers: {},

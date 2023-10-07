@@ -72,19 +72,23 @@ export class FilterTypeService {
         const responses = await Promise.all(
             searchUrls.map((url) => this.publicESIService.fetchESIData<IApiResponse>(url).catch(() => {
                 this.debug(`Failed to fetch ${url}`);
+                // eslint-disable-next-line unicorn/no-useless-undefined
                 return undefined;
-            }))
+            })),
         );
-        const exactResponse = responses.filter((response) => !response?.data.fuzzy)[0];
+        const exactResponse = responses.find((response) => !response?.data.fuzzy);
 
         if (exactResponse) {
             switch (exactResponse.data.category) {
-                case 'region':
+                case 'region': {
                     return FilterType.REGION;
-                case 'constellation':
+                }
+                case 'constellation': {
                     return FilterType.CONSTELLATION;
-                case 'solar_system':
+                }
+                case 'solar_system': {
                     return FilterType.SYSTEM;
+                }
             }
         }
 

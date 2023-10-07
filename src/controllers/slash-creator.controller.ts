@@ -24,11 +24,11 @@ export class SlashCreatorController {
         SlashCreatorController.debug('Configuration OK');
 
         this.creator = new SlashCreator({ applicationID, publicKey, token });
-        this.creator.on('commandError', (_, e) => {
-            throw e;
+        this.creator.on('commandError', (_, error) => {
+            throw error;
         });
-        this.creator.on('error', (e) => {
-            throw e;
+        this.creator.on('error', (error) => {
+            throw error;
         });
 
         SlashCreatorController.debug('Ready');

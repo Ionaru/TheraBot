@@ -1,4 +1,4 @@
-import { format } from 'util';
+import { format } from 'node:util';
 
 import { CacheController } from '@ionaru/esi-service';
 import { config } from 'dotenv';
@@ -67,10 +67,12 @@ const deactivate = (clientController: ClientController, cacheController: CacheCo
 
 const exit = () => {
     debug('Bye bye');
+    // eslint-disable-next-line unicorn/no-process-exit
     process.exit(0);
 };
 
 start().catch((error) => {
     process.stderr.write(`${format(error)}\n`);
+    // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1);
 });

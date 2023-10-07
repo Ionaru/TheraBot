@@ -35,30 +35,42 @@ export class WatchController {
     private static getSecurityStatusColour(secStatus: number) {
         const roundedSecStatus = Number(secStatus.toPrecision(1));
         switch (true) {
-            case secStatus < 0.05:
+            case secStatus < 0.05: {
                 return '#F00000';
-            case roundedSecStatus === 0.1:
+            }
+            case roundedSecStatus === 0.1: {
                 return '#D73000';
-            case roundedSecStatus === 0.2:
+            }
+            case roundedSecStatus === 0.2: {
                 return '#F04800';
-            case roundedSecStatus === 0.3:
+            }
+            case roundedSecStatus === 0.3: {
                 return '#F06000';
-            case roundedSecStatus === 0.4:
+            }
+            case roundedSecStatus === 0.4: {
                 return '#D77700';
-            case roundedSecStatus === 0.5:
+            }
+            case roundedSecStatus === 0.5: {
                 return '#EFEF00';
-            case roundedSecStatus === 0.6:
+            }
+            case roundedSecStatus === 0.6: {
                 return '#8FEF2F';
-            case roundedSecStatus === 0.7:
+            }
+            case roundedSecStatus === 0.7: {
                 return '#00F000';
-            case roundedSecStatus === 0.8:
+            }
+            case roundedSecStatus === 0.8: {
                 return '#00EF47';
-            case roundedSecStatus === 0.9:
+            }
+            case roundedSecStatus === 0.9: {
                 return '#48F0C0';
-            case roundedSecStatus >= 1:
+            }
+            case roundedSecStatus >= 1: {
                 return '#2FEFEF';
-            default:
+            }
+            default: {
                 return '#2FEFEF';
+            }
         }
     }
 
@@ -78,7 +90,7 @@ export class WatchController {
 
         setInterval(() => {
             this.doWatchCycle();
-        }, 300000); // 5 minutes
+        }, 300_000); // 5 minutes
         this.doWatchCycle().then();
     }
 
@@ -93,7 +105,7 @@ export class WatchController {
         const addedWormholes = wormholeNumbers.filter((wormholeNumber) => !this.knownWormholes.includes(wormholeNumber));
         const closedWormholes = this.knownWormholes.filter((knownWormhole) => !wormholeNumbers.includes(knownWormhole));
 
-        if (!addedWormholes.length) {
+        if (addedWormholes.length === 0) {
             return;
         }
 
@@ -101,17 +113,20 @@ export class WatchController {
 
         const channelsToNotify = await this.getChannelsToNotify();
 
-        addedWormholes.forEach((wormholeId) => {
+        for (const wormholeId of addedWormholes) {
             const wormhole = data.find((wormholeData) => wormholeData.id === wormholeId);
             if (wormhole) {
-                this.sendWormholeAddedMessage(channelsToNotify, wormhole);
+                await this.sendWormholeAddedMessage(channelsToNotify, wormhole);
             }
-            new WormholeModel(wormholeId).save().then();
-        });
 
-        closedWormholes.forEach((wormholeId) => {
-            WormholeModel.delete(wormholeId);
-        });
+            const wormholeModel = new WormholeModel();
+            wormholeModel.id = wormholeId;
+            await wormholeModel.save();
+        }
+
+        for (const wormholeId of closedWormholes) {
+            await WormholeModel.delete(wormholeId);
+        }
     }
 
     public sendWormholeAddedMessage(channels: SupportedChannelType[], wormhole: IWormholeData) {
@@ -125,18 +140,18 @@ export class WatchController {
         embed.addFields([
             {inline: true, name: '**Region**', value: wormhole.destinationSolarSystem.region.name},
             {inline: true, name: '**System**', value: `${wormhole.destinationSolarSystem.name} (${securityStatus})`},
-            {name: '\u200b', value: '\u200b'},
+            {name: '\u200B', value: '\u200B'},
             {inline: true, name: '**Signature**', value: `\`${wormhole.wormholeDestinationSignatureId}\` - \`${wormhole.signatureId}\``},
             {inline: true, name: '**Size**', value: [
                 `${this.getMass(wormhole.sourceWormholeType.jumpMass)}kg`, wormhole.wormholeMass,
             ].join('\n')},
             {inline: true, name: '**Type**', value: `\`${wormhole.sourceWormholeType.name}\``},
-            {name: '\u200b', value: '\u200b'},
+            {name: '\u200B', value: '\u200B'},
             {name: '**Estimated Life**', value: `${countdown(new Date(wormhole.wormholeEstimatedEol), undefined, this.countdownUnits)}`},
         ]);
 
         embed.setFooter({
-            iconURL: 'http://www.newedenpodcast.de/wp-content/uploads/2019/02/EvE-Scout_Logo-281x300.png',
+            iconURL: 'https://www.newedenpodcast.de/wp-content/uploads/2019/02/EvE-Scout_Logo-281x300.png',
             text: 'Data from https://www.eve-scout.com/',
         });
         embed.setTimestamp();
@@ -159,9 +174,9 @@ export class WatchController {
                 return;
             }
 
-            channel.send({embeds: [embed]}).catch((e) => {
-                if (e instanceof DiscordAPIError) {
-                    this.debug(`${e.message}: ${channel.toString()}`);
+            channel.send({embeds: [embed]}).catch((error) => {
+                if (error instanceof DiscordAPIError) {
+                    this.debug(`${error.message}: ${channel.toString()}`);
                 }
             });
         }));
@@ -169,7 +184,7 @@ export class WatchController {
 
     private async isFilteredBySecurity(filters: FilterModel[], wormhole: IWormholeData): Promise<boolean> {
 
-        if (!filters.length) {
+        if (filters.length === 0) {
             return false;
         }
 
@@ -180,18 +195,22 @@ export class WatchController {
         const securityClassFilters = filters.filter((filter) => filter.type === FilterType.SECURITY_CLASS);
         for (const securityClassFilter of securityClassFilters) {
             switch (securityClassFilter.filter) {
-                case 'highsec':
-                    allowedSecurity.push(...['0.5', '0.6', '0.7', '0.8', '0.9', '1.0']);
+                case 'highsec': {
+                    allowedSecurity.push('0.5', '0.6', '0.7', '0.8', '0.9', '1.0');
                     break;
-                case 'lowsec':
-                    allowedSecurity.push(...['0.1', '0.2', '0.3', '0.4']);
+                }
+                case 'lowsec': {
+                    allowedSecurity.push('0.1', '0.2', '0.3', '0.4');
                     break;
-                case 'nullsec':
-                    allowedSecurity.push(...['-1.0', '-0.9', '-0.8', '-0.7', '-0.6', '-0.5', '-0.4', '-0.3', '-0.2', '-0.1', '0.0']);
+                }
+                case 'nullsec': {
+                    allowedSecurity.push('-1.0', '-0.9', '-0.8', '-0.7', '-0.6', '-0.5', '-0.4', '-0.3', '-0.2', '-0.1', '0.0');
                     break;
-                case 'wspace':
+                }
+                case 'wspace': {
                     wormholeSpace = true;
                     break;
+                }
             }
         }
 
@@ -202,7 +221,7 @@ export class WatchController {
         }
 
         const isWormholeSystem = this.wormholeSystemRegex.test(wormhole.destinationSolarSystem.name);
-        if (!allowedSecurity.length && wormholeSpace && !isWormholeSystem) {
+        if (allowedSecurity.length === 0 && wormholeSpace && !isWormholeSystem) {
             return true;
         }
 
@@ -213,7 +232,7 @@ export class WatchController {
             return true;
         }
 
-        if (!allowedSecurity.length) {
+        if (allowedSecurity.length === 0) {
             return false;
         }
 
@@ -222,7 +241,7 @@ export class WatchController {
 
     private async isFilteredBySystem(filters: FilterModel[], wormhole: IWormholeData): Promise<boolean> {
 
-        if (!filters.length) {
+        if (filters.length === 0) {
             return false;
         }
 
@@ -248,7 +267,7 @@ export class WatchController {
             }
         }
 
-        return !(!systemFilters.length && !constellationFilters.length && !regionFilters.length);
+        return !(systemFilters.length === 0 && constellationFilters.length === 0 && regionFilters.length === 0);
     }
 
     private async getChannelsToNotify() {
@@ -257,18 +276,18 @@ export class WatchController {
 
         const allSavedChannels = await ChannelModel.find({where: [{active: true}]});
 
-        const channels = [...this.client.channels.cache.values()].filter(comparator) as SupportedChannelType[];
+        const channels = [...this.client.channels.cache.values()].filter((element) => comparator(element)) as SupportedChannelType[];
         const savedChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.TEXT_CHANNEL);
-        const savedChannelIds = savedChannels.map((channel) => channel.identifier);
-        const channelsToSend = channels.filter((channel) => savedChannelIds.includes(channel.id));
+        const savedChannelIds = new Set(savedChannels.map((channel) => channel.identifier));
+        const channelsToSend = channels.filter((channel) => savedChannelIds.has(channel.id));
 
         const userChannels = [...this.client.users.cache.values()];
         const savedUserChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.DM_CHANNEL);
-        const savedUserChannelIds = savedUserChannels.map((channel) => channel.identifier);
-        const userChannelsToSend = userChannels.filter((channel) => savedUserChannelIds.includes(channel.id));
+        const savedUserChannelIds = new Set(savedUserChannels.map((channel) => channel.identifier));
+        const userChannelsToSend = userChannels.filter((channel) => savedUserChannelIds.has(channel.id));
 
         return [...channelsToSend, ...userChannelsToSend];
     }
 
-    private getMass = (mass: number) => formatNumber(mass * 1000000, 0);
+    private getMass = (mass: number) => formatNumber(mass * 1_000_000, 0);
 }

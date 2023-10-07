@@ -16,21 +16,14 @@ export enum FilterType {
 export class FilterModel extends BaseModel {
 
     @Column()
-    public type: FilterType;
+    public type!: FilterType;
 
     @Column()
-    public filter: string;
+    public filter!: string;
 
     @ManyToOne(() => ChannelModel, (channel) => channel.filters, {
         onDelete: 'CASCADE',
         onUpdate: 'RESTRICT',
     })
-    public channel: ChannelModel;
-
-    public constructor(channel: ChannelModel, type: FilterType, filter: string) {
-        super();
-        this.channel = channel;
-        this.type = type;
-        this.filter = filter;
-    }
+    public channel!: ChannelModel;
 }

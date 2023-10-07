@@ -13,13 +13,13 @@ export const getAxiosInstance = (): AxiosInstance => {
             httpsAgent: new HttpsAgent(),
 
             // Cap the maximum content length we'll accept to 50MBs, just in case
-            maxContentLength: 50000000,
+            maxContentLength: 50_000_000,
 
             // Follow up to 10 HTTP 3xx redirects
             maxRedirects: 10,
 
             // 60 sec timeout
-            timeout: 60000,
+            timeout: 60_000,
         });
     }
 

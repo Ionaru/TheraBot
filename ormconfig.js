@@ -1,6 +1,7 @@
 /**
  * @file Manages the configuration settings for the TypeORM.
  */
+const { DataSource } = require("typeorm");
 
 const runningMigration = process.argv.length >= 3 && process.argv[2].includes('migration');
 const runningTSMain = process.argv[1].includes('main.ts');
@@ -28,4 +29,5 @@ if (runningMigration) {
     connectionOptions.migrationsTableName = 'migrations';
 }
 
-module.exports = connectionOptions;
+const dataSource = new DataSource(connectionOptions);
+module.exports = { dataSource };

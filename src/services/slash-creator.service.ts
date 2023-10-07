@@ -18,6 +18,7 @@ export class SlashCreatorService {
         return new Promise((resolve) => {
             this.creator.once('synced', () => {
                 SlashCreatorService.debug('Commands synced');
+                // eslint-disable-next-line unicorn/no-useless-undefined
                 resolve(undefined);
             });
             this.creator.syncCommands();

@@ -16,6 +16,7 @@ export class NamesService {
         this.debug('getName');
 
         const url = EVE.getUniverseTypeUrl(id);
+        // eslint-disable-next-line unicorn/no-useless-undefined
         const response = await this.publicESIService.fetchESIData<IUniverseTypeData>(url).catch(() => undefined);
 
         return response ? response.name : undefined;

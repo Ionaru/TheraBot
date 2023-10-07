@@ -1,6 +1,7 @@
 import { PublicESIService } from '@ionaru/esi-service';
 import { IUniverseNamesDataUnit } from '@ionaru/eve-utils';
 
+import { debug } from '../debug';
 import { FilterType } from '../models/filter.model';
 
 interface ISearchResponse extends IUniverseNamesDataUnit {
@@ -48,6 +49,8 @@ export class FilterTypeService {
 
     private publicESIService: PublicESIService;
 
+    private debug = debug.extend('FilterTypeService');
+
     public constructor(publicESIService: PublicESIService) {
         this.publicESIService = publicESIService;
     }
@@ -66,8 +69,13 @@ export class FilterTypeService {
             `https://search.spaceships.app/region?q=${filter}`,
         ];
 
-        const responses = await Promise.all(searchUrls.map((url) => this.publicESIService.fetchESIData<IApiResponse>(url)));
-        const exactResponse = responses.filter((response) => !response.data.fuzzy)[0];
+        const responses = await Promise.all(
+            searchUrls.map((url) => this.publicESIService.fetchESIData<IApiResponse>(url).catch(() => {
+                this.debug(`Failed to fetch ${url}`);
+                return undefined;
+            }))
+        );
+        const exactResponse = responses.filter((response) => !response?.data.fuzzy)[0];
 
         if (exactResponse) {
             switch (exactResponse.data.category) {

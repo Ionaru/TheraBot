@@ -8,10 +8,15 @@ import { debug } from '../debug';
 import { ChannelModel, ChannelType } from '../models/channel.model';
 import { FilterModel, FilterType } from '../models/filter.model';
 import { WormholeModel } from '../models/wormhole.model';
-import { EveScoutService, IWormholeData } from '../services/eve-scout.service';
+import { EveScoutService, IEveScoutSignature } from '../services/eve-scout.service';
 import { NamesService } from '../services/names.service';
 
 type SupportedChannelType = TextChannel | User;
+
+interface IEsiSolarSystem {
+    constellation_id: number;
+    security_status: number;
+}
 
 export class WatchController {
 
@@ -21,6 +26,7 @@ export class WatchController {
     private readonly client: Client;
     private readonly eveScoutService: EveScoutService;
     private readonly namesService: NamesService;
+    private readonly publicESIService: PublicESIService;
     private readonly debug = debug.extend('watch');
     private readonly wormholeSystemRegex = new RegExp(/^J\d{6}$/);
 
@@ -30,6 +36,7 @@ export class WatchController {
         this.client = client;
         this.eveScoutService = new EveScoutService(axiosInstance);
         this.namesService = new NamesService(publicESIService);
+        this.publicESIService = publicESIService;
     }
 
     private static getSecurityStatusColour(secStatus: number) {
@@ -129,25 +136,27 @@ export class WatchController {
         }
     }
 
-    public sendWormholeAddedMessage(channels: SupportedChannelType[], wormhole: IWormholeData) {
+    public async sendWormholeAddedMessage(channels: SupportedChannelType[], wormhole: IEveScoutSignature) {
+
+        const system = await this.publicESIService.fetchESIData<IEsiSolarSystem>(
+            `https://esi.evetech.net/v4/universe/systems/${wormhole.in_system_id}`,
+        );
 
         const embed = new EmbedBuilder();
         embed.setTitle('**New Thera connection scouted**');
-        embed.setColor(WatchController.getSecurityStatusColour(wormhole.destinationSolarSystem.security));
+        embed.setColor(WatchController.getSecurityStatusColour(system.security_status));
 
-        const securityStatus = WatchController.getSecurityStatusText(wormhole.destinationSolarSystem.security);
+        const securityStatus = WatchController.getSecurityStatusText(system.security_status);
 
         embed.addFields([
-            {inline: true, name: '**Region**', value: wormhole.destinationSolarSystem.region.name},
-            {inline: true, name: '**System**', value: `${wormhole.destinationSolarSystem.name} (${securityStatus})`},
+            {inline: true, name: '**Region**', value: wormhole.in_region_name},
+            {inline: true, name: '**System**', value: `${wormhole.in_system_name} (${securityStatus})`},
             {name: '\u200B', value: '\u200B'},
-            {inline: true, name: '**Signature**', value: `\`${wormhole.wormholeDestinationSignatureId}\` - \`${wormhole.signatureId}\``},
-            {inline: true, name: '**Size**', value: [
-                `${this.getMass(wormhole.sourceWormholeType.jumpMass)}kg`, wormhole.wormholeMass,
-            ].join('\n')},
-            {inline: true, name: '**Type**', value: `\`${wormhole.sourceWormholeType.name}\``},
+            {inline: true, name: '**Signature**', value: `\`${wormhole.out_signature}\` - \`${wormhole.in_signature}\``},
+            {inline: true, name: '**Size**', value: `\`${wormhole.max_ship_size}\``},
+            {inline: true, name: '**Type**', value: `\`${wormhole.wh_type}\``},
             {name: '\u200B', value: '\u200B'},
-            {name: '**Estimated Life**', value: `${countdown(new Date(wormhole.wormholeEstimatedEol), undefined, this.countdownUnits)}`},
+            {name: '**Estimated Life**', value: `${countdown(new Date(wormhole.expires_at), undefined, this.countdownUnits)}`},
         ]);
 
         embed.setFooter({
@@ -156,7 +165,7 @@ export class WatchController {
         });
         embed.setTimestamp();
 
-        this.debug(`Sending messages for WH ${wormhole.sourceWormholeType.name} to ${channels.length} channels (before filtering).`);
+        this.debug(`Sending messages for WH ${wormhole.wh_type} to ${channels.length} channels (before filtering).`);
 
         return Promise.all(channels.map(async (channel) => {
             const channelModel = await ChannelModel.findOne({where: [{identifier: channel.id}]});
@@ -164,12 +173,12 @@ export class WatchController {
                 return;
             }
 
-            const filteredBySecurity = await this.isFilteredBySecurity(channelModel.filters, wormhole);
+            const filteredBySecurity = await this.isFilteredBySecurity(channelModel.filters, wormhole, system);
             if (filteredBySecurity) {
                 return;
             }
 
-            const filteredBySystem = await this.isFilteredBySystem(channelModel.filters, wormhole);
+            const filteredBySystem = await this.isFilteredBySystem(channelModel.filters, wormhole, system);
             if (filteredBySystem) {
                 return;
             }
@@ -182,7 +191,7 @@ export class WatchController {
         }));
     }
 
-    private async isFilteredBySecurity(filters: FilterModel[], wormhole: IWormholeData): Promise<boolean> {
+    private async isFilteredBySecurity(filters: FilterModel[], wormhole: IEveScoutSignature, system: IEsiSolarSystem): Promise<boolean> {
 
         if (filters.length === 0) {
             return false;
@@ -220,7 +229,7 @@ export class WatchController {
             allowedSecurity.push(securityStatusFilter.filter);
         }
 
-        const isWormholeSystem = this.wormholeSystemRegex.test(wormhole.destinationSolarSystem.name);
+        const isWormholeSystem = this.wormholeSystemRegex.test(wormhole.in_system_name);
         if (allowedSecurity.length === 0 && wormholeSpace && !isWormholeSystem) {
             return true;
         }
@@ -236,10 +245,10 @@ export class WatchController {
             return false;
         }
 
-        return !allowedSecurity.includes(WatchController.getSecurityStatusText(wormhole.destinationSolarSystem.security));
+        return !allowedSecurity.includes(WatchController.getSecurityStatusText(system.security_status));
     }
 
-    private async isFilteredBySystem(filters: FilterModel[], wormhole: IWormholeData): Promise<boolean> {
+    private async isFilteredBySystem(filters: FilterModel[], wormhole: IEveScoutSignature, system: IEsiSolarSystem): Promise<boolean> {
 
         if (filters.length === 0) {
             return false;
@@ -247,14 +256,14 @@ export class WatchController {
 
         const systemFilters = filters.filter((filter) => filter.type === FilterType.SYSTEM);
         for (const systemFilter of systemFilters) {
-            if (wormhole.destinationSolarSystem.name.toLowerCase() === systemFilter.filter) {
+            if (wormhole.in_system_name.toLowerCase() === systemFilter.filter) {
                 return false;
             }
         }
 
         const constellationFilters = filters.filter((filter) => filter.type === FilterType.CONSTELLATION);
         for (const constellationFilter of constellationFilters) {
-            const constellationName = await this.namesService.getName(wormhole.destinationSolarSystem.constellationID);
+            const constellationName = await this.namesService.getName(system.constellation_id);
             if (constellationName && constellationName.toLowerCase() === constellationFilter.filter) {
                 return false;
             }
@@ -262,7 +271,7 @@ export class WatchController {
 
         const regionFilters = filters.filter((filter) => filter.type === FilterType.REGION);
         for (const regionFilter of regionFilters) {
-            if (wormhole.destinationSolarSystem.region.name.toLowerCase() === regionFilter.filter) {
+            if (wormhole.in_region_name.toLowerCase() === regionFilter.filter) {
                 return false;
             }
         }
@@ -288,6 +297,4 @@ export class WatchController {
 
         return [...channelsToSend, ...userChannelsToSend];
     }
-
-    private getMass = (mass: number) => formatNumber(mass * 1_000_000, 0);
 }

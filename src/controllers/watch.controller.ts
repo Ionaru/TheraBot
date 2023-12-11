@@ -30,7 +30,7 @@ export class WatchController {
     private readonly debug = debug.extend('watch');
     private readonly wormholeSystemRegex = new RegExp(/^J\d{6}$/);
 
-    private knownWormholes: number[] = [];
+    private knownWormholes: string[] = [];
 
     public constructor(client: Client, axiosInstance: AxiosInstance, publicESIService: PublicESIService) {
         this.client = client;
@@ -91,7 +91,7 @@ export class WatchController {
 
     public async startWatchCycle() {
         const wormholes = await WormholeModel.find();
-        this.knownWormholes = wormholes.map((wormhole) => wormhole.id);
+        this.knownWormholes = wormholes.map((wormhole) => wormhole.id.toString());
 
         this.debug(`Started watching with ${this.knownWormholes.length} known wormholes`);
 
@@ -108,7 +108,7 @@ export class WatchController {
             return;
         }
 
-        const wormholeNumbers = data.map((wormholeData) => wormholeData.id);
+        const wormholeNumbers = data.map((wormholeData) => wormholeData.id.toString());
         const addedWormholes = wormholeNumbers.filter((wormholeNumber) => !this.knownWormholes.includes(wormholeNumber));
         const closedWormholes = this.knownWormholes.filter((knownWormhole) => !wormholeNumbers.includes(knownWormhole));
 
@@ -121,13 +121,13 @@ export class WatchController {
         const channelsToNotify = await this.getChannelsToNotify();
 
         for (const wormholeId of addedWormholes) {
-            const wormhole = data.find((wormholeData) => wormholeData.id === wormholeId);
+            const wormhole = data.find((wormholeData) => wormholeData.id.toString() === wormholeId);
             if (wormhole) {
                 await this.sendWormholeAddedMessage(channelsToNotify, wormhole);
             }
 
             const wormholeModel = new WormholeModel();
-            wormholeModel.id = wormholeId;
+            wormholeModel.id = Number(wormholeId);
             await wormholeModel.save();
         }
 

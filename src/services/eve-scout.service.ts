@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios';
 import { debug } from '../debug';
 
 export interface IEveScoutSignature {
-    id: number;
+    id: string;
     created_at: string;
     created_by_id: number;
     created_by_name: string;

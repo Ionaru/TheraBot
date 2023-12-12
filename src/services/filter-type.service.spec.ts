@@ -1,5 +1,5 @@
 import { PublicESIService } from '@ionaru/esi-service';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 import mockAxios from '../__mocks__/axios';
 import { FilterType } from '../models/filter.model';
@@ -34,7 +34,9 @@ describe('FilterTypeService', () => {
             expect.assertions(1);
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
-                config: {url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Amarr'},
+                config: {
+                    url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Amarr',
+                } as InternalAxiosRequestConfig,
                 data: {solar_system: [30_002_187]},
                 headers: {},
                 status: 200,
@@ -52,7 +54,9 @@ describe('FilterTypeService', () => {
             expect.assertions(1);
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
-                config: {url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Kimotoro'},
+                config: {
+                    url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Kimotoro',
+                } as InternalAxiosRequestConfig,
                 data: {constellation: [20_000_020]},
                 headers: {},
                 status: 200,
@@ -70,7 +74,9 @@ describe('FilterTypeService', () => {
             expect.assertions(1);
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
-                config: {url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Domain'},
+                config: {
+                    url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Domain',
+                } as InternalAxiosRequestConfig,
                 data: {region: [10_000_043]},
                 headers: {},
                 status: 200,
@@ -106,7 +112,9 @@ describe('FilterTypeService', () => {
             expect.assertions(1);
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
-                config: {url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Amarr'},
+                config: {
+                    url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Amarr',
+                } as InternalAxiosRequestConfig,
                 data: {},
                 headers: {},
                 status: 200,
@@ -121,7 +129,9 @@ describe('FilterTypeService', () => {
             expect.assertions(1);
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
-                config: {url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Amarr'},
+                config: {
+                    url: 'https://esi.evetech.net/v2/search/?categories=solar_system,constellation,region&search=Amarr',
+                } as InternalAxiosRequestConfig,
                 data: {
                     solar_system: [
                         30_002_187,

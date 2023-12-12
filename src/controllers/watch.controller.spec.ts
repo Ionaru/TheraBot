@@ -1,6 +1,6 @@
 import { PublicESIService } from '@ionaru/esi-service';
 import { EVE } from '@ionaru/eve-utils';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { Client, TextChannel } from 'discord.js';
 import { createConnection, getConnection, getConnectionOptions } from 'typeorm';
 
@@ -15,7 +15,7 @@ import { FilterModel, FilterType } from '../models/filter.model';
 import { WatchController } from './watch.controller';
 
 // TODO: Fix these tests with the new EVE Scout API.
-xdescribe('WatchController', () => {
+describe.skip('WatchController', () => {
 
     describe('Notification filtering', () => {
 
@@ -153,7 +153,7 @@ xdescribe('WatchController', () => {
             expect.assertions(1);
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
-                config: {url: EVE.getUniverseTypeUrl(wormholeJita.destinationSolarSystem.constellationID)},
+                config: {url: EVE.getUniverseTypeUrl(wormholeJita.destinationSolarSystem.constellationID)} as InternalAxiosRequestConfig,
                 data: {
                     name: 'Kimotoro',
                 },
@@ -229,7 +229,7 @@ xdescribe('WatchController', () => {
             expect.assertions(1);
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
-                config: {url: EVE.getUniverseTypeUrl(wormholeJita.destinationSolarSystem.constellationID)},
+                config: {url: EVE.getUniverseTypeUrl(wormholeJita.destinationSolarSystem.constellationID)} as InternalAxiosRequestConfig,
                 data: {
                     name: 'Kimotoro',
                 },
@@ -323,7 +323,7 @@ xdescribe('WatchController', () => {
             expect.assertions(3);
 
             mockAxios.get.mockImplementationOnce(async () => axiosGetMock({
-                config: {url: EVE.getUniverseTypeUrl(wormholeJita.destinationSolarSystem.constellationID)},
+                config: {url: EVE.getUniverseTypeUrl(wormholeJita.destinationSolarSystem.constellationID)} as InternalAxiosRequestConfig,
                 data: {
                     name: 'Kimotoro',
                 },

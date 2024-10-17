@@ -2,7 +2,7 @@ import { PublicESIService } from '@ionaru/esi-service';
 import { formatNumber } from '@ionaru/format-number';
 import { AxiosInstance } from 'axios';
 import * as countdown from 'countdown';
-import { Channel, Client, DiscordAPIError, EmbedBuilder, TextChannel, User } from 'discord.js';
+import { Channel, Client, DiscordAPIError, EmbedBuilder, NewsChannel, TextChannel, User } from 'discord.js';
 
 import { debug } from '../debug';
 import { ChannelModel, ChannelType } from '../models/channel.model';
@@ -11,7 +11,7 @@ import { WormholeModel } from '../models/wormhole.model';
 import { EveScoutService, IEveScoutSignature } from '../services/eve-scout.service';
 import { NamesService } from '../services/names.service';
 
-type SupportedChannelType = TextChannel | User;
+type SupportedChannelType = NewsChannel | TextChannel | User;
 
 interface IEsiSolarSystem {
     constellation_id: number;
@@ -183,11 +183,16 @@ export class WatchController {
                 return;
             }
 
-            channel.send({embeds: [embed]}).catch((error) => {
+            try {
+                const message = await channel.send({embeds: [embed]});
+                if (message.crosspostable) {
+                    await message.crosspost();
+                }
+            } catch (error) {
                 if (error instanceof DiscordAPIError) {
                     this.debug(`${error.message}: ${channel.toString()}`);
                 }
-            });
+            }
         }));
     }
 
@@ -280,7 +285,7 @@ export class WatchController {
     }
 
     private async getChannelsToNotify() {
-        const usedChannelClasses = [TextChannel];
+        const usedChannelClasses = [TextChannel, NewsChannel];
         const comparator = (channel: Channel) => usedChannelClasses.some((channelClass) => channel instanceof channelClass);
 
         const allSavedChannels = await ChannelModel.find({where: [{active: true}]});

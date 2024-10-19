@@ -76,7 +76,7 @@ export class FilterTypeService {
                 return undefined;
             })),
         );
-        const exactResponse = responses.find((response) => !response?.data.fuzzy);
+        const exactResponse = responses.find((response) => response && !response.data.fuzzy);
 
         if (exactResponse) {
             switch (exactResponse.data.category) {

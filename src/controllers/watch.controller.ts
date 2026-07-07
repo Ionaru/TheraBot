@@ -5,9 +5,9 @@ import * as countdown from 'countdown';
 import { Channel, Client, DiscordAPIError, EmbedBuilder, NewsChannel, TextChannel, User } from 'discord.js';
 
 import { debug } from '../debug';
-import { ChannelModel, ChannelType } from '../models/channel.model';
-import { FilterModel, FilterType } from '../models/filter.model';
-import { WormholeModel } from '../models/wormhole.model';
+import { channelRepository, ChannelType } from '../models/channel.model';
+import { Filter, FilterType } from '../models/filter.model';
+import { wormholeRepository } from '../models/wormhole.model';
 import { EveScoutService, IEveScoutSignature } from '../services/eve-scout.service';
 import { NamesService } from '../services/names.service';
 
@@ -90,7 +90,7 @@ export class WatchController {
     }
 
     public async startWatchCycle() {
-        const wormholes = await WormholeModel.find();
+        const wormholes = wormholeRepository.findAll();
         this.knownWormholes = wormholes.map((wormhole) => wormhole.id.toString());
 
         this.debug(`Started watching with ${this.knownWormholes.length} known wormholes`);
@@ -126,13 +126,11 @@ export class WatchController {
                 await this.sendWormholeAddedMessage(channelsToNotify, wormhole);
             }
 
-            const wormholeModel = new WormholeModel();
-            wormholeModel.id = Number(wormholeId);
-            await wormholeModel.save();
+            wormholeRepository.insertId(Number(wormholeId));
         }
 
         for (const wormholeId of closedWormholes) {
-            await WormholeModel.delete(wormholeId);
+            wormholeRepository.deleteById(Number(wormholeId));
         }
     }
 
@@ -168,7 +166,7 @@ export class WatchController {
         this.debug(`Sending messages for WH ${wormhole.wh_type} to ${channels.length} channels (before filtering).`);
 
         return Promise.all(channels.map(async (channel) => {
-            const channelModel = await ChannelModel.findOne({where: [{identifier: channel.id}]});
+            const channelModel = channelRepository.findByIdentifier(channel.id);
             if (!channelModel) {
                 return;
             }
@@ -196,7 +194,7 @@ export class WatchController {
         }));
     }
 
-    private async isFilteredBySecurity(filters: FilterModel[], wormhole: IEveScoutSignature, system: IEsiSolarSystem): Promise<boolean> {
+    private async isFilteredBySecurity(filters: Filter[], wormhole: IEveScoutSignature, system: IEsiSolarSystem): Promise<boolean> {
 
         if (filters.length === 0) {
             return false;
@@ -253,7 +251,7 @@ export class WatchController {
         return !allowedSecurity.includes(WatchController.getSecurityStatusText(system.security_status));
     }
 
-    private async isFilteredBySystem(filters: FilterModel[], wormhole: IEveScoutSignature, system: IEsiSolarSystem): Promise<boolean> {
+    private async isFilteredBySystem(filters: Filter[], wormhole: IEveScoutSignature, system: IEsiSolarSystem): Promise<boolean> {
 
         if (filters.length === 0) {
             return false;
@@ -288,7 +286,7 @@ export class WatchController {
         const usedChannelClasses = [TextChannel, NewsChannel];
         const comparator = (channel: Channel) => usedChannelClasses.some((channelClass) => channel instanceof channelClass);
 
-        const allSavedChannels = await ChannelModel.find({where: [{active: true}]});
+        const allSavedChannels = channelRepository.findActive();
 
         const channels = [...this.client.channels.cache.values()].filter((element) => comparator(element)) as SupportedChannelType[];
         const savedChannels = allSavedChannels.filter((channel) => channel.type === ChannelType.TEXT_CHANNEL);

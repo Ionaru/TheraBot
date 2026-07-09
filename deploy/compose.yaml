@@ -1,0 +1,17 @@
+services:
+  therabot:
+    image: ghcr.io/ionaru/therabot:${THERABOT_GIT_REVISION:-latest}
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+    environment:
+      - THERABOT_ID
+      - THERABOT_KEY
+      - THERABOT_TOKEN
+      - DEBUG
+    volumes:
+      - ${THERABOT_DATA_VOLUME:-data}:/app/data
+    restart: unless-stopped
+
+volumes:
+  data:

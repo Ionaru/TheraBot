@@ -2,7 +2,6 @@ import { format } from 'node:util';
 
 import { CacheController } from '@ionaru/esi-service';
 import { config } from 'dotenv';
-import 'reflect-metadata'; // Required for TypeORM
 
 config();
 

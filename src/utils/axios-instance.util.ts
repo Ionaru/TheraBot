@@ -8,6 +8,7 @@ let axiosInstance: AxiosInstance;
 export const getAxiosInstance = (): AxiosInstance => {
     if (!axiosInstance) {
         debug('Creating AxiosInstance');
+        // eslint-disable-next-line import/no-named-as-default-member
         axiosInstance = axios.create({
             // keepAlive pools and reuses TCP connections, so it's faster
             httpsAgent: new HttpsAgent(),

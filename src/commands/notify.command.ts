@@ -1,8 +1,8 @@
 import { EmbedBuilder } from 'discord.js';
 import { CommandContext, CommandOptionType, SlashCommand, SlashCreator } from 'slash-create';
 
-import { ChannelModel, ChannelType } from '../models/channel.model';
-import { FilterModel } from '../models/filter.model';
+import { Channel, channelRepository, ChannelType } from '../models/channel.model';
+import { Filter, filterRepository } from '../models/filter.model';
 import { FilterTypeService } from '../services/filter-type.service';
 import { getPublicESIService } from '../utils/public-esi-service.util';
 
@@ -72,14 +72,8 @@ export class NotifyCommand extends SlashCommand {
         });
     }
 
-    private static getFilter(channel: ChannelModel, filter: string): Promise<FilterModel | null> {
-        return FilterModel.findOne({
-            where: [{
-                channel: {
-                    identifier: channel.identifier,
-                }, filter,
-            }],
-        });
+    private static getFilter(channel: Channel, filter: string): Filter | undefined {
+        return filterRepository.findByChannelIdentifierAndFilter(channel.identifier, filter);
     }
 
     private static parseFilter(filters: string): string[] {
@@ -143,7 +137,7 @@ export class NotifyCommand extends SlashCommand {
     }
 
     private async setNotifyInfo(embed: EmbedBuilder, context: CommandContext) {
-        const channel = await this.getChannel(context);
+        const channel = this.getChannel(context);
 
         const channelText = [];
 
@@ -162,12 +156,12 @@ export class NotifyCommand extends SlashCommand {
     }
 
     private async setNotifyHere(embed: EmbedBuilder, context: CommandContext) {
-        const channel = await this.getChannel(context);
+        const channel = this.getChannel(context);
 
         if (channel && channel.active) {
             this.setNotifyEmbed(embed, 'Channel already added');
         } else {
-            await this.activateChannel(context, channel);
+            this.activateChannel(context, channel);
             this.setNotifyEmbed(embed, 'Channel added');
         }
     }
@@ -188,16 +182,16 @@ export class NotifyCommand extends SlashCommand {
 
             const output = [];
 
-            let channel = await this.getChannel(context);
+            let channel = this.getChannel(context);
             if (!channel || !channel.active) {
-                await this.activateChannel(context, channel);
+                this.activateChannel(context, channel);
                 output.push('Channel added');
-                channel = await this.getChannel(context);
+                channel = this.getChannel(context);
             }
 
             if (channel) {
 
-                if (await NotifyCommand.getFilter(channel, filter)) {
+                if (NotifyCommand.getFilter(channel, filter)) {
                     this.setNotifyEmbed(embed, `Filter **${filter}** already exists on this channel`);
                     continue;
                 }
@@ -209,11 +203,7 @@ export class NotifyCommand extends SlashCommand {
                     continue;
                 }
 
-                const filterModel = new FilterModel();
-                filterModel.channel = channel;
-                filterModel.type = filterType;
-                filterModel.filter = filter;
-                await filterModel.save();
+                filterRepository.insert({ channelId: channel.id, filter, type: filterType });
                 output.push(`Filter **${filter}** added`);
 
                 this.setNotifyEmbed(embed, output.join('\n'));
@@ -223,7 +213,7 @@ export class NotifyCommand extends SlashCommand {
 
     private async setNotifyUndo(embed: EmbedBuilder, context: CommandContext) {
 
-        const channel = await this.getChannel(context);
+        const channel = this.getChannel(context);
 
         if (!channel) {
             this.setNotifyEmbed(embed, 'Channel not found');
@@ -234,24 +224,23 @@ export class NotifyCommand extends SlashCommand {
 
         for (const filter of filters) {
 
-            const filterModel = await NotifyCommand.getFilter(channel, filter);
+            const filterModel = NotifyCommand.getFilter(channel, filter);
 
             if (!filterModel) {
                 this.setNotifyEmbed(embed, `Filter **${filter}** not found`);
                 continue;
             }
 
-            await filterModel.remove();
+            filterRepository.deleteById(filterModel.id);
             this.setNotifyEmbed(embed, `Filter **${filter}** removed`);
         }
     }
 
     private async setNotifyStop(embed: EmbedBuilder, context: CommandContext) {
-        const channel = await this.getChannel(context);
+        const channel = this.getChannel(context);
 
         if (channel) {
-            channel.active = false;
-            await channel.save();
+            channelRepository.setActive(channel.id, false);
             this.setNotifyEmbed(embed, 'Channel removed');
         } else {
             this.setNotifyEmbed(embed, 'Channel not found');
@@ -303,27 +292,18 @@ export class NotifyCommand extends SlashCommand {
         ]);
     }
 
-    private async getChannel(context: CommandContext): Promise<ChannelModel | null> {
+    private getChannel(context: CommandContext): Channel | undefined {
         const identifier = context.guildID ? context.channelID : context.user.id;
-        return ChannelModel.findOne({ where: [{ identifier }] });
+        return channelRepository.findByIdentifier(identifier);
     }
 
-    private async activateChannel(context: CommandContext, existingChannel?: ChannelModel | null) {
+    private activateChannel(context: CommandContext, existingChannel?: Channel): void {
         if (existingChannel) {
-            existingChannel.active = true;
-            await existingChannel.save();
+            channelRepository.setActive(existingChannel.id, true);
+        } else if (context.guildID) {
+            channelRepository.insert({ identifier: context.channelID, type: ChannelType.TEXT_CHANNEL });
         } else {
-            if (context.guildID) {
-                const newChannel = new ChannelModel();
-                newChannel.type = ChannelType.TEXT_CHANNEL;
-                newChannel.identifier = context.channelID;
-                await newChannel.save();
-            } else {
-                const newChannel = new ChannelModel();
-                newChannel.type = ChannelType.DM_CHANNEL;
-                newChannel.identifier = context.user.id;
-                await newChannel.save();
-            }
+            channelRepository.insert({ identifier: context.user.id, type: ChannelType.DM_CHANNEL });
         }
     }
 }

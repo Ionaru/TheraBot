@@ -1,39 +1,109 @@
 name: TheraBot CD
 
 on:
-    push:
-        branches:
-            - master
-    pull_request:
-        branches:
-            - master
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  NODE_VERSION: "24"
 
 jobs:
-    test:
+  audit:
+    name: Audit dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm audit --omit=dev
 
-        runs-on: ubuntu-latest
+  get_sha:
+    name: Get short SHA for image tags
+    runs-on: ubuntu-latest
+    outputs:
+      sha_short: ${{ steps.get_sha.outputs.sha_short }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: get_sha
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
+  test:
+    name: Unit tests
+    needs: [audit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - run: npm test
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: lts/*
+  build-image:
+    name: Build image
+    needs: [audit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: docker compose -f deploy/compose.yaml build therabot
+      - run: docker save -o therabot-image.tar ghcr.io/ionaru/therabot:latest
+      - uses: actions/upload-artifact@v7
+        with:
+          name: therabot-image
+          path: therabot-image.tar
+          retention-days: 1
 
-            - name: Audit
-              run: npm audit --omit=dev
+  push-image:
+    name: Push image
+    if: github.event_name == 'push'
+    needs: [get_sha, test, build-image]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: therabot-image
+      - run: docker load -i therabot-image.tar
+      - run: docker tag ghcr.io/ionaru/therabot:latest ghcr.io/ionaru/therabot:${{ needs.get_sha.outputs.sha_short }}
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - run: docker push -a ghcr.io/ionaru/therabot
 
-            - name: Install packages
-              run: npm ci
-
-            - name: Run tests
-              run: npm test
-
-            - name: Build
-              run: npm run build
-
-            - name: Deploy
-              if: github.event_name == 'push'
-              run: npx -q @ionaru/teamcity-deploy teamcity.saturnserver.org TheraBot_Build ${{ secrets.API_TOKEN }}
+  deploy:
+    needs: [get_sha, push-image]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy
+      cancel-in-progress: false
+    steps:
+      - uses: appleboy/ssh-action@v1.2.5
+        with:
+          command_timeout: 30m
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            $ErrorActionPreference = "Stop"
+            cd ${{ secrets.DEPLOY_PATH }}
+            git fetch -a
+            git switch -d ${{ needs.get_sha.outputs.sha_short }}
+            docker system prune --all -f
+            $env:THERABOT_GIT_REVISION = "${{ needs.get_sha.outputs.sha_short }}"
+            $env:DOCKER_CONFIG = "/docker-no-creds"
+            docker compose -p therabot -f deploy/compose.yaml pull
+            docker compose -p therabot -f deploy/compose.yaml up --pull=never --no-build --remove-orphans -d --wait
+            $deployExit = $LASTEXITCODE
+            docker compose -p therabot -f deploy/compose.yaml logs therabot
+            if ($deployExit -ne 0) { exit $deployExit }

@@ -26,6 +26,15 @@ RUN npm ci --omit=dev && npm cache clean --force
 # Copy the compiled application from the build stage.
 COPY --from=build /app/dist ./dist
 
+# search.spaceships.app chains to the new Let's Encrypt root "ISRG Root YR" and
+# serves an incomplete chain (it omits the cross-sign to the trusted ISRG Root
+# X1). That new root is not yet in Node's bundled CA store, so TLS verification
+# fails with UNABLE_TO_GET_ISSUER_CERT_LOCALLY. Supply the X1 cross-sign of Root
+# YR as an extra trust anchor: this is exactly the certificate a browser fetches
+# on its own via AIA chasing. Full verification stays on; nothing is disabled.
+COPY deploy/isrg-root-yr-cross.pem /etc/ssl/certs/isrg-root-yr-cross.pem
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/isrg-root-yr-cross.pem
+
 # The SQLite database (data/therabot.db) and ESI cache (data/cache.json) live
 # here; mounted as a volume in production.
 RUN mkdir -p /app/data

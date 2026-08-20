@@ -81,29 +81,87 @@ jobs:
       - run: docker push -a ghcr.io/ionaru/therabot
 
   deploy:
+    name: Deploy
     needs: [get_sha, push-image]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     concurrency:
       group: deploy
       cancel-in-progress: false
     steps:
       - uses: appleboy/ssh-action@v1.2.5
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          GIT_REVISION: ${{ needs.get_sha.outputs.sha_short }}
         with:
-          command_timeout: 30m
+          command_timeout: 15m
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
+          envs: DEPLOY_PATH,GIT_REVISION
           script: |
-            $ErrorActionPreference = "Stop"
-            cd ${{ secrets.DEPLOY_PATH }}
-            git fetch -a
-            git switch -d ${{ needs.get_sha.outputs.sha_short }}
-            docker system prune --all -f
-            $env:THERABOT_GIT_REVISION = "${{ needs.get_sha.outputs.sha_short }}"
-            $env:DOCKER_CONFIG = "/docker-no-creds"
-            docker compose -p therabot -f deploy/compose.yaml pull
-            docker compose -p therabot -f deploy/compose.yaml up --pull=never --no-build --remove-orphans -d --wait
-            $deployExit = $LASTEXITCODE
-            docker compose -p therabot -f deploy/compose.yaml logs therabot
-            if ($deployExit -ne 0) { exit $deployExit }
+            set -eu
+
+            cd "$DEPLOY_PATH"
+
+            # Match the checkout to the commit whose image was just published, so the
+            # compose file on disk and the running image always come from one commit.
+            git fetch --prune origin
+            git checkout --force "$GIT_REVISION"
+
+            export THERABOT_GIT_REVISION="$GIT_REVISION"
+
+            # --env-file is not optional. Compose does not auto-discover a .env at the
+            # checkout root when the compose file lives in deploy/, so without it the
+            # stack silently runs :latest against a named volume with no secrets.
+            #
+            # This body must stay a SINGLE command. A shell function used as the left
+            # operand of || runs with errexit disabled, so a multi-command body would
+            # keep going after a failure and return the last command's status, losing
+            # the real exit code.
+            compose() {
+              docker compose \
+                --project-name therabot \
+                --env-file "$DEPLOY_PATH/.env" \
+                --file "$DEPLOY_PATH/deploy/compose.yaml" \
+                "$@"
+            }
+
+            compose pull
+
+            # "|| rc=$?" stops errexit aborting before the logs are printed.
+            rc=0
+            compose up --detach --pull=never --no-build --remove-orphans \
+              --wait --wait-timeout 120 || rc=$?
+
+            compose logs --tail=100 therabot
+
+            if [ "$rc" -ne 0 ]; then
+              exit "$rc"
+            fi
+
+            # There is no healthcheck, so --wait only proves the container reached
+            # "running". Watch it for a moment and confirm it is not crash-looping.
+            # RestartCount is cumulative for the life of the container, so compare a
+            # delta rather than expecting zero: a redeploy that reuses an existing
+            # container would otherwise trip over a restart from weeks ago.
+            container="$(compose ps --all --quiet therabot)"
+            before="$(docker inspect --format '{{.RestartCount}}' "$container")"
+            sleep 20
+            after="$(docker inspect --format '{{.RestartCount}}' "$container")"
+            status="$(docker inspect --format '{{.State.Status}}' "$container")"
+            if [ "$status" != "running" ] || [ "$after" -ne "$before" ]; then
+              echo "TheraBot is unhealthy: status=$status restarts=$before->$after" >&2
+              compose logs --tail=200 therabot
+              exit 1
+            fi
+
+            # Reclaim disk from superseded TheraBot images only. Other stacks share this
+            # Docker daemon, so a global "docker system prune --all" would delete theirs.
+            stale="$(docker image ls --format '{{.Repository}}:{{.Tag}}' \
+              --filter 'reference=ghcr.io/ionaru/therabot' \
+              | grep -vx "ghcr.io/ionaru/therabot:${GIT_REVISION}" || true)"
+            if [ -n "$stale" ]; then
+              echo "$stale" | xargs -r docker image rm --force || true
+            fi
